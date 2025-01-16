@@ -1,0 +1,505 @@
+﻿@model HRMS.Models.ViewModel.documentUploadViewModel
+@{
+    ViewData["Title"] = "Employee Document And Other Details Upload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+</style>
+<form asp-controller="Master" asp-action="EmployeeDocumentAndOtherDetailsUpload" method="post">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-sm-12 mb-12 mb-sm-0 ">
+                <div class="card">
+                    <from>
+                        <div class="card m-2">
+                            <h2 class="card-header">
+                                Emergency Contact
+                            </h2>
+                            <div class="card-body">
+                                <div class="row mt-3">
+
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Employee Id</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.employee_id, new { @class = "form-control", @type = "text", @readonly = "true" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Employee Id</label><span style="color:crimson">*</span>
+
+                                            <input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="btnupdateonclick()">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>emg_contact_name</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.emg_contact_name, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>emg_contact_relation</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.emg_contact_relation, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>emg_contact_no</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.emg_contact_no, new { @class = "form-control", @type = "text" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card m-2">
+                            <h2 class="card-header">
+                                Bank Details
+                            </h2>
+                            <div class="card-body">
+                                <div class="row mt-3">
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Account Holder Name</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.ac_name, new { @class = "form-control", @type = "text" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Account Number</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.ac_no, new { @class = "form-control", @type = "text" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Bank Name</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.bank_name, new { @class = "form-control", @type = "text" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>Branch Name</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.branch_name, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>Ifsc Code</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.ifsc_code, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Branch Code</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.branch_code, new { @class = "form-control", @type = "text" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>Aadhar No</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.aadhar_no, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>Pan No</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.pan_no, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Voter Id No</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.voter_id_no, new { @class = "form-control", @type = "text" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>PF No</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.pf_no, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>Esic No</label><span style="color:crimson">*</span>
+                                            @Html.TextBoxFor(p => p.esic_no, new { @class = "form-control", @type = "text" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-4 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Passport No</label><span style="color:crimson">*</span>
+
+                                            @Html.TextBoxFor(p => p.passport_no, new { @class = "form-control", @type = "text" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card m-2">
+                            <h2 class="card-header">
+                                Document Upload Section
+                            </h2>
+                            <div class="card-body">
+                                <div class="row mt-3">
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Bank Front Page/Blank Cheque</label><span style="color:crimson">*</span>
+                                            <input type="file" id="bank_detail" name="bank_detail" accept="pdf/*" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Aadhar</label><span style="color:crimson">*</span>
+                                            <input type="file" id="aadhar" name="aadhar" accept="pdf/*" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Pan</label><span style="color:crimson">*</span>
+                                            <input type="file" id="pan" name="pan" accept="pdf/*" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>Voter Id</label><span style="color:crimson">*</span>
+                                            <input type="file" id="voter_id" name="voter_id" accept="pdf/*" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>joining_letter</label><span style="color:crimson">*</span>
+                                            <input type="file" id="joining_letter" name="joining_letter" accept="pdf/*" />
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start">
+                                        <div class="form-group">
+                                            <label>police_verification</label><span style="color:crimson">*</span>
+                                            <input type="file" id="police_verification" name="police_verification" accept="pdf/*" />
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>permanent_letter</label><span style="color:crimson">*</span>
+                                            <input type="file" id="permanent_letter" name="permanent_letter" accept="pdf/*" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                                        <div class="form-group">
+                                            <label>employee_img</label><span style="color:crimson">*</span>
+                                            <input type="file" id="employee_img" name="employee_img" accept=".jpg, .jpeg, .png" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </from>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</form>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+        });
+
+        function cleartextbox() {
+            $('#employee_id ').val('');
+            $('#ac_name ').val('');
+            $('#ac_no ').val('');
+            $('#bank_name ').val('');
+            $('#branch_name ').val('');
+            $('#ifsc_code ').val('');
+            $('#branch_code ').val('');
+            $('#aadhar_no ').val('');
+            $('#pan_no ').val('');
+            $('#voter_id_no ').val('');
+            $('#pf_no ').val('');
+            $('#esic_no ').val('');
+            $('#passport_no ').val('');
+            $('#emg_contact_name ').val('');
+            $('#emg_contact_relation ').val('');
+            $('#emg_contact_no ').val('');
+            $('#bank_detail ').val('');
+            $('#aadhar ').val('');
+            $('#pan ').val('');
+            $('#voter_id ').val('');
+            $('#joining_letter ').val('');
+            $('#police_verification ').val('');
+            $('#permanent_letter ').val('');
+            $('#employee_img ').val('');
+        }
+        function CheckPdffiles() {
+            var fup1 = document.getElementById('bank_detail');
+            var fup2 = document.getElementById('aadhar');
+            var fup3 = document.getElementById('pan');
+            var fup4 = document.getElementById('joining_letter');
+            var fup5 = document.getElementById('police_verification');
+            var fup6 = document.getElementById('permanent_letter');
+
+
+            if (fup1.value == "" || fup2.value == "" || fup3.value == "" || fup4.value == "" || fup5.value == "" || fup6.value == "") {
+
+                return false;
+            }
+            else {
+                var fileName1 = fup1.value;
+                var fileName2 = fup2.value;
+                var fileName3 = fup3.value;
+                var fileName4 = fup4.value;
+                var fileName5 = fup5.value;
+                var fileName6 = fup6.value;
+
+
+                var ext1 = fileName1.substring(fileName1.lastIndexOf('.') + 1);
+                var ext2 = fileName2.substring(fileName2.lastIndexOf('.') + 1);
+                var ext3 = fileName3.substring(fileName3.lastIndexOf('.') + 1);
+                var ext4 = fileName4.substring(fileName4.lastIndexOf('.') + 1);
+                var ext5 = fileName5.substring(fileName5.lastIndexOf('.') + 1);
+                var ext6 = fileName6.substring(fileName6.lastIndexOf('.') + 1);
+
+
+                if (ext1 == "pdf" && ext2 == "pdf" && ext3 == "pdf" && ext4 == "pdf" && ext5 == "pdf" && ext6 == "pdf") {
+                    return true;
+                }
+                else {
+
+                    return false;
+                }
+            }
+
+        }
+        function CheckImgfiles() {
+
+            var fup = document.getElementById('employee_img');
+
+
+            if (fup.value == "") {
+
+                return false;
+            }
+            else {
+                var fileName = fup.value;
+                var ext = fileName.substring(fileName.lastIndexOf('.') + 1);
+                if (ext == "jpg" || ext == "jpeg" || ext == "png") {
+                    return true;
+                }
+                else {
+
+                    return false;
+                }
+            }
+
+        }
+        function btnupdateonclick() {
+            var checkpdf = CheckPdffiles();
+            var checkimg = CheckImgfiles();
+            if (checkpdf == false) {
+                alert("Choose PDF File");
+            }
+            else if (checkimg == false) {
+                alert("Choose .jpg/.png/.jpge File");
+            }
+            else if ($('#emg_contact_name').val() == null || $('#emg_contact_name').val() == "") {
+                alert("emg_contact_name");
+                $('#emg_contact_name').focus();
+
+            }
+            else if ($('#emg_contact_relation').val() == null || $('#emg_contact_relation').val() == "") {
+                alert("emg_contact_relation Cannot be Blank");
+                $('#emg_contact_relation').focus();
+
+            }
+            else if ($('#emg_contact_no').val() == null || $('#emg_contact_no').val() == "") {
+                alert(" Choose valid emg_contact_no ");
+                $('#emg_contact_no').focus();
+
+            }
+            else if ($('#ac_name').val() == null || $('#ac_name').val() == "") {
+                alert("ac_name  Cannot be Blank");
+                $('#ac_name').focus();
+
+            }
+            else if ($('#ac_no').val() == null || $('#ac_no').val() == "") {
+                alert("ac_no  Cannot be Blank");
+                $('#ac_no').focus();
+            }
+            else if ($('#bank_name').val() == null || $('#bank_name').val() == "") {
+                alert("bank_name Cannot be Blank");
+                $('#bank_name').focus();
+
+            }
+            else if ($('#branch_name').val() == null || $('#branch_name').val() == "") {
+                alert("branch_name Cannot be Blank");
+                $('#branch_name').focus();
+
+            }
+            else if ($('#ifsc_code').val() == null || $('#ifsc_code').val() == "") {
+                alert("ifsc_code Cannot be Blank");
+                $('#ifsc_code').focus();
+
+            }
+            else if ($('#branch_code').val() == null || $('#branch_code').val() == "") {
+                alert("Choose Valid branch_code");
+                $('#branch_code').focus();
+
+            }
+            else if ($('#aadhar_no').val() == null || $('#aadhar_no').val() == "") {
+                alert("aadhar_no Cannot be Blank");
+                $('#aadhar_no').focus();
+
+            }
+            else if ($('#pan_no').val() == null || $('#pan_no').val() == "") {
+                alert("pan_no Cannot be Blank");
+                $('#pan_no').focus();
+            }
+            else if ($('#voter_id_no').val() == null || $('#voter_id_no').val() == "") {
+                alert("voter_id_no date Cannot be Blank");
+                $('#voter_id_no').focus();
+
+            }
+            else if ($('#pf_no').val() == null || $('#pf_no').val() == "") {
+                alert("pf_no  Cannot be Blank");
+                $('#pf_no').focus();
+
+            }
+            else if ($('#esic_no').val() == null || $('#esic_no').val() == "") {
+                alert("esic_no Cannot be Blank");
+                $('#esic_no').focus();
+            }
+            else if ($('#passport_no').val() == null || $('#passport_no').val() == "") {
+                alert("passport_no Cannot be Blank");
+                $('#passport_no').focus();
+            }
+            else {
+
+                let fup1 = document.getElementById('bank_detail');
+                let fup2 = document.getElementById('aadhar');
+                let fup3 = document.getElementById('pan');
+                let fup4 = document.getElementById('joining_letter');
+                let fup5 = document.getElementById('police_verification');
+                let fup6 = document.getElementById('permanent_letter');
+                let fup7 = document.getElementById('employee_img');
+                let fup8 = document.getElementById('voter_id');
+                if (fup1.files.length != 0 && fup2.files.length != 0 && fup3.files.length != 0 && fup5.files.length != 0 && fup5.files.length != 0 && fup6.files.length != 0 && fup7.files.length != 0 && fup8.files.length != 0) {
+                    var fileUpload1 = $("#bank_detail").get(0);
+                    var fileUpload2 = $("#aadhar").get(0);
+                    var fileUpload3 = $("#pan").get(0);
+                    var fileUpload4 = $("#joining_letter").get(0);
+                    var fileUpload5 = $("#police_verification").get(0);
+                    var fileUpload6 = $("#permanent_letter").get(0);
+                    var fileUpload7 = $("#employee_img").get(0);
+                    var fileUpload8 = $("#voter_id").get(0);
+                    var files1 = fileUpload1.files;
+                    var files2 = fileUpload2.files;
+                    var files3 = fileUpload3.files;
+                    var files4 = fileUpload4.files;
+                    var files5 = fileUpload5.files;
+                    var files6 = fileUpload6.files;
+                    var files7 = fileUpload7.files;
+                    var files8 = fileUpload8.files;
+                    var fileData = new FormData();
+                    fileData.append("bank_detail", files1[0]);
+                    fileData.append("aadhar", files2[0]);
+                    fileData.append("pan", files3[0]);
+                    fileData.append("joining_letter", files4[0]);
+                    fileData.append("police_verification", files5[0]);
+                    fileData.append("permanent_letter", files6[0]);
+                    fileData.append("employee_img", files7[0]);
+                    fileData.append("voter_id", files8[0]);
+                    fileData.append("emg_contact_name", $("#emg_contact_name").val());
+                    fileData.append("emg_contact_relation", $("#emg_contact_relation").val());
+                    fileData.append("emg_contact_no", $("#emg_contact_no").val());
+                    fileData.append("ac_name", $("#ac_name").val());
+                    fileData.append("ac_no", $("#ac_no").val());
+                    fileData.append("bank_name", $("#bank_name").val());
+                    fileData.append("branch_name", $("#branch_name").val());
+                    fileData.append("ifsc_code", $("#ifsc_code").val());
+                    fileData.append("branch_code", $("#branch_code").val());
+                    fileData.append("aadhar_no", $("#aadhar_no").val());
+                    fileData.append("pan_no", $("#pan_no").val());
+                    fileData.append("voter_id_no", $("#voter_id_no").val());
+                    fileData.append("pf_no", $("#pf_no").val());
+                    fileData.append("esic_no", $("#esic_no").val());
+                    fileData.append("passport_no", $("#passport_no").val());
+                    fileData.append("employee_id", $("#employee_id").val());
+                    $.ajax({
+                        url: '/Master/UpdateEmployeeDetails',
+                        type: 'post',
+                        datatype: 'json',
+                        contentType: false,
+                        processData: false,
+                        async: false,
+                        data: fileData,
+                        success: function (data) {
+                            alert(data);
+                            cleartextbox();
+
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+
+                    });
+
+                }
+
+            }
+        }
+
+    </script>
+}

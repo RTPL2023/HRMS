@@ -1,0 +1,504 @@
+﻿@model HRMS.Models.ViewModel.employee_masterViewModel
+@{
+    ViewData["Title"] = "Employee Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+</style>
+<form asp-controller="Master" asp-action="employee_master" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#employeeadd">
+                            Add Employee
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        @*@Html.TextBoxFor(p => p.ac_hddesc, new { @class = "size", @type = "text" })*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 mb-12 mb-sm-0">
+                <div class="card">
+
+
+                    <table class="table table-bordered" align="center" id="list">
+
+                
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Button trigger modal -->
+    <!-- Modal Start -->
+    <div class="modal fade" id="employeeadd" tabindex="-1" aria-labelledby="employeeaddLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="employeeaddLabel">Add New Employee</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="card m-5">
+                        <div class="card-body">
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Branch Id</label><span style="color:crimson">*</span>
+                                        <select id="branch_id" name="branch_id" class="form-control" style="background-color: #fad6f2fa; color: royalblue; font-weight: bold ">
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Employee Id</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.employee_id, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Employee Name</label><span style="color:crimson">*</span>
+                                        @Html.TextBoxFor(p => p.name, new { @class = "form-control", @type = "text" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Gender</label><span style="color:crimson">*</span>
+                                        <select name="gender" id="gender" class="form-control" required>
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Phone Number</label><span style="color:crimson">*</span>
+                                        @Html.TextBoxFor(p => p.contact_number_1, new { @class = "form-control", @type = "text" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Alternative Phone Number</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.contact_number_2, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>
+                                            Personal Email
+                                        </label><span style="color:crimson">*</span>
+                                        @Html.TextBoxFor(p => p.personal_email, new { @class = "form-control", @type = "text" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Official Mail</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.official_email, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Employment Type</label><span style="color:crimson">*</span>
+
+                                        <select name="employment_type" id="employment_type" class="form-control" required>
+                                            <option value="">Select Gender</option>
+                                            <option value="Permanent">Permanent</option>
+                                            <option value="Temporary">Temporary</option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Address</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.address, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>
+                                            City
+                                        </label><span style="color:crimson">*</span>
+                                        @Html.TextBoxFor(p => p.city, new { @class = "form-control", @type = "text" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>District</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.dist, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>State</label><span style="color:crimson">*</span>
+                                        <select name="state" id="state" class="form-control" required>
+                                            <option value="">Select State</option>
+                                            <option value="Andaman & Nicobar Islands">Andaman & Nicobar Islands</option>
+                                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                            <option value="Assam">Assam</option>
+                                            <option value="Bihar">Bihar</option>
+                                            <option value="Chandigarh">Chandigarh</option>
+                                            <option value="Chattisgarh">Chattisgarh</option>
+                                            <option value="Dadra & Nagar Haveli">Dadra & Nagar Haveli</option>
+                                            <option value="Daman & Diu">Daman & Diu</option>
+                                            <option value="Delhi">Delhi</option>
+                                            <option value="Goa">Goa</option>
+                                            <option value="Gujarat">Gujarat</option>
+                                            <option value="Haryana">Haryana</option>
+                                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                            <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                                            <option value="Jharkhand">Jharkhand</option>
+                                            <option value="Karnataka">Karnataka</option>
+                                            <option value="Kerala">Kerala</option>
+                                            <option value="Lakshadweep">Lakshadweep</option>
+                                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                            <option value="Maharashtra">Maharashtra</option>
+                                            <option value="Manipur">Manipur</option>
+                                            <option value="Meghalaya">Meghalaya</option>
+                                            <option value="Mizoram">Mizoram</option>
+                                            <option value="Nagaland">Nagaland</option>
+                                            <option value="Odisha">Odisha</option>
+                                            <option value="Poducherry">Poducherry</option>
+                                            <option value="Punjab">Punjab</option>
+                                            <option value="Rajasthan">Rajasthan</option>
+                                            <option value="Sikkim">Sikkim</option>
+                                            <option value="Tamil Nadu">Tamil Nadu</option>
+                                            <option value="Telangana">Telangana</option>
+                                            <option value="Tripura">Tripura</option>
+                                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                            <option value="Uttarakhand">Uttarakhand</option>
+                                            <option value="West Bengal">West Bengal</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Country</label><span style="color:crimson">*</span>
+
+                                        <select name="country" id="country" class="form-control" required>
+                                            <option value="">Select Country</option>
+                                            <option value="India">India</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Date Of Birth</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.date_of_birth, new { @class = "form-control", @type = "date" })
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Pin</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.pin, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Joining Date</label><span style="color:crimson">*</span>
+                                        @Html.TextBoxFor(p => p.joining_date, new { @class = "form-control", @type = "date" })
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Designation</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.designation, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>department</label><span style="color:crimson">*</span>
+                                        @Html.TextBoxFor(p => p.department, new { @class = "form-control", @type = "text" })
+                                    </div>
+
+                                </div>
+                            </div><div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Reporting Manager</label><span style="color:crimson">*</span>
+
+                                        @Html.TextBoxFor(p => p.reporting_mg_id, new { @class = "form-control", @type = "text" })
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Last Educational Qualification</label><span style="color:crimson">*</span>
+                                        @Html.TextBoxFor(p => p.last_edu_ql, new { @class = "form-control", @type = "text" })
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </from>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+</form>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+               $.ajax({
+                type: "POST",
+                url: '@Url.Action("getBranchMastDetails", "Utility")',
+
+                dataType: "json",
+                success: function (data) {
+                    $("#branch_id").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#branch_id").append(
+                            $('<option></option>').val(sc.branchId).html(sc.branchName));
+                    });
+
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+                });
+        });
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            ShowTable();
+         });
+
+        function cleartextbox() {
+                $('#ultyp_code').val("");
+                $('#ultyp_libc').val("");
+                $('#employee_id').val("");
+                $('#name').val("");
+                $('#gender').val("");
+                $('#contact_number_1').val("");
+                $('#contact_number_2').val("");
+                $('#personal_email').val("");
+                $('#official_email').val("");
+                $('#employment_type').val("");
+                $('#address').val("");
+                $('#city').val("");
+                $('#dist').val("");
+                $('#state').val("");
+                $('#pin').val("");
+                $('#country').val("");
+                $('#joining_date').val("");
+                $('#date_of_birth').val("");
+                $('#designation').val("");
+                $('#department').val("");
+                $('#reporting_mg_id').val("");
+                $('#last_edu_ql').val("");
+        }
+        function btnsubmitOnclick() {
+            if ($('#employee_id').val() == null || $('#employee_id').val() == "") {
+                alert("Employee id Required");
+                $('#employee_id').focus();
+
+            }
+            else if ($('#name').val() == null || $('#name').val() == "") {
+                alert("Name Cannot be Blank");
+                $('#name').focus();
+
+            }
+            else if ($('#gender').val() == null || $('#gender').val() == "Select Gender") {
+                alert(" Choose valid Gender ");
+                $('#gender').focus();
+
+            } else if ($('#contact_number_1').val() == null || $('#contact_number_1').val() == "") {
+                alert("Contact Number Cannot be Blank");
+                $('#contact_number_1').focus();
+
+            } else if ($('#personal_email').val() == null || $('#personal_email').val() == "") {
+                alert("Personal Email Cannot be Blank");
+                $('#personal_email').focus();
+            } else if ($('#address').val() == null || $('#address').val() == "") {
+                alert("Address Cannot be Blank");
+                $('#address').focus();
+
+            } else if ($('#city').val() == null || $('#city').val() == "") {
+                alert("City Cannot be Blank");
+                $('#city').focus();
+
+            } else if ($('#dist').val() == null || $('#dist').val() == "") {
+                alert("District Cannot be Blank");
+                $('#dist').focus();
+
+            } else if ($('#state').val() == null || $('#state').val() == "") {
+                alert("Choose Valid State");
+                $('#state').focus();
+
+            } else if ($('#pin').val() == null || $('#pin').val() == "") {
+                alert("Pin Cannot be Blank");
+                $('#pin').focus();
+
+            } else if ($('#country').val() == null || $('#country').val() == "") {
+                alert("Country Cannot be Blank");
+                $('#country').focus();
+            } else if ($('#joining_date').val() == null || $('#joining_date').val() == "") {
+                alert("Joining date Cannot be Blank");
+                $('#joining_date').focus();
+
+            } else if ($('#date_of_birth').val() == null || $('#date_of_birth').val() == "") {
+                alert("Date Of Birth Cannot be Blank");
+                $('#date_of_birth').focus();
+
+            } else if ($('#designation').val() == null || $('#designation').val() == "") {
+                alert("Designation Cannot be Blank");
+                $('#designation').focus();
+
+            } else if ($('#department').val() == null || $('#department').val() == "") {
+                alert("Department Cannot be Blank");
+                $('#department').focus();
+
+            } else if ($('#reporting_mg_id').val() == null || $('#reporting_mg_id').val() == "") {
+                alert("Reporting Manager Code Cannot be Blank");
+                $('#reporting_mg_id').focus();
+
+            }
+            else if ($('#last_edu_ql').val() == null || $('#last_edu_ql').val() == "") {
+                alert("Last Educational Qualification Cannot be Blank");
+                $('#last_edu_ql').focus();
+
+            } else if ($('#employment_type').val() == null || $('#employment_type').val() == "") {
+                alert("Employmen Type Cannot be Blank");
+                $('#employment_type').focus();
+
+            } else if ($('#branch_id').val() == null || $('#branch_id').val() == "") {
+                alert("Branch Id  Cannot be Blank");
+                $('#branch_id').focus();
+
+            }
+            else {
+                    let ModelObject = {
+                        ultyp_code: $('#ultyp_code').val(),
+                        ultyp_libc: $('#ultyp_libc').val(),
+                        employee_id: $('#employee_id').val(),
+                        name: $('#name').val(),
+                        gender: $('#gender').val(),
+                        contact_number_1: $('#contact_number_1').val(),
+                        contact_number_2: $('#contact_number_2').val(),
+                        personal_email: $('#personal_email').val(),
+                        official_email: $('#official_email').val(),
+                        employment_type: $('#employment_type').val(),
+                        address: $('#address').val(),
+                        city: $('#city').val(),
+                        dist: $('#dist').val(),
+                        state: $('#state').val(),
+                        pin: $('#pin').val(),
+                        country: $('#country').val(),
+                        joining_date: $('#joining_date').val(),
+                        date_of_birth: $('#date_of_birth').val(),
+                        designation: $('#designation').val(),
+                        department: $('#department').val(),
+                        reporting_mg_id: $('#reporting_mg_id').val(),
+                        last_edu_ql: $('#last_edu_ql').val(),
+                        branch_id: $('#branch_id').val(),
+                    };
+
+                    $.ajax({
+                        url: '@Url.Action("SaveEmployeedetails", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);
+                            cleartextbox();
+                            $("#employeeadd").modal('hide');
+                            ShowTable();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function ShowTable() {
+            let ModelObject = {  name: $('#name').val()};
+                    $.ajax({
+                        type: "POST",
+                         url: '@Url.Action("getEmployeeList", "Master")',
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            document.getElementById("list").innerHTML = data;
+                         
+                    },
+                     error: function (err) {
+                    //alert("Error Occured");
+                     }
+                    });
+        }
+
+
+
+
+       
+
+    </script>
+}
