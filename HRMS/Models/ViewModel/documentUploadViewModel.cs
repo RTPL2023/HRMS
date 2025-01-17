@@ -33,5 +33,8 @@ namespace HRMS.Models.ViewModel
         public IFormFile permanent_letter { get; set; }
         public IFormFile employee_img { get; set; }
 
+
+    
+
     }
 }

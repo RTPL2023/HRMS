@@ -9,6 +9,7 @@ namespace HRMS.Models.ViewModel
     {
         public string branch_id { get; set; }
         public string employee_id { get; set; }
+        public string user_role { get; set; }
         public string name { get; set; }
         public string gender { get; set; }
         public string contact_number_1 { get; set; }

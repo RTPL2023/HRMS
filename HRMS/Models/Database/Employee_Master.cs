@@ -75,7 +75,19 @@ namespace HRMS.Models.Database
                     { "department",model.department },
                     { "reporting_mg_id",model.reporting_mg_id },
                     { "last_edu_ql",model.last_edu_ql },
-                    { "branch_id","branch_id" },
+                    { "branch_id",model.branch_id },
+                    
+                });
+                config.Insert("users", new Dictionary<string, object>()
+                {
+                    { "User_Id",model.employee_id },
+                    { "employee_id",model.employee_id },
+                    { "password","Rishi" },
+                    { "user_role",model.user_role },
+                    { "allocated_branchid",model.branch_id },
+                    { "created_by","users"},
+                    { "created_on",DateTime.Now.ToString("dd/MM/yyyy").Replace("-","/") },
+                   
                 });
                 msg = "Saved Successfully";
             }

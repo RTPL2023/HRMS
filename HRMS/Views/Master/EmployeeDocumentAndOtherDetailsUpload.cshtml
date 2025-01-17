@@ -176,33 +176,45 @@
                         </div>
 
                         <div class="card m-2">
-                            <h2 class="card-header">
-                                Document Upload Section
-                            </h2>
+                            <div class="card-header">
+                                <h2>
+                                    Document Upload Section
+                                </h2>
+                                <p>
+                                    Every Pdf Must be uplode Between <span style="color:crimson">100kb* to 200Kb*</span>  And image uploade Between<span style="color:crimson">1MB* To 2Mb*</span>
+                                </p>
+                            </div>
                             <div class="card-body">
                                 <div class="row mt-3">
                                     <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
                                         <div class="form-group">
                                             <label>Bank Front Page/Blank Cheque</label><span style="color:crimson">*</span>
                                             <input type="file" id="bank_detail" name="bank_detail" accept="pdf/*" />
+                                            <p id="bd_size"></p>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
                                         <div class="form-group">
                                             <label>Aadhar</label><span style="color:crimson">*</span>
                                             <input type="file" id="aadhar" name="aadhar" accept="pdf/*" />
+                                            <p id="aa_size"></p>
+
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
                                         <div class="form-group">
                                             <label>Pan</label><span style="color:crimson">*</span>
                                             <input type="file" id="pan" name="pan" accept="pdf/*" />
+                                            <p id="pn_size"></p>
+
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
                                         <div class="form-group">
                                             <label>Voter Id</label><span style="color:crimson">*</span>
                                             <input type="file" id="voter_id" name="voter_id" accept="pdf/*" />
+                                            <p id="vi_size"></p>
+
                                         </div>
                                     </div>
 
@@ -212,6 +224,8 @@
                                         <div class="form-group">
                                             <label>joining_letter</label><span style="color:crimson">*</span>
                                             <input type="file" id="joining_letter" name="joining_letter" accept="pdf/*" />
+                                            <p id="jl_size"></p>
+
                                         </div>
 
                                     </div>
@@ -219,6 +233,8 @@
                                         <div class="form-group">
                                             <label>police_verification</label><span style="color:crimson">*</span>
                                             <input type="file" id="police_verification" name="police_verification" accept="pdf/*" />
+                                            <p id="pv_size"></p>
+
                                         </div>
 
                                     </div>
@@ -226,12 +242,16 @@
                                         <div class="form-group">
                                             <label>permanent_letter</label><span style="color:crimson">*</span>
                                             <input type="file" id="permanent_letter" name="permanent_letter" accept="pdf/*" />
+                                            <p id="pl_size"></p>
+
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
                                         <div class="form-group">
                                             <label>employee_img</label><span style="color:crimson">*</span>
                                             <input type="file" id="employee_img" name="employee_img" accept=".jpg, .jpeg, .png" />
+                                            <p id="em_size"></p>
+
                                         </div>
                                     </div>
 
@@ -252,6 +272,129 @@
 </form>
 @section scripts
 {
+
+    <script type="text/javascript">
+        $(function filesizeCheck() {
+            $("#bank_detail").on('change', function (event) {
+                var file = event.target.files[0];
+                if (parseInt(file.size / 1024) >= 200) {
+                    alert("Pdf size of maximum 200kb");
+                    document.getElementById('bd_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                }
+                else if (parseInt(file.size / 1024) <= 100) {
+                    alert("Pdf size of minimum 100kb");
+                    document.getElementById('bd_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                } else {
+                    document.getElementById('bd_size').innerHTML = null;
+                }
+            });
+            $("#aadhar").on('change', function (event) {
+                var file = event.target.files[0];
+                if (parseInt(file.size / 1024) >= 200) {
+                    alert("Pdf size of maximum 200kb");
+                    document.getElementById('aa_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                }
+                else if (parseInt(file.size / 1024) <= 100) {
+                    alert("Pdf size of minimum 100kb");
+                    document.getElementById('aa_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                }
+                else {
+                    document.getElementById('aa_size').innerHTML = null;
+                }
+            });
+            $("#pan").on('change', function (event) {
+                var file = event.target.files[0];
+                if (parseInt(file.size / 1024) >= 200) {
+                    alert("Pdf size of maximum 200kb");
+                    document.getElementById('pn_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                }
+                else if (parseInt(file.size / 1024) <= 100) {
+                    alert("Pdf size of minimum 100kb");
+                    document.getElementById('pn_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                } else {
+                    document.getElementById('pn_size').innerHTML = null;
+                }
+            }); $("#voter_id").on('change', function (event) {
+                var file = event.target.files[0];
+                if (parseInt(file.size / 1024) >= 200) {
+                    alert("Pdf size of maximum 200kb");
+                    document.getElementById('vi_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                }
+                else if (parseInt(file.size / 1024) <= 100) {
+                    alert("Pdf size of minimum 100kb");
+                    document.getElementById('vi_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                } else {
+                    document.getElementById('vi_size').innerHTML = null;
+                }
+            });
+            $("#joining_letter").on('change', function (event) {
+                var file = event.target.files[0];
+                if (parseInt(file.size / 1024) >= 200) {
+                    alert("Pdf size of maximum 200kb");
+                    document.getElementById('jl_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                }
+                else if (parseInt(file.size / 1024) <= 100) {
+                    alert("Pdf size of minimum 100kb");
+                    document.getElementById('jl_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                } else {
+                    document.getElementById('jl_size').innerHTML = null;
+                }
+            }); $("#permanent_letter").on('change', function (event) {
+                var file = event.target.files[0];
+                if (parseInt(file.size / 1024) >= 200) {
+                    alert("Pdf size of maximum 200kb");
+                    document.getElementById('pl_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                }
+                else if (parseInt(file.size / 1024) <= 100) {
+                    alert("Pdf size of minimum 100kb");
+                    document.getElementById('pl_size').innerHTML =
+                        '<b>' + parseInt(file.size / 1024) + '</b> KB';
+                    return;
+                } else {
+                    document.getElementById('pl_size').innerHTML = null;
+                }
+            }); $("#employee_img").on('change', function (event) {
+                var file = event.target.files[0];
+                if (parseInt(file.size / 1024) >= 1024 * 2) {
+                    alert(parseInt(file.size / 1024));
+                    alert("Pdf size of maximum 2MB");
+                    document.getElementById('em_size').innerHTML =
+                        '<b>' + parseInt(file.size / (1024 * 1024)) + '</b> MB';
+                    return;
+                }
+                else if (parseInt(file.size / (1024)) <= 1024) {
+                    alert("Pdf size of minimum 1MB");
+                    document.getElementById('em_size').innerHTML =
+                        '<b>' + parseInt(file.size / (1024)) + '</b> kb';
+                    return;
+                } else {
+                    document.getElementById('em_size').innerHTML = null;
+                }
+            });
+        });
+    </script>
     <script type="text/javascript">
 
         $(document).ready(function () {

@@ -31,8 +31,6 @@
 
 
                     <table class="table table-bordered" align="center" id="list">
-
-                
                     </table>
 
                 </div>
@@ -74,6 +72,19 @@
                                     <div class="form-group">
                                         <label>Employee Name</label><span style="color:crimson">*</span>
                                         @Html.TextBoxFor(p => p.name, new { @class = "form-control", @type = "text" })
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label>Employee Role</label><span style="color:crimson">*</span>
+
+                                        <select name="user_role" id="user_role" class="form-control" required>
+                                            <option value="">Select Employee Role</option>
+                                            <option value="ADMIN">ADMIN</option>
+                                            <option value="SUPERADMIN">SUPER ADMIN</option>
+                                            <option value="USER">USER</option>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -301,6 +312,8 @@
 </form>
 @section scripts
 {
+
+  
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -354,6 +367,7 @@
                 $('#department').val("");
                 $('#reporting_mg_id').val("");
                 $('#last_edu_ql').val("");
+                $('#user_role').val("");
         }
         function btnsubmitOnclick() {
             if ($('#employee_id').val() == null || $('#employee_id').val() == "") {
@@ -432,6 +446,10 @@
             } else if ($('#branch_id').val() == null || $('#branch_id').val() == "") {
                 alert("Branch Id  Cannot be Blank");
                 $('#branch_id').focus();
+                
+            } else if ($('#user_role').val() == null || $('#user_role').val() == "Select Employee Role") {
+                alert("Employee Role Cannot be Blank");
+                $('#user_role').focus();
 
             }
             else {
@@ -459,6 +477,7 @@
                         reporting_mg_id: $('#reporting_mg_id').val(),
                         last_edu_ql: $('#last_edu_ql').val(),
                         branch_id: $('#branch_id').val(),
+                        user_role: $('#user_role').val(),
                     };
 
                     $.ajax({
@@ -487,7 +506,7 @@
                         dataType: "json",
                         success: function (data) {
                             document.getElementById("list").innerHTML = data;
-                         
+
                     },
                      error: function (err) {
                     //alert("Error Occured");
@@ -498,7 +517,7 @@
 
 
 
-       
+
 
     </script>
 }
