@@ -80,5 +80,57 @@ namespace HRMS.Controllers
             }
             return Json(tableemenent);
         }
+        [HttpGet]
+        public IActionResult DesignationsMaster(employee_masterViewModel model)
+        {
+            Employee_Master em = new Employee_Master();
+            List<Employee_Master> emlst = new List<Employee_Master>();
+            emlst = em.getemployeelists();
+            ViewBag.emlist = emlst;
+            return View(model);
+        }
+
+        public JsonResult Savedesignation(employee_masterViewModel model)
+        {
+            Designation_Master em = new Designation_Master();
+            string msg = em.saveDesignationMaster(model);
+
+            return Json(msg);
+        }
+        public JsonResult getdesignationByid(int id)
+        {
+            Designation_Master em = new Designation_Master();
+            em = em.getdesignationByid(id);
+
+            return Json(em);
+        }
+        public JsonResult editdesignationByid(employee_masterViewModel model)
+        {
+            Designation_Master em = new Designation_Master();
+          string msg= em.modifydesignationByid(model);
+
+            return Json(msg);
+        }
+        public JsonResult getDesignationsMasterList()
+        {
+            Designation_Master dm = new Designation_Master();
+            List<Designation_Master> dmlst = new List<Designation_Master>();
+            dmlst = dm.getDesignation_Masterlists();
+            string tableemenent = "";
+            if (dmlst.Count > 0)
+            {
+                tableemenent = "<tr><th>Designation</th><th>Department</th><th>Action</th></tr>";
+                foreach (var a in dmlst)
+                {
+
+                    tableemenent = tableemenent + "<tr><td>" + a.designation + "</td><td>" + a.department + "</td>" +
+                        "<td><button type=\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#designationedit\" onclick=btnEditOnclick('" + a.id + "')> <i class=\"fa-solid fa-pen\"></i></ button >" +
+                        "<button type=\"button\" class=\"table__icon delete\" data-bs-toggle=\"modal\" data-bs-target=\"#designationDelete\"> <i class=\"fa-solid fa-trash\"></i></ button ></td></tr>";
+
+
+                }
+            }
+            return Json(tableemenent);
+        }
     }
 }

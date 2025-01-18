@@ -27,6 +27,9 @@ namespace HRMS.Models.ViewModel
         public string date_of_birth { get; set; }
         public string designation { get; set; }
         public string department { get; set; }
+        public string editdesignation { get; set; }
+        public string editdepartment { get; set; }
+        public string editid { get; set; }
         public string reporting_mg_id { get; set; }
         public string last_edu_ql { get; set; }
 

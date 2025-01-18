@@ -1,0 +1,368 @@
+﻿@model HRMS.Models.ViewModel.employee_masterViewModel
+@{
+    ViewData["Title"] = "Employee Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .table__icon.edit {
+        background-color: rgba(26, 188, 156, .1);
+        --tw-text-opacity: 1;
+        color: rgb(26 188 156 / var(--tw-text-opacity, 1));
+    }
+
+    .table__icon {
+        display: flex;
+        height: 30px;
+        width: 30px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        padding: 2px 7px;
+        font-size: 14px;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+        transition-property: all;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .3s;
+        transition-timing-function: linear;
+    }
+
+    button {
+        border-width: 0;
+        background-color: transparent;
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+    }
+
+    .table__icon.delete {
+        background-color: rgba(255, 58, 41, .1);
+        --tw-text-opacity: 1;
+        color: rgb(255 58 41 / var(--tw-text-opacity, 1));
+    }
+</style>
+<form asp-controller="Master" asp-action="employee_master" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#employeeadd">
+                            Add Designations
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        @*@Html.TextBoxFor(p => p.ac_hddesc, new { @class = "size", @type = "text" })*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 mb-12 mb-sm-0">
+                <div class="card">
+
+
+                    <table class="table table-bordered" align="center" id="list">
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+        <!-- toast -->
+
+        <div class="toast" id="myToast">
+            <div class="toast-container top-0 end-0 p-3">
+                <div class="toast align-items-center text-bg-success border-0 fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body" id="tostmsg">
+                            Hello, world! This is a toast message.
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- toast -->
+
+    </div>
+    <!-- Button trigger modal -->
+    <!--ADD Designation Modal  Start -->
+    <div class="modal fade" id="employeeadd" tabindex="-1" aria-labelledby="employeeaddLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="employeeaddLabel">Add New Designation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+
+                    <div class="row m-3">
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>Designation</label><span style="color:crimson">*</span>
+
+                                @Html.TextBoxFor(p => p.designation, new { @class = "form-control", @type = "text" })
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3">
+
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Department</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(p => p.department, new { @class = "form-control", @type = "text" })
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    <!--EDIT Designation Modal  Start -->
+    <div class="modal fade" id="designationedit" tabindex="-1" aria-labelledby="designationaddLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="designationaddLabel">Edit Designation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+
+                    <div class="row m-3">
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>Designation</label><span style="color:crimson">*</span>
+
+                                @Html.TextBoxFor(p => p.editdesignation, new { @class = "form-control", @type = "text" })
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3">
+
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Department</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(p => p.editdepartment, new { @class = "form-control", @type = "text" })
+                                <input type="text" id="editid" style="display:none">
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnEditDesignation" name="btnEditDesignation" onclick="btnEditDesignationOnclick()">Edit Designation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    <!--Delete Designation Modal  Start -->
+    <div class="modal fade" id="designationDelete" tabindex="-1" aria-labelledby="designationDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="designationDeleteLabel">Edit Designation</h1>
+
+                </div>
+                <from>
+
+
+                    <div class="row m-3">
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+
+                                Are you sure?
+                                You won't be able to revert this!
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Edit Designation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+</form>
+@section scripts
+{
+
+
+    @*<script type="text/javascript">
+
+            $(document).ready(function () {
+                   $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("getBranchMastDetails", "Utility")',
+
+                    dataType: "json",
+                    success: function (data) {
+                        $("#branch_id").html(""); // clear before appending new list
+                        $.each(data, function (i, sc) {
+
+                            $("#branch_id").append(
+                                $('<option></option>').val(sc.branchId).html(sc.branchName));
+                        });
+
+                    },
+                    error: function (err) {
+                    alert(err);
+                    }
+
+                    });
+            });
+        </script>*@
+    @*<script src="~/lib/bootstrap/js/bootstrap.js"></script>*@
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            ShowTable();
+         });
+
+        function cleartextbox() {
+            $('#designation').val("");
+            $('#department').val("");
+            $('#editdesignation').val("");
+            $('#editdepartment').val("");
+            $('#editid').val("");
+
+
+        }
+        function btnsubmitOnclick() {
+            if ($('#designation').val() == null || $('#designation').val() == "") {
+                alert("designation id Required");
+                $('#designation').focus();
+
+            }
+            else if ($('#department').val() == null || $('#department').val() == "") {
+                alert("department id Required");
+                $('#department').focus();
+
+            }
+            else {
+                    let ModelObject = {
+                        designation: $('#designation').val(),
+                        department: $('#department').val(),
+
+                    };
+
+                    $.ajax({
+                        url: '@Url.Action("Savedesignation", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            $("#myToast").toast({
+                                delay: 5000
+                            });
+                            $("#myToast").toast("show");
+                            document.getElementById('tostmsg').innerHTML =
+                                data;
+                            cleartextbox();
+                            $("#employeeadd").modal('hide');
+                            ShowTable();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnEditOnclick(decid) {
+                    let ModelObject = {
+                        id: decid
+                    };
+                    $.ajax({
+                        url: '@Url.Action("getdesignationByid", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                           /* console.log(data);*/
+                            $('#editdepartment').val(data.department);
+                            $('#editdesignation').val(data.designation);
+                            $('#editid').val(data.id);
+
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+
+        }
+        function btnEditDesignationOnclick() {
+                    let ModelObject = {
+                        editdepartment:$('#editdepartment').val(),
+                        editdesignation:$('#editdesignation').val(),
+                        editid:$('#editid').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("editdesignationByid", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            $("#designationedit").modal('hide');
+                            $("#myToast").toast({
+                                delay: 5000
+                            });
+                            $("#myToast").toast("show");
+                            document.getElementById('tostmsg').innerHTML =
+                                data;
+                            cleartextbox();
+                            ShowTable();
+
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+
+        }
+        function ShowTable() {
+            let ModelObject = {  name: $('#name').val()};
+                    $.ajax({
+                        type: "POST",
+                         url: '@Url.Action("getDesignationsMasterList", "Master")',
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            document.getElementById("list").innerHTML = data;
+
+                    },
+                     error: function (err) {
+                    //alert("Error Occured");
+                     }
+                    });
+        }
+
+
+
+
+
+
+    </script>
+}
