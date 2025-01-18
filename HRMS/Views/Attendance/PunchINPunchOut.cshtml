@@ -1,0 +1,125 @@
+﻿@model HRMS.Models.ViewModel.PunchInPunchOutViewModel
+@{
+    ViewData["Title"] = "Employee Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+</style>
+<form asp-controller="Attendance" asp-action="PunchINPunchOut" method="post">
+ 
+   
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Mark Your Attendance</h1>
+                    
+                </div>
+          
+
+
+                <div class="modal-footer">
+                    <button type="button" id="punchin" name="punchin" value="PUNCH IN" class="btn btn-primary btn-sm" onclick="btnPunchinOnclick()"></button>
+                    <button type="button" id="punchout" name="punchout" value="PUNCH OUT" class="btn btn-primary btn-sm" onclick="btnPunchoutOnclick()"></button>
+                    
+                </div>
+            
+</form>
+@section scripts
+{
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+        });
+
+
+        function btnPunchinOnclick() {
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(in_showPosition);
+            }
+            else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function in_showPosition(position) {
+
+            var inloc = "";
+            if ((22.6295808 - 0.001) < position.coords.latitude < (22.6295808 + 0.001) && (88.4310016 - 0.001) < position.coords.longitude < (88.4310016 + 0.001)) {
+
+                inloc = "Valid";
+            }
+            else {
+                inloc = "Invalid";
+
+            }
+            let ModelObject = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                in_location_type: inloc
+            };
+
+                    $.ajax({
+                        url: '@Url.Action("EmployeeInAttendanceMark", "Attendance")',
+                        type: "POST",
+                       data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);
+
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+
+        }
+
+        function btnPunchoutOnclick() {
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(out_showPosition);
+            }
+            else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+          function out_showPosition(position) {
+
+              var outloc = "";
+            if ((22.6295808 - 0.001) < position.coords.latitude < (22.6295808 + 0.001) && (88.4310016 - 0.001) < position.coords.longitude < (88.4310016 + 0.001)) {
+
+                outloc = "Valid";
+            }
+            else {
+                outloc = "Invalid";
+
+            }
+            let ModelObject = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                out_location_type: outloc
+            };
+
+                    $.ajax({
+                        url: '@Url.Action("EmployeeOutAttendanceMark", "Attendance")',
+                        type: "POST",
+                       data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);
+
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+
+        }
+
+
+
+    </script>
+}
