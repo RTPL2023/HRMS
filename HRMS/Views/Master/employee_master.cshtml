@@ -143,7 +143,7 @@
                                         <label>Employment Type</label><span style="color:crimson">*</span>
 
                                         <select name="employment_type" id="employment_type" class="form-control" required>
-                                            <option value="">Select Gender</option>
+                                            <option value="">Select Employment Type</option>
                                             <option value="Permanent">Permanent</option>
                                             <option value="Temporary">Temporary</option>
 
@@ -166,7 +166,11 @@
                                         <label>
                                             City
                                         </label><span style="color:crimson">*</span>
-                                        @Html.TextBoxFor(p => p.city, new { @class = "form-control", @type = "text" })
+                                        <select name="city" id="city" class="form-control" required>
+                                            <option value="">Select City</option>
+
+                                        </select>
+
                                     </div>
 
                                 </div>
@@ -176,8 +180,11 @@
                                     <div class="form-group">
                                         <label>District</label><span style="color:crimson">*</span>
 
-                                        @Html.TextBoxFor(p => p.dist, new { @class = "form-control", @type = "text" })
 
+                                        <select name="dist" id="dist" class="form-control" required>
+                                            <option value="">Select District</option>
+
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
@@ -185,43 +192,47 @@
                                         <label>State</label><span style="color:crimson">*</span>
                                         <select name="state" id="state" class="form-control" required>
                                             <option value="">Select State</option>
-                                            <option value="Andaman & Nicobar Islands">Andaman & Nicobar Islands</option>
-                                            <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                            <option value="Assam">Assam</option>
-                                            <option value="Bihar">Bihar</option>
-                                            <option value="Chandigarh">Chandigarh</option>
-                                            <option value="Chattisgarh">Chattisgarh</option>
-                                            <option value="Dadra & Nagar Haveli">Dadra & Nagar Haveli</option>
-                                            <option value="Daman & Diu">Daman & Diu</option>
-                                            <option value="Delhi">Delhi</option>
-                                            <option value="Goa">Goa</option>
-                                            <option value="Gujarat">Gujarat</option>
-                                            <option value="Haryana">Haryana</option>
-                                            <option value="Himachal Pradesh">Himachal Pradesh</option>
-                                            <option value="Jammu & Kashmir">Jammu & Kashmir</option>
-                                            <option value="Jharkhand">Jharkhand</option>
-                                            <option value="Karnataka">Karnataka</option>
-                                            <option value="Kerala">Kerala</option>
-                                            <option value="Lakshadweep">Lakshadweep</option>
-                                            <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                            <option value="Maharashtra">Maharashtra</option>
-                                            <option value="Manipur">Manipur</option>
-                                            <option value="Meghalaya">Meghalaya</option>
-                                            <option value="Mizoram">Mizoram</option>
-                                            <option value="Nagaland">Nagaland</option>
-                                            <option value="Odisha">Odisha</option>
-                                            <option value="Poducherry">Poducherry</option>
-                                            <option value="Punjab">Punjab</option>
-                                            <option value="Rajasthan">Rajasthan</option>
-                                            <option value="Sikkim">Sikkim</option>
-                                            <option value="Tamil Nadu">Tamil Nadu</option>
-                                            <option value="Telangana">Telangana</option>
-                                            <option value="Tripura">Tripura</option>
-                                            <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                            <option value="Uttarakhand">Uttarakhand</option>
-                                            <option value="West Bengal">West Bengal</option>
+
                                         </select>
+                                        @*<select name="state" id="state" class="form-control" required>
+                                                <option value="">Select State</option>
+                                                <option value="Andaman & Nicobar Islands">Andaman & Nicobar Islands</option>
+                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                <option value="Assam">Assam</option>
+                                                <option value="Bihar">Bihar</option>
+                                                <option value="Chandigarh">Chandigarh</option>
+                                                <option value="Chattisgarh">Chattisgarh</option>
+                                                <option value="Dadra & Nagar Haveli">Dadra & Nagar Haveli</option>
+                                                <option value="Daman & Diu">Daman & Diu</option>
+                                                <option value="Delhi">Delhi</option>
+                                                <option value="Goa">Goa</option>
+                                                <option value="Gujarat">Gujarat</option>
+                                                <option value="Haryana">Haryana</option>
+                                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                                                <option value="Jharkhand">Jharkhand</option>
+                                                <option value="Karnataka">Karnataka</option>
+                                                <option value="Kerala">Kerala</option>
+                                                <option value="Lakshadweep">Lakshadweep</option>
+                                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                <option value="Maharashtra">Maharashtra</option>
+                                                <option value="Manipur">Manipur</option>
+                                                <option value="Meghalaya">Meghalaya</option>
+                                                <option value="Mizoram">Mizoram</option>
+                                                <option value="Nagaland">Nagaland</option>
+                                                <option value="Odisha">Odisha</option>
+                                                <option value="Poducherry">Poducherry</option>
+                                                <option value="Punjab">Punjab</option>
+                                                <option value="Rajasthan">Rajasthan</option>
+                                                <option value="Sikkim">Sikkim</option>
+                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                <option value="Telangana">Telangana</option>
+                                                <option value="Tripura">Tripura</option>
+                                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                <option value="Uttarakhand">Uttarakhand</option>
+                                                <option value="West Bengal">West Bengal</option>
+                                            </select>*@
                                     </div>
 
                                 </div>
@@ -231,7 +242,7 @@
 
                                         <select name="country" id="country" class="form-control" required>
                                             <option value="">Select Country</option>
-                                            <option value="India">India</option>
+
                                         </select>
                                     </div>
 
@@ -267,24 +278,28 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
                                     <div class="form-group">
                                         <label>Designation</label><span style="color:crimson">*</span>
-
-                                        @Html.TextBoxFor(p => p.designation, new { @class = "form-control", @type = "text" })
+                                        <select name="designation" id="designation" class="form-control" required>
+                                        </select>
 
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>department</label><span style="color:crimson">*</span>
-                                        @Html.TextBoxFor(p => p.department, new { @class = "form-control", @type = "text" })
+                                        <select name="department" id="department" class="form-control" required>
+                                        </select>
                                     </div>
 
                                 </div>
-                            </div><div class="row mt-3">
+                            </div>
+                            <div class="row mt-3">
                                 <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
                                     <div class="form-group">
                                         <label>Reporting Manager</label><span style="color:crimson">*</span>
+                                        <select name="reporting_mg_id" id="reporting_mg_id" class="form-control" required>
+                                            <option value="">Select Reporting Manager</option>
 
-                                        @Html.TextBoxFor(p => p.reporting_mg_id, new { @class = "form-control", @type = "text" })
+                                        </select>
 
                                     </div>
                                 </div>
@@ -295,6 +310,24 @@
                                     </div>
 
                                 </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label>Employment Role</label><span style="color:crimson">*</span>
+
+                                            <select name="employment_role" id="employment_role" class="form-control" required>
+                                                <option value="">Select Employment Type</option>
+                                                <option value="Employee">Employee</option>
+                                                <option value="Manager">Manager</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -313,14 +346,14 @@
 @section scripts
 {
 
-  
+
     <script type="text/javascript">
 
         $(document).ready(function () {
+            //---- branchName  dropdowon-------
                $.ajax({
                 type: "POST",
                 url: '@Url.Action("getBranchMastDetails", "Utility")',
-
                 dataType: "json",
                 success: function (data) {
                     $("#branch_id").html(""); // clear before appending new list
@@ -329,13 +362,142 @@
                         $("#branch_id").append(
                             $('<option></option>').val(sc.branchId).html(sc.branchName));
                     });
-
                 },
                 error: function (err) {
                 alert(err);
                 }
 
-                });
+               });
+            //---- designation  dropdowon-------
+
+              $.ajax({
+                type: "POST",
+                url: '@Url.Action("getdesignation", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#designation").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#designation").append(
+                            $('<option></option>').val(sc.id).html(sc.designation));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+              });
+            //---- department  dropdowon-------
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getdepartmentmaster", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#department").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#department").append(
+                            $('<option></option>').val(sc.id).html(sc.department));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+            //---- Country  dropdowon-------
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getCountryMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#country").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#country").append(
+                            $('<option></option>').val(sc.countryId).html(sc.countryname));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+
+            //---- State  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getStateMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#state").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#state").append(
+                            $('<option></option>').val(sc.stateid).html(sc.statename));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+            //---- dist  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getDistrictMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#dist").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#dist").append(
+                            $('<option></option>').val(sc.districtid).html(sc.districtname));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+              //---- City  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getCityMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#city").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#city").append(
+                            $('<option></option>').val(sc.cityid).html(sc.cityname));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+            //---- City  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getReportingManager", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#reporting_mg_id").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#reporting_mg_id").append(
+                            $('<option></option>').val(sc.employee_id).html(sc.name));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+               });
         });
     </script>
     <script type="text/javascript">
@@ -368,6 +530,7 @@
                 $('#reporting_mg_id').val("");
                 $('#last_edu_ql').val("");
                 $('#user_role').val("");
+            $('#employment_role').val("");
         }
         function btnsubmitOnclick() {
             if ($('#employee_id').val() == null || $('#employee_id').val() == "") {
@@ -446,10 +609,14 @@
             } else if ($('#branch_id').val() == null || $('#branch_id').val() == "") {
                 alert("Branch Id  Cannot be Blank");
                 $('#branch_id').focus();
-                
+
             } else if ($('#user_role').val() == null || $('#user_role').val() == "Select Employee Role") {
                 alert("Employee Role Cannot be Blank");
                 $('#user_role').focus();
+
+            } else if ($('#employment_role').val() == null || $('#employment_role').val() == "") {
+                alert("Employment Role Cannot be Blank");
+                $('#employment_role').focus();
 
             }
             else {
@@ -478,6 +645,7 @@
                         last_edu_ql: $('#last_edu_ql').val(),
                         branch_id: $('#branch_id').val(),
                         user_role: $('#user_role').val(),
+                        employment_role: $('#employment_role').val(),
                     };
 
                     $.ajax({

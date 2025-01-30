@@ -11,9 +11,9 @@ namespace HRMS.Models.DataBase
     public class MasterDistrict
     {
         SQLConfig config = new SQLConfig();
-        public String DistrictId { get; set; }
+        public String districtid { get; set; }
         public String DistrictSubId { get; set; }
-        public String DistrictName { get; set; }
+        public String districtname { get; set; }
         public String StateId { get; set; }
         public String Created_by { get; set; }
         public String Create_date { get; set; }
@@ -42,7 +42,7 @@ namespace HRMS.Models.DataBase
         }
         //public string UpdateDistrict(MasterDistrict md)
         //{
-        //    string sql = "select * from master_district where DistrictName ='" + md.DistrictName + "' and stateid='" + md.StateId + "'";
+        //    string sql = "select * from master_district where districtname ='" + md.districtname + "' and stateid='" + md.StateId + "'";
         //    config.singleResult(sql);
         //    int check = 0;
         //    if (config.dt.Rows.Count > 0)
@@ -56,7 +56,7 @@ namespace HRMS.Models.DataBase
         //        {
         //            config.Update("Master_District", new Dictionary<String, object>()
         //                {
-        //                { "DistrictName",     md.DistrictName},
+        //                { "districtname",     md.districtname},
         //                { "StateId",       md.StateId},
         //                { "Modified_By",   md.Modified_by},
         //                { "Modified_Date", md.Modified_Date},
@@ -64,7 +64,7 @@ namespace HRMS.Models.DataBase
         //                { "M_Device_Name", md.M_Device_name},
         //                }, new Dictionary<string, object>()
         //                {
-        //                { "DistrictId", md.DistrictId },
+        //                { "districtid", md.districtid },
         //                });
         //            md.msg = "Updated Successfuly";
         //        }
@@ -79,7 +79,7 @@ namespace HRMS.Models.DataBase
         //{
         //    DataTable dt = new DataTable();
         //    Hashtable hs = new Hashtable();
-        //    string sql = "select * from master_district where DistrictName ='" + md.DistrictName + "' and stateid='" + md.StateId + "'";
+        //    string sql = "select * from master_district where districtname ='" + md.districtname + "' and stateid='" + md.StateId + "'";
         //    config.singleResult(sql);
         //    int check = 0;
         //    if (config.dt.Rows.Count > 0)
@@ -92,7 +92,7 @@ namespace HRMS.Models.DataBase
         //        try
         //        {
         //            {
-        //                hs.Add("DistrictName", md.DistrictName);
+        //                hs.Add("districtname", md.districtname);
         //                hs.Add("StateId", md.StateId);
         //                hs.Add("Modified_By", md.Modified_by);
         //                hs.Add("Modified_Date", md.Modified_Date);
@@ -100,7 +100,7 @@ namespace HRMS.Models.DataBase
         //                hs.Add("M_Device_Name", md.M_Device_name);
         //            }
         //            {
-        //                hs.Add("DistrictId", md.DistrictId);
+        //                hs.Add("districtid", md.districtid);
         //            }
         //            dt = config.ReturnScalar("spUpdateDistrict", hs);
         //            md.msg = "Updated Successfuly";
@@ -126,7 +126,7 @@ namespace HRMS.Models.DataBase
 
                 }, new Dictionary<string, object>()
                   {
-                  { "DistrictId", md.DistrictId }
+                  { "districtid", md.districtid }
                 });
                 md.msg = "Deleted Successfuly";
             }
@@ -137,17 +137,17 @@ namespace HRMS.Models.DataBase
             return md.msg;
         }
 
-        public MasterDistrict getDistrictDetailsByDistrictId(string Districtid)
+        public MasterDistrict getDistrictDetailsBydistrictid(string Districtid)
         {
             MasterDistrict md = new MasterDistrict();
-            string sql = "select * from master_district a,master_State b where a.StateId=b.StateId and a.DistrictId='" + Districtid + "'";
+            string sql = "select * from master_district a,master_State b where a.StateId=b.StateId and a.districtid='" + Districtid + "'";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    md.DistrictId = Convert.ToString(dr["DistrictId"]);
-                    md.DistrictName = Convert.ToString(dr["DistrictName"]);
+                    md.districtid = Convert.ToString(dr["districtid"]);
+                    md.districtname = Convert.ToString(dr["districtname"]);
                     md.StateId = Convert.ToString(dr["StateId"]);
                 }
             }
@@ -156,7 +156,7 @@ namespace HRMS.Models.DataBase
 
         public List<MasterDistrict> getAllDistrictList()
         {
-            string sql = "select * from master_district md,master_state ms where md.is_deleted<>1 and md.StateId=ms.stateid order by DistrictName";
+            string sql = "select * from master_district md,master_state ms where md.is_deleted<>1 and md.StateId=ms.stateid order by districtname";
             config.singleResult(sql);
 
             List<MasterDistrict> mdl = new List<MasterDistrict>();
@@ -166,8 +166,8 @@ namespace HRMS.Models.DataBase
                 foreach (DataRow dr in config.dt.Rows)
                 {
                     MasterDistrict md = new MasterDistrict();
-                    md.DistrictId = Convert.ToString(dr["DistrictId"]);
-                    md.DistrictName = Convert.ToString(dr["DistrictName"]);
+                    md.districtid = Convert.ToString(dr["districtid"]);
+                    md.districtname = Convert.ToString(dr["districtname"]);
                     md.StateId = Convert.ToString(dr["StateId"]);
                     md.StateName = Convert.ToString(dr["StateName"]);
                     mdl.Add(md);
@@ -177,7 +177,7 @@ namespace HRMS.Models.DataBase
         }
         public MasterDistrict getdistrictid(MasterDistrict did)
         {
-            string sql = "Select * from  Master_District order by DistrictId";
+            string sql = "Select * from  Master_District order by districtid";
             config.singleResult(sql);
 
             dcode = 0;
@@ -185,11 +185,11 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    did.DistrictId = Convert.ToString(dr["DistrictId"]);
-                    string subcode = Convert.ToString(dr["DistrictId"]).Substring(0,1);
+                    did.districtid = Convert.ToString(dr["districtid"]);
+                    string subcode = Convert.ToString(dr["districtid"]).Substring(0,1);
                     if (did.DistrictSubId == subcode)
                     {
-                        //dcode = Convert.ToInt32(did.DistrictId.Substring(5)) + 1;
+                        //dcode = Convert.ToInt32(did.districtid.Substring(5)) + 1;
                         dcode = dcode + 1;
                     }
                 }
@@ -200,8 +200,8 @@ namespace HRMS.Models.DataBase
         //{
         //    config.Insert("Master_District", new Dictionary<string, object>()
         //    {
-        //        { "DistrictId", did.DistrictId},
-        //        { "DistrictName", did.DistrictName},
+        //        { "districtid", did.districtid},
+        //        { "districtname", did.districtname},
         //        { "StateId", did.StateId},
         //        { "Created_by",did.Created_by},
         //        { "Create_date", did.Create_date},
@@ -223,8 +223,8 @@ namespace HRMS.Models.DataBase
 
         //    DataTable dt = new DataTable();
         //    Hashtable hs = new Hashtable();
-        //    hs.Add("DistrictId", md.DistrictId);
-        //    hs.Add("DistrictName", md.DistrictName);
+        //    hs.Add("districtid", md.districtid);
+        //    hs.Add("districtname", md.districtname);
         //    hs.Add("StateId", md.StateId);
         //    hs.Add("Created_by", md.Created_by);
         //    hs.Add("Create_date", md.Create_date);
@@ -240,10 +240,10 @@ namespace HRMS.Models.DataBase
 
 
         //}
-        public MasterDistrict GetDistrictIdByDistrictName(string district)
+        public MasterDistrict GetdistrictidBydistrictname(string district)
         {
             MasterDistrict md = new MasterDistrict();
-            string sql = "Select * from  Master_District where DistrictName='" + district+ "' order by DistrictId";
+            string sql = "Select * from  Master_District where districtname='" + district+ "' order by districtid";
             config.singleResult(sql);
 
             dcode = 0;
@@ -251,7 +251,7 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    md.DistrictId = Convert.ToString(dr["DistrictId"]);
+                    md.districtid = Convert.ToString(dr["districtid"]);
 
                 }
 
@@ -262,7 +262,7 @@ namespace HRMS.Models.DataBase
 
         
 
-        public MasterDistrict CheckDistrictName(string district, string stateid)
+        public MasterDistrict Checkdistrictname(string district, string stateid)
         {
             string sql = "Select * from  Master_District where stateid='" + stateid + "' order by StateId";
             config.singleResult(sql);
@@ -274,8 +274,8 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    md.DistrictName = Convert.ToString(dr["DistrictName"]);
-                    if (md.DistrictName == district)
+                    md.districtname = Convert.ToString(dr["districtname"]);
+                    if (md.districtname == district)
                     {
                         md.checkdata = true;
                         return md;
@@ -294,7 +294,7 @@ namespace HRMS.Models.DataBase
 
         public List<MasterDistrict> getDistrictMast()
         {
-            string sql = "Select * from  Master_District where is_Deleted<>1 order by DistrictName";
+            string sql = "Select * from  Master_District where is_Deleted<>1 order by districtname";
             config.singleResult(sql);
 
             List<MasterDistrict> mdl = new List<MasterDistrict>();
@@ -303,8 +303,8 @@ namespace HRMS.Models.DataBase
                 foreach (DataRow dr in config.dt.Rows)
                 {
                     MasterDistrict md = new MasterDistrict();
-                    md.DistrictId = Convert.ToString(dr["DistrictId"]);
-                    md.DistrictName = Convert.ToString(dr["DistrictName"]);
+                    md.districtid = Convert.ToString(dr["districtid"]);
+                    md.districtname = Convert.ToString(dr["districtname"]);
                     mdl.Add(md);
                 }
 
@@ -313,7 +313,7 @@ namespace HRMS.Models.DataBase
             return mdl;
         }
 
-        public MasterDistrict GetDistrictNameByDistrictId(string Districtid)
+        public MasterDistrict GetdistrictnameBydistrictid(string Districtid)
         {
             string sql = "Select * from  Master_District where districtid='" + Districtid + "' order by districtid";
             config.singleResult(sql);
@@ -323,7 +323,7 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    md.DistrictName = Convert.ToString(dr["DistrictName"]);
+                    md.districtname = Convert.ToString(dr["districtname"]);
 
                 }
 

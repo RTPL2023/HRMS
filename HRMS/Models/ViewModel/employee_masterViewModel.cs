@@ -32,6 +32,7 @@ namespace HRMS.Models.ViewModel
         public string editid { get; set; }
         public string reporting_mg_id { get; set; }
         public string last_edu_ql { get; set; }
+        public string employment_role { get; set; }
 
 
     }

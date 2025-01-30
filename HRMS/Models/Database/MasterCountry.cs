@@ -11,9 +11,9 @@ namespace HRMS.Models.DataBase
     public class MasterCountry
     {
         SQLConfig config = new SQLConfig();
-        public String CountryId { get; set; }
+        public String countryId { get; set; }
         public String CountrySubId { get; set; }
-        public String CountryName { get; set; }
+        public String countryname { get; set; }
         public String Created_by { get; set; }
         public String Create_date { get; set; }
         public string Create_Time { get; set; }
@@ -28,7 +28,7 @@ namespace HRMS.Models.DataBase
 
         //public string UpdateCountry(MasterCountry mc)
         //{
-        //    string sql = "select * from master_country where CountryName='" + mc.CountryName + "'";
+        //    string sql = "select * from master_country where countryname='" + mc.countryname + "'";
         //    config.singleResult(sql);
         //    int check = 0;
         //    if (config.dt.Rows.Count > 0)
@@ -42,7 +42,7 @@ namespace HRMS.Models.DataBase
         //        {
         //            config.Update("Master_Country",new Dictionary<String, object>()
         //            {
-        //            { "CountryName",   mc.CountryName},
+        //            { "countryname",   mc.countryname},
         //            { "Modified_By",   mc.Modified_by},
         //            { "Modified_Date", mc.Modified_Date},
         //            { "Modified_Time", mc.Modified_Time},
@@ -67,7 +67,7 @@ namespace HRMS.Models.DataBase
         //{
         //    DataTable dt = new DataTable();
         //    Hashtable hs = new Hashtable();
-        //    string sql = "select * from master_country where CountryName='" + mc.CountryName + "'";
+        //    string sql = "select * from master_country where countryname='" + mc.countryname + "'";
         //    config.singleResult(sql);
         //    int check = 0;
         //    if (config.dt.Rows.Count > 0)
@@ -80,7 +80,7 @@ namespace HRMS.Models.DataBase
         //        try
         //        {
         //            {
-        //                hs.Add("CountryName", mc.CountryName);
+        //                hs.Add("countryname", mc.countryname);
         //                hs.Add("Modified_By", mc.Modified_by);
         //                hs.Add("Modified_Date", mc.Modified_Date);
         //                hs.Add("Modified_Time", mc.Modified_Time);
@@ -109,15 +109,15 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    mc.CountryId = Convert.ToString(dr["CountryId"]);
-                    mc.CountryName = Convert.ToString(dr["CountryName"]);
+                    mc.countryId = Convert.ToString(dr["countryId"]);
+                    mc.countryname = Convert.ToString(dr["countryname"]);
                 }
             }
             return mc;
         }
         public List<MasterCountry> getAllCountryList(string db)
         {
-            string sql = "Select * from  Master_Country  where is_deleted<>1 order by CountryId";
+            string sql = "Select * from  Master_Country  where is_deleted<>1 order by countryId";
             config.singleResult(sql);
             List<MasterCountry> mcl = new List<MasterCountry>();
             if (config.dt.Rows.Count > 0)
@@ -125,8 +125,8 @@ namespace HRMS.Models.DataBase
                 foreach (DataRow dr in config.dt.Rows)
                 {
                     MasterCountry mc = new MasterCountry();
-                    mc.CountryId = Convert.ToString(dr["CountryId"]);
-                    mc.CountryName = Convert.ToString(dr["CountryName"]);
+                    mc.countryId = Convert.ToString(dr["countryId"]);
+                    mc.countryname = Convert.ToString(dr["countryname"]);
                     mcl.Add(mc);
                 }
             }
@@ -146,7 +146,7 @@ namespace HRMS.Models.DataBase
 
                 }, new Dictionary<string, object>()
                   {
-                  { "CountryId", mc.CountryId }
+                  { "countryId", mc.countryId }
                 });
                 mc.msg = "Deleted Successfuly";
             }
@@ -158,7 +158,7 @@ namespace HRMS.Models.DataBase
         }
         public MasterCountry getcountryid(MasterCountry mc)
         {
-            string sql = "Select * from  Master_Country order by CountryId";
+            string sql = "Select * from  Master_Country order by countryId";
             config.singleResult(sql);
 
             ccode = 0;
@@ -166,11 +166,11 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    mc.CountryId = Convert.ToString(dr["CountryId"]);
-                    string subcode = (Convert.ToString(dr["CountryId"])).Substring(0, 1);
+                    mc.countryId = Convert.ToString(dr["countryId"]);
+                    string subcode = (Convert.ToString(dr["countryId"])).Substring(0, 1);
                     if (mc.CountrySubId == subcode)
                     {
-                        //ccode = Convert.ToInt32(mc.CountryId.Substring(5)) + 1;
+                        //ccode = Convert.ToInt32(mc.countryId.Substring(5)) + 1;
                         ccode = ccode + 1;
                     }
                 }
@@ -179,9 +179,9 @@ namespace HRMS.Models.DataBase
 
             return mc;
         }
-        public MasterCountry CheckCountryName(string country)
+        public MasterCountry Checkcountryname(string country)
         {
-            string sql = "Select * from  Master_Country where Is_Deleted = 0 order by CountryId";
+            string sql = "Select * from  Master_Country where Is_Deleted = 0 order by countryId";
             config.singleResult(sql);
 
             MasterCountry mc = new MasterCountry();
@@ -189,8 +189,8 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    mc.CountryName = Convert.ToString(dr["CountryName"]);
-                    if (mc.CountryName == country)
+                    mc.countryname = Convert.ToString(dr["countryname"]);
+                    if (mc.countryname == country)
                     {
                         mc.checkdata = true;
                         return mc;
@@ -206,9 +206,9 @@ namespace HRMS.Models.DataBase
             return mc;
         }
 
-        public MasterCountry GetCountryNameByCountryId(string countryid)
+        public MasterCountry GetcountrynameBycountryId(string countryid)
         {
-            string sql = "Select * from  Master_Country where countryid='"+ countryid + "' order by CountryId";
+            string sql = "Select * from  Master_Country where countryid='"+ countryid + "' order by countryId";
             config.singleResult(sql);
 
             MasterCountry mc = new MasterCountry();
@@ -216,7 +216,7 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    mc.CountryName = Convert.ToString(dr["CountryName"]);
+                    mc.countryname = Convert.ToString(dr["countryname"]);
                    
                 }
 
@@ -226,7 +226,7 @@ namespace HRMS.Models.DataBase
         }
         public List<MasterCountry> getCountryMast()
         {
-            string sql = "Select * from  Master_Country where is_deleted<>1 order by CountryName";
+            string sql = "Select * from  Master_Country where is_deleted<>1 order by countryname";
             config.singleResult(sql);
 
             List<MasterCountry> mcl = new List<MasterCountry>();
@@ -235,8 +235,8 @@ namespace HRMS.Models.DataBase
                 foreach (DataRow dr in config.dt.Rows)
                 {
                     MasterCountry mc = new MasterCountry();
-                    mc.CountryId = Convert.ToString(dr["CountryId"]);
-                    mc.CountryName = Convert.ToString(dr["CountryName"]);
+                    mc.countryId = Convert.ToString(dr["countryId"]);
+                    mc.countryname = Convert.ToString(dr["countryname"]);
                     mcl.Add(mc);
                 }
 
@@ -248,8 +248,8 @@ namespace HRMS.Models.DataBase
         //{
         //    config.Insert("Master_Country", new Dictionary<string, object>()
         //    {
-        //        { "CountryId",   mc.CountryId},
-        //        { "CountryName", mc.CountryName},
+        //        { "countryId",   mc.countryId},
+        //        { "countryname", mc.countryname},
         //        { "Created_by",  mc.Created_by},
         //        { "Create_date", mc.Create_date},
         //        { "Create_Time", mc.Create_Time},
@@ -267,8 +267,8 @@ namespace HRMS.Models.DataBase
         //{
         //    DataTable dt = new DataTable();
         //    Hashtable hs = new Hashtable();
-        //    hs.Add("CountryId", mc.CountryId);
-        //    hs.Add("CountryName", mc.CountryName);
+        //    hs.Add("countryId", mc.countryId);
+        //    hs.Add("countryname", mc.countryname);
         //    hs.Add("Create_date", mc.Create_date);
         //    hs.Add("Create_Time", mc.Create_Time);
         //    hs.Add("Created_by", mc.Created_by);
@@ -280,10 +280,10 @@ namespace HRMS.Models.DataBase
         //    dt = config.ReturnScalar("spSaveCountry", hs);
         //    return dt;
         //}
-        public MasterCountry GetCountryIdByCountryName(string country)
+        public MasterCountry GetcountryIdBycountryname(string country)
         {
             MasterCountry mc = new MasterCountry();
-            string sql = "Select * from  Master_Country where CountryName='" + country + "' order by CountryId";
+            string sql = "Select * from  Master_Country where countryname='" + country + "' order by countryId";
             config.singleResult(sql);
 
             ccode = 0;
@@ -291,7 +291,7 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    mc.CountryId = Convert.ToString(dr["CountryId"]);
+                    mc.countryId = Convert.ToString(dr["countryId"]);
 
                 }
 

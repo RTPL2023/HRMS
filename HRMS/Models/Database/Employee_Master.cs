@@ -1,4 +1,4 @@
-﻿        
+﻿
 using HRMS.Includes;
 using HRMS.Controllers;
 
@@ -40,6 +40,7 @@ namespace HRMS.Models.Database
         public string reporting_mg_id { get; set; }
         public string last_edu_ql { get; set; }
         public string branch_id { get; set; }
+        public string employment_role { get; set; }
 
         public string msg { get; set; }
         public Byte[] bank_detail { get; set; }
@@ -80,7 +81,8 @@ namespace HRMS.Models.Database
                     { "reporting_mg_id",model.reporting_mg_id },
                     { "last_edu_ql",model.last_edu_ql },
                     { "branch_id",model.branch_id },
-                    
+                    { "employment_role",model.employment_role },
+
                 });
                 config.Insert("users", new Dictionary<string, object>()
                 {
@@ -91,7 +93,7 @@ namespace HRMS.Models.Database
                     { "allocated_branchid",model.branch_id },
                     { "created_by","users"},
                     { "created_on",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/") },
-                   
+
                 });
                 msg = "Saved Successfully";
             }
@@ -132,6 +134,28 @@ namespace HRMS.Models.Database
                     em.department = Convert.ToString(dr["department"]);
                     em.reporting_mg_id = Convert.ToString(dr["reporting_mg_id"]);
                     em.last_edu_ql = Convert.ToString(dr["last_edu_ql"]);
+                    em.employment_role = Convert.ToString(dr["employment_role"]);
+                    emplst.Add(em);
+                }
+
+            }
+
+            return (emplst);
+        }
+        public List<Employee_Master> getmanageremployeelists()
+        {
+            List<Employee_Master> emplst = new List<Employee_Master>();
+            string sql = "Select * from Employee_Master where employment_role='Manager' order by id";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    Employee_Master em = new Employee_Master();
+                    em.employee_id = Convert.ToString(dr["employee_id"]);
+
+                    em.name = Convert.ToString(dr["name"]);
+
                     emplst.Add(em);
                 }
 
@@ -199,7 +223,7 @@ namespace HRMS.Models.Database
                     { "emg_contact_no",model.emg_contact_no }
 
                 });
-           
+
 
         }
     }

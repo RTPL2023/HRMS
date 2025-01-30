@@ -83,10 +83,7 @@ namespace HRMS.Controllers
         [HttpGet]
         public IActionResult DesignationsMaster(employee_masterViewModel model)
         {
-            Employee_Master em = new Employee_Master();
-            List<Employee_Master> emlst = new List<Employee_Master>();
-            emlst = em.getemployeelists();
-            ViewBag.emlist = emlst;
+            
             return View(model);
         }
 
@@ -110,6 +107,13 @@ namespace HRMS.Controllers
           string msg= em.modifydesignationByid(model);
 
             return Json(msg);
+        } 
+        public JsonResult deletedesignationByid(employee_masterViewModel model)
+        {
+            Designation_Master em = new Designation_Master();
+          string msg= em.deletedesignationByid(model);
+
+            return Json(msg);
         }
         public JsonResult getDesignationsMasterList()
         {
@@ -119,13 +123,68 @@ namespace HRMS.Controllers
             string tableemenent = "";
             if (dmlst.Count > 0)
             {
-                tableemenent = "<tr><th>Designation</th><th>Department</th><th>Action</th></tr>";
+                tableemenent = "<tr><th>Designation</th><th colspan=\"2\">Action</th></tr>";
                 foreach (var a in dmlst)
                 {
 
-                    tableemenent = tableemenent + "<tr><td>" + a.designation + "</td><td>" + a.department + "</td>" +
-                        "<td><button type=\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#designationedit\" onclick=btnEditOnclick('" + a.id + "')> <i class=\"fa-solid fa-pen\"></i></ button >" +
-                        "<button type=\"button\" class=\"table__icon delete\" data-bs-toggle=\"modal\" data-bs-target=\"#designationDelete\"> <i class=\"fa-solid fa-trash\"></i></ button ></td></tr>";
+                    tableemenent = tableemenent + "<tr><td>" + a.designation + "</td>" +
+                        "<td><button type=\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#designationedit\" onclick=btnEditOnclick('" + a.id + "')> <i class=\"fa-solid fa-pen\"></i></ button></td>" +
+                        "<td><button type=\"button\" class=\"table__icon delete\" data-bs-toggle=\"modal\" data-bs-target=\"#designationDelete\" onclick=btnEditOnclick('" + a.id + "')> <i class=\"fa-solid fa-trash\"></i></ button ></td></tr>";
+
+
+                }
+            }
+            return Json(tableemenent);
+        }
+        [HttpGet]
+        public IActionResult DepartmentMaster(employee_masterViewModel model)
+        {
+
+            return View(model);
+        }
+
+        public JsonResult Savedepartment(employee_masterViewModel model)
+        {
+            Department_Master em = new Department_Master();
+            string msg = em.saveDepartment_Master(model);
+
+            return Json(msg);
+        }
+        public JsonResult getdepartmentByid(int id)
+        {
+            Department_Master em = new Department_Master();
+            em = em.getdepartmentByid(id);
+
+            return Json(em);
+        }
+        public JsonResult editDepartmentByid(employee_masterViewModel model)
+        {
+            Department_Master em = new Department_Master();
+            string msg = em.modifydepartmentByid(model);
+
+            return Json(msg);
+        } public JsonResult deleteDepartmentByid(employee_masterViewModel model)
+        {
+            Department_Master em = new Department_Master();
+            string msg = em.deletedepartmentByid(model);
+
+            return Json(msg);
+        }
+        public JsonResult getDepartmentMasterList()
+        {
+            Department_Master dm = new Department_Master();
+            List<Department_Master> dmlst = new List<Department_Master>();
+            dmlst = dm.getDepartment_Masterlists();
+            string tableemenent = "";
+            if (dmlst.Count > 0)
+            {
+                tableemenent = "<tr><th>DepartmentMaster</th><th colspan=\"2\">Action</th></tr>";
+                foreach (var a in dmlst)
+                {
+
+                    tableemenent = tableemenent + "<tr><td>" + a.department + "</td>" +
+                        "<td><button type=\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#Departmentedit\" onclick=btnEditOnclick('" + a.id + "')> <i class=\"fa-solid fa-pen\"></i></ button></td>" +
+                        "<td><button type=\"button\" class=\"table__icon delete\" data-bs-toggle=\"modal\" data-bs-target=\"#DepartmentDelete\" onclick=btnEditOnclick('" + a.id + "')> <i class=\"fa-solid fa-trash\"></i></ button ></td></tr>";
 
 
                 }

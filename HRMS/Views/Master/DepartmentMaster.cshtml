@@ -1,6 +1,6 @@
 ﻿@model HRMS.Models.ViewModel.employee_masterViewModel
 @{
-    ViewData["Title"] = "Employee Master";
+    ViewData["Title"] = "Department Master";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
@@ -44,14 +44,14 @@
         max-height: 300px;
     }
 </style>
-<form asp-controller="Master" asp-action="employee_master" method="post">
+<form asp-controller="Master" asp-action="DepartmentMaster" method="post">
     <div class="container">
         <div class="row">
             <div class="col-sm-6 mb-3 mb-sm-0">
                 <div class="card">
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#employeeadd">
-                            Add Designations
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Department">
+                            Add Department
                         </button>
                     </div>
                 </div>
@@ -64,16 +64,16 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col col-10 table-responsive">
 
                 <table class="table table-hover" align="center" id="list">
                 </table>
-
-
             </div>
-
         </div>
+
+
         <!-- toast -->
 
         <div class="toast" id="myToast">
@@ -92,29 +92,29 @@
 
     </div>
     <!-- Button trigger modal -->
-    <!--ADD Designation Modal  Start -->
-    <div class="modal fade" id="employeeadd" tabindex="-1" aria-labelledby="employeeaddLabel" aria-hidden="true">
+    <!--ADD DepartmentMaster Modal  Start -->
+    <div class="modal fade" id="Department" tabindex="-1" aria-labelledby="DepartmentLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="employeeaddLabel">Add New Designation</h1>
+                    <h1 class="modal-title fs-5" id="DepartmentLabel">Add New Department</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <from>
 
 
+
                     <div class="row m-3">
-                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
                             <div class="form-group">
-                                <label>Designation</label><span style="color:crimson">*</span>
-
-                                @Html.TextBoxFor(p => p.designation, new { @class = "form-control", @type = "text" })
-
+                                <label>Department</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(p => p.department, new { @class = "form-control", @type = "text" })
                             </div>
+
                         </div>
                     </div>
-
                 </from>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -124,45 +124,46 @@
         </div>
     </div>
     <!-- Modal End -->
-    <!--EDIT Designation Modal  Start -->
-    <div class="modal fade" id="designationedit" tabindex="-1" aria-labelledby="designationaddLabel" aria-hidden="true">
+    <!--EDIT Department Modal  Start -->
+    <div class="modal fade" id="Departmentedit" tabindex="-1" aria-labelledby="DepartmentaddLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="designationaddLabel">Edit Designation</h1>
+                    <h1 class="modal-title fs-5" id="DepartmentaddLabel">Edit Department</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <from>
 
 
-                    <div class="row m-3">
-                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
-                            <div class="form-group">
-                                <label>Designation</label><span style="color:crimson">*</span>
 
-                                @Html.TextBoxFor(p => p.editdesignation, new { @class = "form-control", @type = "text" })
+                    <div class="row m-3">
+
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Department</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(p => p.editdepartment, new { @class = "form-control", @type = "text" })
                                 <input type="text" id="editid" style="display:none">
                             </div>
+
                         </div>
                     </div>
-
                 </from>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnEditDesignation" name="btnEditDesignation" onclick="btnEditDesignationOnclick()">Edit Designation</button>
+                    <button type="button" class="btn btn-primary" id="btnEditDepartment" name="btnEditDepartment" onclick="btnEditDepartmentOnclick()">Edit Department</button>
                 </div>
             </div>
         </div>
     </div>
     <!-- Modal End -->
-    <!--Delete Designation Modal  Start -->
-    <div class="modal fade" id="designationDelete" tabindex="-1" aria-labelledby="designationDeleteLabel" aria-hidden="true">
+    <!--Delete Department Modal  Start -->
+    <div class="modal fade" id="DepartmentDelete" tabindex="-1" aria-labelledby="DepartmentDeleteLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="designationDeleteLabel">Edit Designation</h1>
+                    <h1 class="modal-title fs-5" id="DepartmentDeleteLabel">Edit Department</h1>
 
                 </div>
                 <from>
@@ -183,7 +184,7 @@
                 </from>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnDeleteDesignationOnclick()">Delete</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnDeleteOnclick()">Delete </button>
                 </div>
             </div>
         </div>
@@ -193,6 +194,32 @@
 @section scripts
 {
 
+
+    @*<script type="text/javascript">
+
+            $(document).ready(function () {
+                   $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("getBranchMastDetails", "Utility")',
+
+                    dataType: "json",
+                    success: function (data) {
+                        $("#branch_id").html(""); // clear before appending new list
+                        $.each(data, function (i, sc) {
+
+                            $("#branch_id").append(
+                                $('<option></option>').val(sc.branchId).html(sc.branchName));
+                        });
+
+                    },
+                    error: function (err) {
+                    alert(err);
+                    }
+
+                    });
+            });
+        </script>*@
+    @*<script src="~/lib/bootstrap/js/bootstrap.js"></script>*@
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -200,30 +227,29 @@
          });
 
         function cleartextbox() {
-            $('#designation').val("");
 
-            $('#editdesignation').val("");
+            $('#department').val("");
 
+            $('#editdepartment').val("");
             $('#editid').val("");
 
 
         }
         function btnsubmitOnclick() {
-            if ($('#designation').val() == null || $('#designation').val() == "") {
-                alert("designation id Required");
-                $('#designation').focus();
 
-            }
-
-            else {
+             if ($('#department').val() == null || $('#department').val() == "") {
+                alert("department id Required");
+                $('#department').focus();
+             }
+             else {
                     let ModelObject = {
-                        designation: $('#designation').val(),
 
+                        department: $('#department').val(),
 
                     };
 
                     $.ajax({
-                        url: '@Url.Action("Savedesignation", "Master")',
+                        url: '@Url.Action("Savedepartment", "Master")',
                         type: "POST",
                         data: ModelObject,
                         dataType: "json",
@@ -235,7 +261,7 @@
                             document.getElementById('tostmsg').innerHTML =
                                 data;
                             cleartextbox();
-                            $("#employeeadd").modal('hide');
+                            $("#Department").modal('hide');
                             ShowTable();
                         },
                         error: function (err) {
@@ -249,14 +275,14 @@
                         id: decid
                     };
                     $.ajax({
-                        url: '@Url.Action("getdesignationByid", "Master")',
+                        url: '@Url.Action("getdepartmentByid", "Master")',
                         type: "POST",
                         data: ModelObject,
                         dataType: "json",
                         success: function (data) {
                            /* console.log(data);*/
+                            $('#editdepartment').val(data.department);
 
-                            $('#editdesignation').val(data.designation);
                             $('#editid').val(data.id);
 
                         },
@@ -266,19 +292,19 @@
                     });
 
         }
-        function btnEditDesignationOnclick() {
+        function btnEditDepartmentOnclick() {
                     let ModelObject = {
+                        editdepartment:$('#editdepartment').val(),
 
-                        editdesignation:$('#editdesignation').val(),
                         editid:$('#editid').val(),
                     };
                     $.ajax({
-                        url: '@Url.Action("editdesignationByid", "Master")',
+                        url: '@Url.Action("editDepartmentByid", "Master")',
                         type: "POST",
                         data: ModelObject,
                         dataType: "json",
                         success: function (data) {
-                            $("#designationedit").modal('hide');
+                            $("#Departmentedit").modal('hide');
                             $("#myToast").toast({
                                 delay: 5000
                             });
@@ -294,20 +320,19 @@
                         }
                     });
 
-        }
-        function btnDeleteDesignationOnclick() {
+        } function btnDeleteOnclick() {
                     let ModelObject = {
+                        editdepartment:$('#editdepartment').val(),
 
-                       
                         editid:$('#editid').val(),
                     };
                     $.ajax({
-                        url: '@Url.Action("deletedesignationByid", "Master")',
+                        url: '@Url.Action("deleteDepartmentByid", "Master")',
                         type: "POST",
                         data: ModelObject,
                         dataType: "json",
                         success: function (data) {
-                            $("#designationDelete").modal('hide');
+                            $("#DepartmentDelete").modal('hide');
                             $("#myToast").toast({
                                 delay: 5000
                             });
@@ -328,7 +353,7 @@
             let ModelObject = {  name: $('#name').val()};
                     $.ajax({
                         type: "POST",
-                         url: '@Url.Action("getDesignationsMasterList", "Master")',
+                         url: '@Url.Action("getDepartmentMasterList", "Master")',
                         data: ModelObject,
                         dataType: "json",
                         success: function (data) {

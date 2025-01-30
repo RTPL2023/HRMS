@@ -31,58 +31,47 @@ namespace HRMS.Controllers
             return Json(mblst);
         }
         //****************For Country Drop Down
-        public IEnumerable<SelectListItem> getCountryMastDetails()
+        public JsonResult getCountryMastDetails()
         {
-            StateViewModel svm = new StateViewModel();
+            
             MasterCountry cm = new MasterCountry();
-            svm.CountryDesc = cm.getCountryMast().ToList().Select(x => new SelectListItem
-            {
-                Value = x.CountryId.ToString(),
-                Text = x.CountryName.ToString()
-            }); ;
-            return svm.CountryDesc;
+            var country = cm.getCountryMast();
+            
+            return  Json(country);
         }
         //****************For State Drop Down
-        public IEnumerable<SelectListItem> getStateMastDetails()
+        public JsonResult getStateMastDetails()
         {
-            DistrictViewModel dvm = new DistrictViewModel();
+
             MasterState ms = new MasterState();
-            dvm.StateDesc = ms.getStateMast().ToList().Select(x => new SelectListItem
-            {
-                Value = x.StateId.ToString(),
-                Text = x.StateName.ToString()
-            }); ;
+            var State = ms.getStateMast();
 
-            return dvm.StateDesc;
-
+            return Json(State);
         }
+
         //****************For District Drop Down
-        public IEnumerable<SelectListItem> getDistrictMastDetails()
+        public JsonResult getDistrictMastDetails()
         {
-            CityViewModel cvm = new CityViewModel();
+
             MasterDistrict md = new MasterDistrict();
-            cvm.DistrictDesc = md.getDistrictMast().ToList().Select(x => new SelectListItem
-            {
-                Value = x.DistrictId.ToString(),
-                Text = x.DistrictName.ToString()
-            }); ;
 
-            return cvm.DistrictDesc;
+            var District = md.getDistrictMast();
 
+            return Json(District);
         }
+
         //****************For City Drop Down
-        public IEnumerable<SelectListItem> getCityMastDetails()
+        public JsonResult getCityMastDetails()
         {
-            BranchMasterViewModel bvm = new BranchMasterViewModel();
-            MasterCity mc = new MasterCity();
-            bvm.CityDesc = mc.getCityMast().ToList().Select(x => new SelectListItem
-            {
-                Value = x.CityId.ToString(),
-                Text = x.CityName.ToString()
-            }); ;
 
-            return bvm.CityDesc;
+            MasterCity mc = new MasterCity();
+
+
+            var City = mc.getCityMast();
+
+            return Json(City);
         }
+       
 
         //****************District Wise City Drop Down
         public ActionResult FillCity(string District_Id)
@@ -99,6 +88,30 @@ namespace HRMS.Controllers
             leave_type_master ltm = new leave_type_master();
             var leavetype = ltm.GetleaveType();
             return Json(leavetype);
+        } 
+        //****************For Designation Drop Down
+
+        public JsonResult getdesignation()
+        {
+            Designation_Master ltm = new Designation_Master();
+            var dlst = ltm.getDesignation_Masterlists();
+            return Json(dlst);
+        }
+        //****************For Designation Drop Down
+
+        public JsonResult getdepartmentmaster()
+        {
+            Department_Master dm = new Department_Master();
+            var dmlst = dm.getDepartment_Masterlists();
+            return Json(dmlst);
+        }
+        //****************For ReportingManager Drop Down
+
+        public JsonResult getReportingManager()
+        {
+            Employee_Master em = new Employee_Master();
+            var emplst = em.getmanageremployeelists();
+            return Json(emplst);
         }
 
         public string getleaveType(string lid)

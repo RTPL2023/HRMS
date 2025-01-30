@@ -4,110 +4,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link href="~/css/card.css" rel="stylesheet" />
 <style>
-    .itemtab {
-        font-family: Arial, Helvetica, sans-serif;
-        /*font-size: 15px;*/
-        border-collapse: collapse;
-        width: auto;
-    }
-
-        .itemtab tbody {
-            display: block;
-            width: auto;
-            overflow: auto;
-            height: auto;
-        }
-
-        .itemtab td {
-            border: 2px solid black;
-            padding: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-            text-align: center;
-            font-size: 14px;
-            color: black;
-            font-weight: bold
-        }
-
-        .itemtab td, th {
-            width: auto;
-        }
-
-        .itemtab tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .itemtab tr:hover {
-            background-color: #ddd;
-        }
-
-        .itemtab th {
-            border: 2px solid black;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-            text-align: center;
-            font-size: 16px;
-            /*background-color: #04AA6D;*/
-            background-color: #0437F2;
-            color: white;
-            position: sticky;
-            top: 0;
-        }
-
-    .table__icon.edit {
-        background-color: rgba(26, 188, 156, .1);
-        --tw-text-opacity: 1;
-        color: rgb(26 188 156 / var(--tw-text-opacity, 1));
-    }
-
-    .table__icon {
-        display: flex;
-        height: 30px;
-        width: 30px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        padding: 2px 7px;
-        font-size: 14px;
-        --tw-text-opacity: 1;
-        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-        transition-property: all;
-        transition-timing-function: cubic-bezier(.4,0,.2,1);
-        transition-duration: .3s;
-        transition-timing-function: linear;
-    }
-
-    button {
-        border-width: 0;
-        background-color: transparent;
-        outline: 2px solid transparent;
-        outline-offset: 2px;
-    }
-
-    .table__icon.delete {
-        background-color: rgba(255, 58, 41, .1);
-        --tw-text-opacity: 1;
-        color: rgb(255 58 41 / var(--tw-text-opacity, 1));
-    }
 </style>
 <form asp-controller="Attendance" asp-action="PunchINPunchOut" method="post">
     <div class="container ">
-        <div class="row text-center">
-            <div class="col-12 col-md-12">
+        <div class="row">
+            <div class="card__wrapper no-height">
+                <div class="card__title-wrap flex items-center justify-between mb-[20px]">
+                    <h5 class="card__heading-title">Mark Attendance</h5>
 
-                <h1 class="modal-title fs-5">Mark Your Attendance</h1>
-            </div>
-        </div>
-        <div class="row text-center mt-3">
-            <div class="col-12 col-md-6">
-                <button type="button" id="punchin" name="punchin" class="btn btn-primary " onclick="btnPunchinOnclick()">PUNCH IN</button>
+                </div>
+                <p class="text-muted">Office Time: 09:30AM to 06:30PM</p>
+                <div class="d-flex flex-row mb-3">
+                    <div class="p-2">
+                        <button type="button" id="punchin" name="punchin" class="btn btn-primary " onclick="btnPunchinOnclick()">PUNCH IN</button>
+                    </div>
+                    <div class="p-2">
+                        <button type="button" id="punchout" name="punchout" class="btn btn-danger " onclick="btnPunchoutOnclick()">PUNCH OUT</button>
 
-            </div>
-            <div class="col-12 col-md-6 text-start">
-                <button type="button" id="punchout" name="punchout" class="btn btn-danger " onclick="btnPunchoutOnclick()">PUNCH OUT</button>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -124,10 +41,40 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!--<div class="container ">
+    <div class="row text-center">
+        <div class="col-12 col-md-12">
+
+            <h1 class="modal-title fs-5">Mark Your Attendance</h1>
+        </div>
+    </div>
+    <div class="row text-center mt-3">
+        <div class="col-12 col-md-6">
+            <button type="button" id="punchin" name="punchin" class="btn btn-primary " onclick="btnPunchinOnclick()">PUNCH IN</button>
 
         </div>
-        <!-- toast -->
+        <div class="col-12 col-md-6 text-start">
+            <button type="button" id="punchout" name="punchout" class="btn btn-danger " onclick="btnPunchoutOnclick()">PUNCH OUT</button>
 
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-sm-12 mb-12 mb-sm-0">
+            <div class="card">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" align="center">
+                        <tbody id="attlist">
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>-->
+        <!-- toast -->
         <div class="toast" id="myToast">
             <div class="toast-container top-0 end-0 p-3">
                 <div class="toast align-items-center text-bg-success border-0 fade show top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
@@ -141,82 +88,86 @@
             </div>
         </div>
         <!-- toast -->
-    </div>
+        <!--</div>-->
+        <!--ADD Designation Modal  Start -->
+        <div class="modal fade" id="EditInvalid" tabindex="-1" aria-labelledby="EditInvalidLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
 
-    <!--ADD Designation Modal  Start -->
-    <div class="modal fade" id="EditInvalid" tabindex="-1" aria-labelledby="EditInvalidLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="EditInvalidLabel">Modify Attendance</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <from>
-                    <div class="row m-3">
-                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
-                            <div class="form-group">
-                                <label>Date</label><span style="color:crimson">*</span>
-                                <input type="text" id="attendance_date" class="form-control" readonly />
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
-                            <div class="form-group">
-                                <label>In Time</label><span style="color:crimson">*</span>
-                                <input type="time" id="requested_in_time" class="form-control" />
-                            </div>
-                        </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="EditInvalidLabel">Modify Attendance</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="row m-3">
+                    <from>
+                        <div class="row m-3">
+                            <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <span style="color:crimson">*</span>
+                                    <input type="text" id="attendance_date" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                                <div class="form-group">
+                                    <label>In Time</label>
+                                    <span style="color:crimson">*</span>
+                                    <input type="time" id="requested_in_time" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-3">
 
-                        <div class="col-lg-6 col-12 col-sm-12 text-start">
-                            <div class="form-group">
-                                <label>Out Time</label><span style="color:crimson">*</span>
-                                <input type="time" id="requested_out_time" class="form-control" />
+                            <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                <div class="form-group">
+                                    <label>Out Time</label>
+                                    <span style="color:crimson">*</span>
+                                    <input type="time" id="requested_out_time" class="form-control" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6 col-12 col-sm-12 text-start">
-                            <div class="form-group">
-                                <label>Day Type</label><span style="color:crimson">*</span>
-                           
-                                <select name="requested_day_count" id="requested_day_count" class="form-control" required>
-                                    <option value="">Select Day Type</option>
-                                    <option value="1">Full Day</option>
-                                    <option value="0.5">Half Day</option>
-                                    
-                                </select>
+                            <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                <div class="form-group">
+                                    <label>Day Type</label>
+                                    <span style="color:crimson">*</span>
 
+                                    <select name="requested_day_count" id="requested_day_count" class="form-control" required>
+                                        <option value="">Select Day Type</option>
+                                        <option value="1">Full Day</option>
+                                        <option value="0.5">Half Day</option>
+
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12 col-sm-12 text-start">
+                                <div class="form-group">
+                                    <label>Reason</label>
+                                    <span style="color:crimson">*</span>
+                                    <input type="text" id="reason" class="form-control" maxlength="100" />
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-12 col-sm-12 text-start">
-                            <div class="form-group">
-                                <label>Reason</label><span style="color:crimson">*</span>
-                                <input type="text" id="reason" class="form-control" maxlength="100"/>
+                        <div class="row m-3" id="disbledtextbox">
+                            <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                                <div class="form-group">
+
+                                    <input type="text" id="attendance_Id" class="form-control" readonly />
+                                    <input type="text" id="actual_In_time" class="form-control" readonly />
+                                    <input type="text" id="actual_out_time" class="form-control" readonly />
+                                    <input type="text" id="actual_punch_type" class="form-control" readonly />
+                                    <input type="text" id="actual_day_count" class="form-control" readonly />
+                                </div>
                             </div>
+
                         </div>
+                    </from>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
                     </div>
-                    <div class="row m-3" id="disbledtextbox">
-                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
-                            <div class="form-group">
-
-                                <input type="text" id="attendance_Id" class="form-control" readonly />
-                                <input type="text" id="actual_In_time" class="form-control" readonly />
-                                <input type="text" id="actual_out_time" class="form-control" readonly />
-                                <input type="text" id="actual_punch_type" class="form-control" readonly />
-                                <input type="text" id="actual_day_count" class="form-control" readonly />
-                            </div>
-                        </div>
-
-                    </div>
-                </from>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Modal End -->
+        <!-- Modal End -->
 
 </form>
 @section scripts

@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace HRMS.Models.Database
 {
-    public class Designation_Master
+    public class Department_Master
     {
         SQLConfig config = new SQLConfig();
 
         public string id { get; set; }
-
-        public string designation { get; set; }
-
+        public string department { get; set; }
         public string created_by { get; set; }
         public string created_on { get; set; }
         public string modified_by { get; set; }
@@ -25,18 +23,17 @@ namespace HRMS.Models.Database
         UtilityController u = new UtilityController();
 
 
-        public string saveDesignationMaster(employee_masterViewModel model)
+        public string saveDepartment_Master(employee_masterViewModel model)
         {
             string msg = "";
-            string sql = "Select * from Designation_Master where Designation = '" + model.designation + "'";
+            string sql = "Select * from Department_Master where department = '" + model.department + "'";
             config.singleResult(sql);
             if (config.dt.Rows.Count == 0)
             {
 
-                config.Insert("Designation_Master", new Dictionary<string, object>()
+                config.Insert("Department_Master", new Dictionary<string, object>()
                 {
-                    { "designation",model.designation },
-
+                    { "department",model.department },
                     { "created_by","users"},
                     { "created_on",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/") },
 
@@ -45,15 +42,15 @@ namespace HRMS.Models.Database
             }
             else
             {
-                msg = "Designation Alrady Exisd";
+                msg = "department Alrady Exisd";
             }
             return (msg);
         }
-        public Designation_Master getdesignationByid(int id)
+        public Department_Master getdepartmentByid(int id)
         {
-            Designation_Master dm = new Designation_Master();
+            Department_Master dm = new Department_Master();
 
-            string sql = "Select * from Designation_Master where id=" + id + "";
+            string sql = "Select * from Department_Master where id=" + id + "";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
@@ -62,24 +59,24 @@ namespace HRMS.Models.Database
 
                     dm.id = Convert.ToString(dr["id"]);
 
-                    dm.designation = Convert.ToString(dr["designation"]);
+                    dm.department = Convert.ToString(dr["department"]);
 
                 }
             }
             return (dm);
         }
-        public string modifydesignationByid(employee_masterViewModel model)
+        public string modifydepartmentByid(employee_masterViewModel model)
         {
 
             string msg = "";
-            string sql = "Select * from Designation_Master where id=" + model.editid + "";
+            string sql = "Select * from Department_Master where id=" + model.editid + "";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
-                config.Update("Designation_Master", new Dictionary<String, object>()
+                config.Update("Department_Master", new Dictionary<String, object>()
                 {
 
-                    { "designation", model.editdesignation},
+                    { "department", model.editdepartment},
                     { "modified_by",   "user"},
                     { "modified_on",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/")},
 
@@ -88,44 +85,43 @@ namespace HRMS.Models.Database
                   {
                   { "id",Convert.ToInt32( model.editid) }
                 });
-                msg = "Designation Update Successfull";
+                msg = "Department Updated Successfull";
             }
             return (msg);
-        } 
-        public string deletedesignationByid(employee_masterViewModel model)
+        }
+        public string deletedepartmentByid(employee_masterViewModel model)
         {
-
             string msg = "";
-            string sql = "delete from Designation_Master where id=" + model.editid + "";
+            string sql = "delete from Department_Master where id=" + model.editid + "";
             config.Execute_Query(sql);
-           
-                msg = "Designation Deleted Successfull";
-           
+
+            msg = "Department Deleted Successfull";
+
             return (msg);
         }
-        public List<Designation_Master> getDesignation_Masterlists()
+        public List<Department_Master> getDepartment_Masterlists()
         {
-            List<Designation_Master> dmlst = new List<Designation_Master>();
-            string sql = "Select * from Designation_Master order by id";
+            List<Department_Master> dmlst = new List<Department_Master>();
+            string sql = "Select * from Department_Master order by id";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    Designation_Master dm = new Designation_Master();
+                    Department_Master dm = new Department_Master();
                     dm.id = Convert.ToString(dr["id"]);
 
-                    dm.designation = Convert.ToString(dr["designation"]);
+                    dm.department = Convert.ToString(dr["department"]);
                     dmlst.Add(dm);
                 }
             }
             return (dmlst);
         }
-        public Designation_Master getdesignationlist()
+        public Department_Master getdepartmentlist()
         {
-            Designation_Master dm = new Designation_Master();
+            Department_Master dm = new Department_Master();
 
-            string sql = "Select * from Designation_Master ORDER BY designation";
+            string sql = "Select * from Department_Master ORDER BY department";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
@@ -133,7 +129,7 @@ namespace HRMS.Models.Database
                 {
                     dm.id = Convert.ToString(dr["id"]);
 
-                    dm.designation = Convert.ToString(dr["designation"]);
+                    dm.department = Convert.ToString(dr["department"]);
 
                 }
             }
