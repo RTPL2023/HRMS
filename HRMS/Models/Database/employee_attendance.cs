@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
 using HRMS.Includes;
+using System.Globalization;
 
 namespace HRMS.Models.Database
 {
     public class employee_attendance
     {
+        DateTimeFormatInfo usCinfo = new CultureInfo("en-GB", false).DateTimeFormat;
         SQLConfig config = new SQLConfig();
         public int id { get; set; }
         public string employee_id { get; set; }
@@ -44,7 +46,7 @@ namespace HRMS.Models.Database
         public string punchout_longitude { get; set; }
         public decimal duration { get; set; }
         public string msg { get; set; }
-        public  int rownum { get; set; }
+        public int rownum { get; set; }
 
         public employee_attendance SaveInAttendance(employee_attendance ea)
         {
@@ -56,10 +58,10 @@ namespace HRMS.Models.Database
             }
             else
             {
-                sql = "insert into employee_attendance (employee_id,date,day,in_time,in_location_type,punchin_latitude,punchin_longitude) values ('"+ ea.employee_id + "', ";
+                sql = "insert into employee_attendance (employee_id,date,day,in_time,in_location_type,punchin_latitude,punchin_longitude) values ('" + ea.employee_id + "', ";
                 sql = sql + "'" + ea.date + "','" + ea.day + "','" + ea.in_time + "','" + ea.in_location_type + "','" + ea.punchin_latitude + "','" + ea.punchin_longitude + "')";
                 ea.rownum = config.Execute_Query_WithRetValue(sql);
-           
+
                 if (ea.rownum > 0)
                 {
                     ea.msg = "You Have Punched In Successfully";
@@ -69,7 +71,7 @@ namespace HRMS.Models.Database
                     ea.msg = "Unable To Punch In";
                 }
             }
-          
+
             return ea;
         }
         public employee_attendance SaveOutAttendance(employee_attendance ea)
@@ -81,14 +83,14 @@ namespace HRMS.Models.Database
                 DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
                 ea.in_time = Convert.ToString(dr["in_time"]);
                 ea.in_location_type = Convert.ToString(dr["in_location_type"]);
-                DateTime emp_intime = Convert.ToDateTime(ea.date + " " + ea.in_time);
-                DateTime emp_outtime = Convert.ToDateTime(ea.date + " " + ea.out_time);
+                DateTime emp_intime = Convert.ToDateTime(ea.date + " " + ea.in_time, usCinfo);
+                DateTime emp_outtime = Convert.ToDateTime(ea.date + " " + ea.out_time, usCinfo);
                 TimeSpan diff = emp_outtime - emp_intime;
-                if (ea.in_location_type=="Valid"&&ea.out_location_type=="Valid")
+                if (ea.in_location_type == "Valid" && ea.out_location_type == "Valid")
                 {
-                    if (diff.TotalHours <9)
+                    if (diff.TotalHours < 9)
                     {
-                        if(diff.TotalHours > 4.5)
+                        if (diff.TotalHours > 4.5)
                         {
                             ea.punch_type = "Valid";
                             ea.duration = Convert.ToDecimal(0.5);
@@ -98,7 +100,7 @@ namespace HRMS.Models.Database
                             ea.punch_type = "Invalid";
                             ea.duration = Convert.ToDecimal(0);
                         }
-                        
+
                     }
                     else
                     {
@@ -112,7 +114,7 @@ namespace HRMS.Models.Database
                     ea.duration = Convert.ToDecimal(0);
                 }
 
-
+                //ea.date = Convert.ToDateTime(ea.date).ToString("dd/MM/yyyy").Replace("-", "/");
                 sql = "update employee_attendance set ";
                 sql = sql + "out_time='" + ea.out_time + "',";
                 sql = sql + "out_location_type='" + ea.out_location_type + "',";
@@ -120,7 +122,7 @@ namespace HRMS.Models.Database
                 sql = sql + "punchout_longitude='" + ea.punchout_longitude + "', ";
                 sql = sql + "punch_type='" + ea.punch_type + "', ";
                 sql = sql + "duration=" + ea.duration + " ";
-               
+
                 sql = sql + "where ";
                 sql = sql + "employee_id='" + ea.employee_id + "'and ";
                 sql = sql + "day='" + ea.day + "'and ";
@@ -142,13 +144,36 @@ namespace HRMS.Models.Database
                 ea.msg = "No Punch In Record Found Or You Have Already Punched Out";
 
             }
-          
+
             return ea;
         }
 
 
 
-
-
+        public List<employee_attendance> getemployeeAttendacelistByemployeeId(string empl_id)
+        {
+            List<employee_attendance> ealst = new List<employee_attendance>();
+            string sql = "Select top (45) * from employee_attendance Where employee_Id='" + empl_id + "' order by id desc";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    employee_attendance ea = new employee_attendance();
+                    ea.id = Convert.ToInt32(dr["id"]);
+                    ea.duration = !Convert.IsDBNull(dr["duration"]) ? Convert.ToDecimal(dr["duration"]) : Convert.ToDecimal(0);
+                    ea.date = Convert.ToString(dr["date"]);
+                    ea.day = Convert.ToString(dr["day"]);
+                    ea.in_time = Convert.ToString(dr["in_time"]);
+                    ea.out_time = Convert.ToString(dr["out_time"]);
+                    //ea.duration = Convert.ToDecimal(dr["duration"]);
+                    ea.punch_type = Convert.ToString(dr["punch_type"]);
+                    ea.is_approved = !Convert.IsDBNull(dr["is_approved"])? Convert.ToInt32(dr["is_approved"]): Convert.ToInt32(2);
+                    ealst.Add(ea);
+                }
+            }
+            return (ealst);
+        }
+      
     }
 }

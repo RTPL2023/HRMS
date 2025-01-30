@@ -3,32 +3,233 @@
     ViewData["Title"] = "Employee Master";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
+    .itemtab {
+        font-family: Arial, Helvetica, sans-serif;
+        /*font-size: 15px;*/
+        border-collapse: collapse;
+        width: auto;
+    }
+
+        .itemtab tbody {
+            display: block;
+            width: auto;
+            overflow: auto;
+            height: auto;
+        }
+
+        .itemtab td {
+            border: 2px solid black;
+            padding: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            text-align: center;
+            font-size: 14px;
+            color: black;
+            font-weight: bold
+        }
+
+        .itemtab td, th {
+            width: auto;
+        }
+
+        .itemtab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .itemtab tr:hover {
+            background-color: #ddd;
+        }
+
+        .itemtab th {
+            border: 2px solid black;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            text-align: center;
+            font-size: 16px;
+            /*background-color: #04AA6D;*/
+            background-color: #0437F2;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+    .table__icon.edit {
+        background-color: rgba(26, 188, 156, .1);
+        --tw-text-opacity: 1;
+        color: rgb(26 188 156 / var(--tw-text-opacity, 1));
+    }
+
+    .table__icon {
+        display: flex;
+        height: 30px;
+        width: 30px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        padding: 2px 7px;
+        font-size: 14px;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+        transition-property: all;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .3s;
+        transition-timing-function: linear;
+    }
+
+    button {
+        border-width: 0;
+        background-color: transparent;
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+    }
+
+    .table__icon.delete {
+        background-color: rgba(255, 58, 41, .1);
+        --tw-text-opacity: 1;
+        color: rgb(255 58 41 / var(--tw-text-opacity, 1));
+    }
 </style>
 <form asp-controller="Attendance" asp-action="PunchINPunchOut" method="post">
- 
-   
+    <div class="container ">
+        <div class="row text-center">
+            <div class="col-12 col-md-12">
+
+                <h1 class="modal-title fs-5">Mark Your Attendance</h1>
+            </div>
+        </div>
+        <div class="row text-center mt-3">
+            <div class="col-12 col-md-6">
+                <button type="button" id="punchin" name="punchin" class="btn btn-primary " onclick="btnPunchinOnclick()">PUNCH IN</button>
+
+            </div>
+            <div class="col-12 col-md-6 text-start">
+                <button type="button" id="punchout" name="punchout" class="btn btn-danger " onclick="btnPunchoutOnclick()">PUNCH OUT</button>
+
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-12 mb-12 mb-sm-0">
+                <div class="card">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" align="center">
+                            <tbody id="attlist">
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- toast -->
+
+        <div class="toast" id="myToast">
+            <div class="toast-container top-0 end-0 p-3">
+                <div class="toast align-items-center text-bg-success border-0 fade show top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body" id="tostmsg">
+
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- toast -->
+    </div>
+
+    <!--ADD Designation Modal  Start -->
+    <div class="modal fade" id="EditInvalid" tabindex="-1" aria-labelledby="EditInvalidLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">Mark Your Attendance</h1>
-                    
+                    <h1 class="modal-title fs-5" id="EditInvalidLabel">Modify Attendance</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-          
+                <from>
+                    <div class="row m-3">
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>Date</label><span style="color:crimson">*</span>
+                                <input type="text" id="attendance_date" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>In Time</label><span style="color:crimson">*</span>
+                                <input type="time" id="requested_in_time" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3">
 
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Out Time</label><span style="color:crimson">*</span>
+                                <input type="time" id="requested_out_time" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Day Type</label><span style="color:crimson">*</span>
+                           
+                                <select name="requested_day_count" id="requested_day_count" class="form-control" required>
+                                    <option value="">Select Day Type</option>
+                                    <option value="1">Full Day</option>
+                                    <option value="0.5">Half Day</option>
+                                    
+                                </select>
 
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Reason</label><span style="color:crimson">*</span>
+                                <input type="text" id="reason" class="form-control" maxlength="100"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3" id="disbledtextbox">
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+
+                                <input type="text" id="attendance_Id" class="form-control" readonly />
+                                <input type="text" id="actual_In_time" class="form-control" readonly />
+                                <input type="text" id="actual_out_time" class="form-control" readonly />
+                                <input type="text" id="actual_punch_type" class="form-control" readonly />
+                                <input type="text" id="actual_day_count" class="form-control" readonly />
+                            </div>
+                        </div>
+
+                    </div>
+                </from>
                 <div class="modal-footer">
-                    <button type="button" id="punchin" name="punchin" value="PUNCH IN" class="btn btn-primary btn-sm" onclick="btnPunchinOnclick()"></button>
-                    <button type="button" id="punchout" name="punchout" value="PUNCH OUT" class="btn btn-primary btn-sm" onclick="btnPunchoutOnclick()"></button>
-                    
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
                 </div>
-            
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+
 </form>
 @section scripts
 {
 
-
     <script type="text/javascript">
 
         $(document).ready(function () {
+            ShowTable();
+
+           /* $('#myToast').hide();*/
+            $('#disbledtextbox').hide();
+
 
         });
 
@@ -67,7 +268,7 @@
                         dataType: "json",
                         success: function (data) {
                             alert(data);
-
+                            ShowTable();
                         },
                         error: function (err) {
                             alert("Error Occured");
@@ -86,7 +287,7 @@
             }
         }
 
-          function out_showPosition(position) {
+        function out_showPosition(position) {
 
               var outloc = "";
             if ((22.6295808 - 0.001) < position.coords.latitude < (22.6295808 + 0.001) && (88.4310016 - 0.001) < position.coords.longitude < (88.4310016 + 0.001)) {
@@ -110,16 +311,105 @@
                         dataType: "json",
                         success: function (data) {
                             alert(data);
-
+                            ShowTable();
                         },
                         error: function (err) {
+                            console.log(err);
                             alert("Error Occured");
                         }
                     });
 
         }
 
+        function ShowTable() {
+            let ModelObject = { name: $('#name').val() };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getEmployeeAttendenceList", "Attendance")',
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("attlist").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function cleartextbox() {
+            $('#requested_in_time').val(null);
+            $('#requested_out_time').val(null);
+            $('#attendance_date').val(null);
+            $('#attendance_Id').val(null);
+            $('#actual_In_time').val(null);
+            $('#actual_out_time').val(null);
+            $('#actual_punch_type').val(null);
+            $('#actual_day_count').val(null);
+            $('#reason').val(null);
+
+        }
+        function btnEditOnclick(in_time, out_time, attendance_date, attendance_Id, punch_type, actual_day_count) {
+            $('#requested_in_time').val(in_time);
+            $('#requested_out_time').val(out_time);
+            $('#attendance_date').val(attendance_date);
+            $('#attendance_Id').val(attendance_Id);
+            $('#actual_In_time').val(in_time);
+            $('#actual_out_time').val(out_time);
+            $('#actual_punch_type').val(punch_type);
+            $('#actual_day_count').val(actual_day_count);
+           /* console.log(in_time, out_time, attendance_date, attendance_Id, punch_type, actual_day_count);*/
+            $('#disbledtextbox').hide;
+        }
+        function btnsubmitOnclick() {
+            if ($('#reason').val() == "") {
+                alert("Reason Can't Be Blank!");
+            }
+            else if ($('#requested_day_count').val() == "") {
+                alert("Day Type Can't Be Blank!");
 
 
+            } else if ($('#requested_in_time').val() == "") {
+                alert("In Time Can't Be Blank!");
+
+            } else if ($('#requested_out_time').val() == "") {
+                alert("Out Time Can't Be Blank!");
+
+            } else {
+                    let ModelObject = {
+                            requested_in_time: $('#requested_in_time').val(),
+                            requested_out_time: $('#requested_out_time').val(),
+                            attendance_date: $('#attendance_date').val(),
+                            attendance_Id: $('#attendance_Id').val(),
+                            actual_In_time: $('#actual_In_time').val(),
+                            actual_out_time: $('#actual_out_time').val(),
+                            actual_punch_type: $('#actual_punch_type').val(),
+                            actual_day_count: $('#actual_day_count').val(),
+                            requested_day_count: $('#requested_day_count').val(),
+                            reason: $('#reason').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("editIntimeOutTime", "Attendance")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            cleartextbox();
+
+                            $("#EditInvalid").modal('hide');
+                            $("#myToast").toast({
+                                delay: 5000
+                            });
+                            $("#myToast").toast("show");
+                            document.getElementById('tostmsg').innerHTML =
+                                data;
+                            ShowTable();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
     </script>
 }

@@ -1,4 +1,5 @@
-﻿using HRMS.Includes;
+﻿using HRMS.Controllers;
+using HRMS.Includes;
 using HRMS.Models.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,8 @@ namespace HRMS.Models.Database
         public string modified_by { get; set; }
         public string modified_on { get; set; }
        
-
+        UtilityController u = new UtilityController();
+        
 
         public string saveDesignationMaster(employee_masterViewModel model)
         {
@@ -35,7 +37,7 @@ namespace HRMS.Models.Database
                     { "designation",model.designation },
                     { "department",model.department },
                     { "created_by","users"},
-                    { "created_on",DateTime.Now.ToString("dd/MM/yyyy").Replace("-","/") },
+                    { "created_on",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/") },
 
                 });
                 msg = "Saved Successfully";
@@ -78,7 +80,7 @@ namespace HRMS.Models.Database
                     { "department", model.editdepartment},
                     { "designation", model.editdesignation},
                     { "modified_by",   "user"},
-                    { "modified_on",DateTime.Now.ToString("dd/MM/yyyy").Replace("-","/")},
+                    { "modified_on",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/")},
                     
 
                 }, new Dictionary<string, object>()

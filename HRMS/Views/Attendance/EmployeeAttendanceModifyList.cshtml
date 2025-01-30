@@ -1,0 +1,544 @@
+﻿@model HRMS.Models.ViewModel.PunchInPunchOutViewModel
+@{
+    ViewData["Title"] = "Employee Attendance Modify List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .itemtab {
+        font-family: Arial, Helvetica, sans-serif;
+        /*font-size: 15px;*/
+        border-collapse: collapse;
+        width: auto;
+    }
+
+        .itemtab tbody {
+            display: block;
+            width: auto;
+            overflow: auto;
+            height: auto;
+        }
+
+        .itemtab td {
+            border: 2px solid black;
+            padding: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            text-align: center;
+            font-size: 14px;
+            color: black;
+            font-weight: bold
+        }
+
+        .itemtab td, th {
+            width: auto;
+        }
+
+        .itemtab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .itemtab tr:hover {
+            background-color: #ddd;
+        }
+
+        .itemtab th {
+            border: 2px solid black;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            text-align: center;
+            font-size: 16px;
+            /*background-color: #04AA6D;*/
+            background-color: #0437F2;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+    .table__icon.edit {
+        background-color: rgba(26, 188, 156, .1);
+        --tw-text-opacity: 1;
+        color: rgb(26 188 156 / var(--tw-text-opacity, 1));
+    }
+
+    .table__icon {
+        display: flex;
+        height: 30px;
+        width: 30px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        padding: 2px 7px;
+        font-size: 14px;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+        transition-property: all;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .3s;
+        transition-timing-function: linear;
+    }
+
+    button {
+        border-width: 0;
+        background-color: transparent;
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+    }
+
+    .table__icon.delete {
+        background-color: rgba(255, 58, 41, .1);
+        --tw-text-opacity: 1;
+        color: rgb(255 58 41 / var(--tw-text-opacity, 1));
+    }
+
+    .bga {
+        display: inline-flex;
+        height: 26px;
+        min-width: 75px;
+        align-items: center;
+        justify-content: center;
+        border-radius: .375rem;
+        padding: .25rem .625rem;
+        text-align: center;
+        font-weight: 400;
+        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+    }
+
+    .bga, code {
+        font-size: 12px;
+        --tw-text-opacity: 1;
+    }
+
+    .bgaa-success {
+       /* --tw-bg-opacity: 1;*/
+        background-color: rgb(52 181 58 / var(--tw-bg-opacity, 1));
+    }
+
+    .bgaa-warning {
+        /*--tw-bg-opacity: 1;*/
+        background-color: rgb(255 178 0 / var(--tw-bg-opacity, 1));
+    }
+
+    .bgaa-danger {
+      /*  --tw-bg-opacity: 1;*/
+        background-color: rgb(255 21 0/ var(--tw-bg-opacity, 1));
+    }
+</style>
+<form asp-controller="Attendance" asp-action="EmployeeAttendanceModifyList" method="post">
+    <div class="container ">
+        <div class="row text-center">
+            <div class="col-12 col-md-12">
+
+                <h1 class="modal-title fs-5">Modify  Attendance List</h1>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-sm-12 mb-12 mb-sm-0">
+                <div class="card">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" align="center">
+                            <tbody id="list">
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row text-center">
+            <div class="col-12 col-md-12">
+
+                <h1 class="modal-title fs-5">Leave List</h1>
+            </div>
+        </div>
+        <div class="row mt-3 mb-5">
+            <div class="col-sm-12 mb-12 mb-sm-0">
+                <div class="card">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" align="center">
+                            <tbody id="leavelist">
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- toast -->
+
+        <div class="toast" id="myToast">
+            <div class="toast-container top-0 end-0 p-3">
+                <div class="toast align-items-center text-bg-success border-0 fade show top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body" id="tostmsg">
+
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- toast -->
+    </div>
+
+    <!--Attendance Approved modal Modal  Start -->
+    <div class="modal fade" id="Approved" tabindex="-1" aria-labelledby="ApprovedLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ApprovedLabel">Attendance Approval</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+                    <div class="row m-3">
+
+
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Reason</label><span style="color:crimson">*</span>
+                                <input type="text" id="appreason" class="form-control" maxlength="100"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3" @*id="disbledtextbox"*@>
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+
+                                <input type="text" id="attendance_Id" class="form-control" readonly />
+                                <input type="text" id="employee_id" class="form-control" readonly />
+
+                            </div>
+                        </div>
+
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnApprovedsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    <!-- Attendance Rejected modal Modal  Start -->
+    <div class="modal fade" id="Rejected" tabindex="-1" aria-labelledby="RejectedLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="RejectedLabel">Attendance Rejection</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Reason</label><span style="color:crimson">*</span>
+                                <input type="text" id="rejreason" class="form-control" maxlength="100"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3" @*id="disbledtextbox"*@>
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+
+                                <input type="text" id="rejattendance_Id" class="form-control" readonly />
+                                <input type="text" id="rejemployee_id" class="form-control" readonly />
+
+                            </div>
+                        </div>
+
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnRejecSubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    <!--Leave Approved modal Modal  Start -->
+    <div class="modal fade" id="ApprovedLeave" tabindex="-1" aria-labelledby="ApprovedLeaveLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ApprovedLeaveLabel">Leave Approval</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+                    <div class="row m-3">
+
+
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Reason</label><span style="color:crimson">*</span>
+                                <input type="text" id="accleavereason" class="form-control" maxlength="100" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3" @*id="disbledtextbox"*@>
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+
+                                <input type="text" id="accleaveemployee_id" class="form-control" readonly />
+                                <input type="text" id="accleave_id" class="form-control" readonly />
+
+                            </div>
+                        </div>
+
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnLeaveAcceptsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+    <!-- Leave Rejected modal Modal  Start -->
+    <div class="modal fade" id="RejectedLeave" tabindex="-1" aria-labelledby="RejectedLeaveLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="RejectedLeaveLabel">Leave Rejection</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Reason</label><span style="color:crimson">*</span>
+                                <input type="text" id="rejleavereason" class="form-control" maxlength="100"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3" @*id="disbledtextbox"*@>
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+
+                                <input type="text" id="rjleaveemployee_id" class="form-control" readonly />
+                                <input type="text" id="rjleave_id" class="form-control" readonly />
+
+                            </div>
+                        </div>
+
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnLeaveRejectSubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+</form>
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            ShowTable();
+
+           /* $('#myToast').hide();*/
+            $('#disbledtextbox').hide();
+
+
+        });
+
+
+
+        function ShowTable() {
+            let ModelObject = { name: $('#name').val() };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getemployeeattendanceModifyList", "Attendance")',
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("list").innerHTML = data.attlist;
+                    document.getElementById("leavelist").innerHTML = data.leavelist;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function cleartextbox() {
+            $('#rejreason').val(null);
+            $('#appreason').val(null);
+            $('#rejemployee_id').val(null);
+            $('#rejattendance_Id').val(null);
+            $('#employee_id').val(null);
+            $('#attendance_Id').val(null);
+        }
+        function btnApprovrdOnclick(attendance_Id, employee_id) {
+            $('#employee_id').val(employee_id);
+            $('#attendance_Id').val(attendance_Id);
+
+          //  $('#disbledtextbox').hide;
+        }
+        function btnRejectOnclick(attendance_Id, employee_id) {
+            $('#rejemployee_id').val(employee_id);
+            $('#rejattendance_Id').val(attendance_Id);
+
+          //  $('#disbledtextbox').hide;
+        }
+        function btnApprovedsubmitOnclick() {
+            if ($('#appreason').val() != "") {
+                let ModelObject = {
+                    employee_id: $('#employee_id').val(),
+                    attendance_Id: $('#attendance_Id').val(),
+                    appreason: $('#appreason').val(),
+                };
+                $.ajax({
+                    url: '@Url.Action("ApprovedAttandence", "Attendance")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        cleartextbox();
+
+                        $("#Approved").modal('hide');
+                        $("#myToast").toast({
+                            delay: 5000
+                        });
+                        $("#myToast").toast("show");
+                        document.getElementById('tostmsg').innerHTML =
+                            data;
+                        ShowTable();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+            } else {
+                alert("Pleace Give The Reason")
+            }
+        }
+        function btnRejecSubmitOnclick() {
+            if ($('#rejreason').val() != "") {
+                let ModelObject = {
+                    employee_id: $('#rejemployee_id').val(),
+                    attendance_Id: $('#rejattendance_Id').val(),
+                    rejreason: $('#rejreason').val(),
+                };
+                $.ajax({
+                    url: '@Url.Action("RejectedAttandence", "Attendance")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        cleartextbox();
+
+                        $("#Rejected").modal('hide');
+                        $("#myToast").toast({
+                            delay: 5000
+                        });
+                        $("#myToast").toast("show");
+                        document.getElementById('tostmsg').innerHTML =
+                            data;
+                        ShowTable();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+            } else {
+                alert("Pleace Give The Reason")
+            }
+        }
+
+        function btnAcceptLeave(employee_id, id) {
+            $('#accleaveemployee_id').val(employee_id);
+            $('#accleave_id').val(id);
+        }
+        function btnRejectLeave(employee_id, id) {
+            $('#rjleaveemployee_id').val(employee_id);
+            $('#rjleave_id').val(id);
+        }
+         function btnLeaveAcceptsubmitOnclick() {
+             if ($('#accleavereason').val() != "") {
+                let ModelObject = {
+                    employee_id: $('#accleaveemployee_id').val(),
+                    id: $('#accleave_id').val(),
+                    accleavereason: $('#accleavereason').val(),
+                };
+                $.ajax({
+                    url: '@Url.Action("ApprovedLeave", "Attendance")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        $('#accleaveemployee_id').val(null);
+                        $('#accleave_id').val(null);
+                        $('#accleavereason').val(null);
+                        $("#ApprovedLeave").modal('hide');
+                        $("#myToast").toast({
+                            delay: 5000
+                        });
+                        $("#myToast").toast("show");
+                        document.getElementById('tostmsg').innerHTML =
+                            data;
+                        ShowTable();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+            } else {
+                alert("Pleace Give The Reason")
+            }
+        }
+        function btnLeaveRejectSubmitOnclick() {
+            if ($('#rejleavereason').val() != "") {
+                let ModelObject = {
+                    employee_id: $('#rjleaveemployee_id').val(),
+                    id: $('#rjleave_id').val(),
+                    rejleavereason: $('#rejleavereason').val(),
+                };
+                $.ajax({
+                    url: '@Url.Action("RejectedLeave", "Attendance")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        
+                        $('#rjleaveemployee_id').val(null);
+                        $('#rjleave_id').val(null);
+                        $('#rejleavereason').val(null);
+                        $("#RejectedLeave").modal('hide');
+                        $("#myToast").toast({
+                            delay: 5000
+                        });
+                        $("#myToast").toast("show");
+                        document.getElementById('tostmsg').innerHTML =
+                            data;
+                        ShowTable();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+            } else {
+                alert("Pleace Give The Reason")
+            }
+        }
+    </script>
+}

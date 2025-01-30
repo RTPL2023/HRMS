@@ -17,12 +17,12 @@ using HRMS.Models.DataBase;
 
 namespace HRMS.Controllers
 {
-   
+
     public class UtilityController : Controller
     {
 
         //****************For Branch Drop Down
-      
+
         public JsonResult getBranchMastDetails()
         {
             MasterBranch mb = new MasterBranch();
@@ -83,7 +83,7 @@ namespace HRMS.Controllers
 
             return bvm.CityDesc;
         }
-      
+
         //****************District Wise City Drop Down
         public ActionResult FillCity(string District_Id)
         {
@@ -91,6 +91,40 @@ namespace HRMS.Controllers
             var cities = mc.GetCityByDistrictId(District_Id);
             return Json(cities);
         }
+
+        //****************For Leave Drop Down
+
+        public ActionResult GetleaveList()
+        {
+            leave_type_master ltm = new leave_type_master();
+            var leavetype = ltm.GetleaveType();
+            return Json(leavetype);
+        }
+
+        public string getleaveType(string lid)
+        {
+            string leaves = "";
+            if (lid == "CL")
+                leaves = "Casual Leave";
+            if (lid == "EL")
+                leaves = "Earned Leave";
+            if (lid == "SL")
+                leaves = "Sick Leave";
         
+            if (lid == "CO")
+                leaves = "Comp-Off";
+          
+
+            return leaves;
+
+        }
+
+        public DateTime currentDateTime()
+        {
+            DateTime curdt = DateTime.Now.AddHours(13);
+            curdt = curdt.AddMinutes(30);
+            return curdt;
+        }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿using HRMS.Includes;
+﻿        
+using HRMS.Includes;
+using HRMS.Controllers;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,7 @@ namespace HRMS.Models.Database
 {
     public class Employee_Master
     {
+        UtilityController u = new UtilityController();
         SQLConfig config = new SQLConfig();
         public int id { get; set; }
         public string employee_id { get; set; }
@@ -86,7 +90,7 @@ namespace HRMS.Models.Database
                     { "user_role",model.user_role },
                     { "allocated_branchid",model.branch_id },
                     { "created_by","users"},
-                    { "created_on",DateTime.Now.ToString("dd/MM/yyyy").Replace("-","/") },
+                    { "created_on",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/") },
                    
                 });
                 msg = "Saved Successfully";
