@@ -226,5 +226,45 @@ namespace HRMS.Models.Database
 
 
         }
+        public List<Employee_Master> getempidMast()
+        {
+            string sql;
+            sql = "select * from Employee_Master order by id";
+            config.singleResult(sql);
+            List<Employee_Master> lstdtm = new List<Employee_Master>();
+
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    Employee_Master dtm = new Employee_Master();
+                    dtm.employee_id = dr["employee_id"].ToString();
+                    dtm.name = dr["employee_id"].ToString() + "-" + dr["name"].ToString();
+
+
+                    lstdtm.Add(dtm);
+                }
+            }
+            return lstdtm;
+        }
+        public Employee_Master getEmployeename(string empid)
+        {
+            string sql;
+            sql = "select * from Employee_Master where employee_id='" + empid + "'";
+            config.singleResult(sql);
+            Employee_Master em = new Employee_Master();
+
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+
+
+                    em.name = dr["name"].ToString();
+
+                }
+            }
+            return em;
+        }
     }
 }

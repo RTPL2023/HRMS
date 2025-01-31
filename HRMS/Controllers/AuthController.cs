@@ -2,6 +2,7 @@
 using HRMS.Models.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,16 @@ using System.Threading.Tasks;
 
 namespace HRMS.Controllers
 {
+
     public class AuthController : Controller
     {
+      
         [HttpGet]
         public IActionResult login()
         {
             return View();
         }
+        
 
         public JsonResult Loginchack(LoginViewModel model)
         {
@@ -47,6 +51,12 @@ namespace HRMS.Controllers
             }
 
             return Json(model);
+        }
+        public JsonResult forgatepassword(string employee_id, string oldpass, string newpass)
+        {
+            users _user = new users();
+            string msg = _user.updatePassword(employee_id, oldpass, newpass);
+            return Json(msg);
         }
     }
 }

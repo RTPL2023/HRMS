@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Data;
 using HRMS.Includes;
 using System.Globalization;
+using HRMS.Models.ViewModel;
 
 namespace HRMS.Models.Database
 {
@@ -174,6 +175,28 @@ namespace HRMS.Models.Database
             }
             return (ealst);
         }
-      
+        public List<employee_attendance> GetDetailAttendanceReportByEmpId(DetailReportViewModel model)
+        {
+            List<employee_attendance> ealst = new List<employee_attendance>();
+            string sql = "Select  * from employee_attendance Where employee_Id='" + model.employee_id + "' and Convert(date,date,103)>=Convert(date,'" + model.from_date + "',103) and Convert(date,date,103)<=Convert(date,'" + model.to_date + "',103) order by id";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    employee_attendance ea = new employee_attendance();
+                    ea.employee_id = Convert.ToString(dr["employee_id"]);
+                    ea.date = Convert.ToString(dr["date"]);
+                    ea.day = Convert.ToString(dr["day"]);
+                    ea.in_time = Convert.ToString(dr["in_time"]);
+                    ea.out_time = Convert.ToString(dr["out_time"]);
+                    ea.punch_type = Convert.ToString(dr["punch_type"]);
+                    ea.duration = !Convert.IsDBNull(dr["duration"]) ? Convert.ToDecimal(dr["duration"]) : Convert.ToDecimal(0);
+                    ea.is_approved = !Convert.IsDBNull(dr["is_approved"]) ? Convert.ToInt32(dr["is_approved"]) : Convert.ToInt32(2);
+                    ealst.Add(ea);
+                }
+            }
+            return (ealst);
+        }
     }
 }

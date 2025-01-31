@@ -6,15 +6,21 @@ using System.Threading.Tasks;
 using HRMS.Models.ViewModel;
 using HRMS.Models.Database;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HRMS.Controllers
 {
-
+    [Authorize]
     public class AttendanceController : Controller
     {
+
         DateTimeFormatInfo usCinfo = new CultureInfo("en-GB", false).DateTimeFormat;
 
         UtilityController u = new UtilityController();
+
+        public DateTimeFormatInfo UsCinfo { get => usCinfo; set => usCinfo = value; }
+       
+        [HttpGet]
         public IActionResult PunchINPunchOut(PunchInPunchOutViewModel model)
         {
             return View(model);
@@ -143,6 +149,8 @@ namespace HRMS.Controllers
             string msg = amr.saveInOutModifyDetails(model, User.Identity.Name);
             return Json(msg);
         }
+        [HttpGet]
+
         public IActionResult EmployeeAttendanceModifyList(PunchInPunchOutViewModel model)
         {
             return View(model);
@@ -226,6 +234,7 @@ namespace HRMS.Controllers
             return Json(msg);
         }
 
+        [HttpGet]
 
         public IActionResult LeaveApply(PunchInPunchOutViewModel model)
         {
@@ -311,7 +320,7 @@ namespace HRMS.Controllers
             Leave_ledger ll = new Leave_ledger();
             string date = "01/" + u.currentDateTime().ToString("MM") + "/" + u.currentDateTime().Year.ToString();
             string msg = "";
-            if (Convert.ToDateTime(date,usCinfo) <= u.currentDateTime())
+            if (Convert.ToDateTime(date,UsCinfo) <= u.currentDateTime())
             {
                 msg = ll.refreshleaveBalance(User.Identity.Name, date);
             }

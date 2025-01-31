@@ -16,9 +16,9 @@ namespace HRMS.Includes
 {
     public class SQLConfig
     {                      
-        public SqlConnection con = new SqlConnection("server=192.168.137.1;database=HRMS;UID=sa;password=Rishi@2022;TrustServerCertificate=True");
+       // public SqlConnection con = new SqlConnection("server=192.168.137.1;database=HRMS;UID=sa;password=Rishi@2022;TrustServerCertificate=True");
         //public SqlConnection con = new SqlConnection("server=115.187.62.28;database=HRMS;UID=sa;password=Rishi@2022;TrustServerCertificate=True");
-        //public SqlConnection con = new SqlConnection("server=SQL8010.site4now.net;database=db_aa6509_hrms;UID=db_aa6509_hrms_admin;password=Rishi@2022;TrustServerCertificate=True");
+        public SqlConnection con = new SqlConnection("server=SQL8010.site4now.net;database=db_aa6509_hrms;UID=db_aa6509_hrms_admin;password=Rishi@2022;TrustServerCertificate=True");
  
         private SqlCommand cmd;
         private SqlDataAdapter da;

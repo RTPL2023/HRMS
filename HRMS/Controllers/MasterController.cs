@@ -5,14 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using HRMS.Models.ViewModel;
 using HRMS.Models.Database;
+using Microsoft.AspNetCore.Authorization;
+
 namespace HRMS.Controllers
 {
+    [Authorize]
     public class MasterController : Controller
     {
+        
         public IActionResult Index()
         {
             return View();
         }
+        [HttpGet]
+
         public IActionResult employee_master(employee_masterViewModel model)
         {
             Employee_Master em = new Employee_Master();
@@ -73,7 +79,7 @@ namespace HRMS.Controllers
                 foreach (var a in emlst)
                 {
 
-                    tableemenent = tableemenent + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td><a href = '" + @Url.Action("EmployeeDocumentAndOtherDetailsUpload", "Master", new { id = a.employee_id }) + "' class = \"fa-solid fa-pen fa-lg\"></a></td></tr>";
+                    tableemenent = tableemenent + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td><a href = '" + @Url.Action("EmployeeDocumentAndOtherDetailsUpload", "Master", new { id = a.employee_id }) + "' class = \"table__icon edit\"><i class = \"fa-solid fa-pen fa-lg\"></i></a></td></tr>";
 
 
                 }

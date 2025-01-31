@@ -64,6 +64,8 @@ namespace HRMS.Models.Database
             }
             else
             {
+                model.requested_punch_type = "Valid";
+
                 sql = "update Employee_Attendance_mod_Request set ";
                 sql = sql + "attendance_date='" +model.attendance_date  + "',";
                 sql = sql + "Application_date='" + u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/") + "',";
@@ -77,7 +79,7 @@ namespace HRMS.Models.Database
                 sql = sql + "Requested_day_count='" + model.requested_day_count + "',";
                 sql = sql + "Reason='" + model.reason + "'";
                 sql = sql + "where ";
-                sql = sql + "employee_Id='" + employee_id + "' and attendance_Id='" + attendance_Id + "'";
+                sql = sql + "employee_Id='" + employee_id + "' and attendance_Id='" + model.attendance_Id + "'";
                 config.Execute_Query(sql);
                 msg = "Application Modified Successfully";
             }

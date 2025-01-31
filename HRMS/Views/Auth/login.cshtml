@@ -13,9 +13,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    @*<link href="~/css/c98694d3784e46ad.css" rel="stylesheet" />
-        <link href="~/css/f9ed539b02f61655.css" rel="stylesheet" />
-        <link href="~/css/66a8d3968b62c58b.css" rel="stylesheet" />*@
+ 
 
     <style>
         .divider:after,
@@ -38,108 +36,165 @@
     </style>
 </head>
 <body>
+    <form asp-controller="Auth" asp-action="login" method="post">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
 
-    <section class="vh-100">
-        <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-md-9 col-lg-6 col-xl-5">
-                    @*<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-md-9 col-lg-6 col-xl-5">
+                        @*<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
                         class="img-fluid" alt="Sample image">*@
-                    <img src="~/img/test.png" class="img-fluid" />
-                </div>
-                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                    <form>
-                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                            <h2>WELCOME TO HRMS LOGIN</h2>
+                        <img src="~/img/test.png" class="img-fluid" />
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                        <form>
+                            <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                                <h2>WELCOME TO HRMS LOGIN</h2>
 
-                        </div>
-
-
-                        <!-- Email input -->
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="form3Example3">Employee Id</label>
-                            <input type="text" id="emp_id" class="form-control form-control-lg"
-                                   placeholder="Enter Employee Id " />
-                        </div>
-
-                        <!-- Password input -->
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <label class="form-label" for="form3Example4">Password</label>
-                            <input type="password" id="password" class="form-control form-control-lg"
-                                   placeholder="Enter Password" />
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <!-- Checkbox -->
-                            <div class="form-check mb-0">
-                                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                                <label class="form-check-label" for="form2Example3">
-                                    Remember me
-                                </label>
                             </div>
-                            <a href="#!" class="text-body">Forgot password?</a>
-                        </div>
 
-                        <div class="text-center text-lg-start mt-4 pt-2">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
-                                    style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="btnloginOnclick()">
-                                Login
-                            </button>
-                            @*<p class="small fw-bold mt-2 pt-1 mb-0">
+
+                            <!-- Email input -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <label class="form-label" for="form3Example3">Employee Id</label>
+                                <input type="text" id="emp_id" class="form-control form-control-lg"
+                                       placeholder="Enter Employee Id " />
+                            </div>
+
+                            <!-- Password input -->
+                            <div data-mdb-input-init class="form-outline mb-3">
+                                <label class="form-label" for="form3Example4">Password</label>
+                                <input type="password" id="password" class="form-control form-control-lg"
+                                       placeholder="Enter Password" />
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- Checkbox -->
+                                <div class="form-check mb-0">
+                                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                                    <label class="form-check-label" for="form2Example3">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <a href="#!" class="text-body" data-bs-toggle="modal" data-bs-target="#forgotpassword">Forgot password?</a>
+                            </div>
+
+                            <div class="text-center text-lg-start mt-4 pt-2">
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
+                                        style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="btnloginOnclick()">
+                                    Login
+                                </button>
+                                @*<p class="small fw-bold mt-2 pt-1 mb-0">
                                     Don't have an account? <a href="#!"
                                                               class="link-danger">Register</a>
                                 </p>*@
-                        </div>
+                            </div>
 
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
-            <!-- Copyright -->
-            <div class="text-white mb-3 mb-md-0">
-                &copy; 2025 - HRMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-            <!-- Copyright -->
-            <!-- Right -->
-            <div>
-                <a href="#!" class="text-white me-4">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#!" class="text-white me-4">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="#!" class="text-white me-4">
-                    <i class="fab fa-google"></i>
-                </a>
-                <a href="#!" class="text-white">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-            </div>
-            <!-- Right -->
-        </div>
-
-        <div class="toast" id="myToast">
-            <div class="toast-container top-0 end-0 p-3">
-                <div class="toast align-items-center text-bg-primary border-0 fade show" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="d-flex">
-                        <div class="toast-body" id="tostmsg">
-                            Hello, world! This is a toast message.
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+            <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+                <!-- Copyright -->
+                <div class="text-white mb-3 mb-md-0">
+                    &copy; 2025 - HRMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+                <!-- Copyright -->
+                <!-- Right -->
+                <div>
+                    <a href="#!" class="text-white me-4">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#!" class="text-white me-4">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#!" class="text-white me-4">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="#!" class="text-white">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+                <!-- Right -->
+            </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script type="text/javascript">
+            <div class="toast" id="myToast">
+                <div class="toast-container top-0 end-0 p-3">
+                    <div class="toast align-items-center text-bg-primary border-0 fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body" id="tostmsg">
+                                Hello, world! This is a toast message.
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- modal Forgot password -->
+            <div class="modal fade" id="forgotpassword" tabindex="-1" aria-labelledby="forgotpasswordLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered  modal-sm">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="forgotpasswordLabel">
+                                Forgot Password
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <from>
+                            <div class="row m-3">
+                                <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Employee Id</label>
+                                        <span style="color:crimson">*</span>
+                                        <input name="employee_id" id="employee_id" class="form-control" required />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-3">
+                                <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>Old Password</label>
+                                        <span style="color:crimson">*</span>
+                                        <input type="password" name="oldpass" id="oldpass" class="form-control" required />
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row m-3">
+                                <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                                    <div class="form-group">
+                                        <label>New Password</label>
+                                        <span style="color:crimson">*</span>
+                                        <input type="password" name="newpass" id="newpass" class="form-control" required />
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </from>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnforgateSubmitOnclick()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal End -->
+        </section>
+        </form>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+        <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script type="text/javascript">
         $(document).ready(function () {
 
         });
@@ -200,18 +255,88 @@
         }
         function loginSuccess() {
 
-                window.location.href = "@Url.Action("Index", "Home")";
+                window.location.href = "@Url.Action("PunchINPunchOut", "Attendance")";
         }
         function AdminLogin() {
 
-                window.location.href = "@Url.Action("Index", "Home")";
+                window.location.href = "@Url.Action("PunchINPunchOut", "Attendance")";
         }
         function loginFailed() {
 
                 window.location.href = "@Url.Action("login", "Auth")";
         }
 
-    </script>
+
+        function btnforgateSubmitOnclick() {
+            if ($('#employee_id').val() == "" || $('#employee_id').val() == null) {
+                $("#myToast").toast({
+                    delay: 3000
+                });
+                $("#myToast").toast("show");
+                document.getElementById('tostmsg').innerHTML =
+                    "Employe Id Cant't Blank";
+                $("#employee_id").focus();
+
+            } else if ($('#oldpass').val() == "" || $('#oldpass').val() == null) {
+                   $("#myToast").toast({
+                        delay: 3000
+                   });
+                   $("#myToast").toast("show");
+                   document.getElementById('tostmsg').innerHTML =
+                        "Old Password Cant't Blank";
+                $("#oldpass").focus();
+            }
+            else if ($('#newpass').val() == "" || $('#newpass').val() == null) {
+                $("#myToast").toast({
+                    delay: 3000
+                });
+                $("#myToast").toast("show");
+                document.getElementById('tostmsg').innerHTML =
+                    "New Password Cant't Blank";
+                $("#newpass").focus();
+            }
+            else {
+
+                   let ModelObject = {
+                       employee_id: $('#employee_id').val(),
+                       oldpass: $('#oldpass').val(),
+                       newpass: $('#newpass').val(),
+                   };
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("forgatepassword", "Auth")',
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            {
+                                if (data == "Old Password Miss Match!!") {
+                                    $("#forgotpassword").modal('show');
+                                }
+                                else {
+                                    $("#forgotpassword").modal('hide');
+                                    $('#oldpass').val("");
+                                    $('#newpass').val("");
+                                }
+                                $("#myToast").toast({
+                                    delay: 5000
+                                });
+                                $("#myToast").toast("show");
+                                document.getElementById('tostmsg').innerHTML = data;
+
+
+
+                            }
+
+                        },
+                        error: function (err) {
+                            alert(err);
+
+                        }
+                    });
+                    }
+        }
+
+        </script>
 </body>
 </html>
 

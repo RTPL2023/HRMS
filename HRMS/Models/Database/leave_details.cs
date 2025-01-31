@@ -353,6 +353,47 @@ namespace HRMS.Models.Database
             msg = "Leave Rejected";
             return (msg);
         }
+        public decimal GetLeaveCountByEmpid(DetailReportViewModel model)
+        {
+            decimal count = 0;
+            leave_details ld = new leave_details();
+            string sql = "Select * from Leave_count where employee_id='" + model.employee_id + "' and Convert(date,date,103)>=Convert(date,'" + model.from_date + "',103) and Convert(date,date,103)<=Convert(date,'" + model.to_date + "',103)";
+            config.singleResult(sql);
 
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    count = count + Convert.ToDecimal(dr["duration"]);
+                }
+
+
+            }
+            return count;
+
+        }
+        public List<leave_details> GetLeaves(string empid, string frdt, string todt)
+        {
+
+            List<leave_details> ldl = new List<leave_details>();
+
+            string sql = "Select * from Leave_count where employee_id='" + empid + "' and Convert(date,date,103)>=Convert(date,'" + frdt + "',103) and Convert(date,date,103)<=Convert(date,'" + todt + "',103) order by id";
+            config.singleResult(sql);
+
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    leave_details ld = new leave_details();
+                    ld.apply_date = Convert.ToString(dr["date"]);
+                    ld.leave_type = Convert.ToString(dr["lv_hd"]) + " - " + Convert.ToString(dr["duration"]);
+                    ldl.Add(ld);
+                }
+
+
+            }
+            return ldl;
+
+        }
     }
 }

@@ -32,88 +32,107 @@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start align-items-sm-start p-3" id="menu">
                             <li class="nav-item">
                                 <a href="#" class="nav-link align-middle px-0">
-                                    <i class="fs-4 bi-house"></i> <span class="ms-1  d-sm-inline">Home</span>
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1  d-sm-inline fa-bold">HOME</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1  d-sm-inline">Dashboard</span>
+                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1  d-sm-inline fa-bold">DASHBOARD</span>
                                 </a>
                                 <ul class="collapse  nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                                     <li class="w-100">
 
-                                        <a href="/Attendance/PunchINPunchOut" class="nav-link px-0"> <span class=" d-sm-inline">Punch IN Punch Out</span> </a>
+                                        <a href="/Attendance/PunchINPunchOut" class="nav-link px-0"> <span class=" d-sm-inline">PUNCH IN-OUT</span> </a>
                                     </li>
                                     <li>
-                                        <a href="/Attendance/LeaveApply" class="nav-link px-0"> <span class=" d-sm-inline">LeaveApply</span></a>
+                                        <a href="/Attendance/LeaveApply" class="nav-link px-0"> <span class=" d-sm-inline">APPLY LEAVE</span></a>
                                     </li>
                                 </ul>
                             </li>
-
-                            <li>
-                                @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("Super ADMIN"))
-                                {
+                            @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
+                            {
+                                <li>
                                     <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                        <i class="fs-4 bi-bootstrap"></i> <span class="ms-1  d-sm-inline">Master</span>
+                                        <i class="fs-4 bi-bootstrap"></i> <span class="ms-1  d-sm-inline fa-bold">MASTER</span>
                                     </a>
                                     <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                                         <li class="w-100">
-                                            <a href="/Master/employee_master" class="nav-link px-0"> <span class=" d-sm-inline">Employee Master</span> </a>
+                                            <a href="/Master/employee_master" class="nav-link px-0"> <span class=" d-sm-inline">EMPLOYEE MASTER</span> </a>
                                         </li>
                                         <li>
-                                            <a href="/Master/DesignationsMaster" class="nav-link px-0"> <span class=" d-sm-inline">Designations Master</span> </a>
+                                            <a href="/Master/DesignationsMaster" class="nav-link px-0"> <span class=" d-sm-inline">DESIGNATION MASTER</span> </a>
                                         </li>
                                         <li>
-                                            <a href="/Master/DepartmentMaster" class="nav-link px-0"> <span class=" d-sm-inline">Department Master</span> </a>
+                                            <a href="/Master/DepartmentMaster" class="nav-link px-0"> <span class=" d-sm-inline">DEPARTMENT MASTER</span> </a>
                                         </li>
                                         <li>
-                                            <a href="/Attendance/EmployeeAttendanceModifyList" class="nav-link px-0"> <span class=" d-sm-inline">Attendance/Leave Modify List</span> </a>
+                                            <a href="/Attendance/EmployeeAttendanceModifyList" class="nav-link px-0"> <span class=" d-sm-inline">ATTENDANCE-LEAVE APPROVAL</span> </a>
                                         </li>
-                                    </ul>}
-                            </li>
+                                       
+                                    </ul>
 
-                            @*<li>
-                                    <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-grid"></i> <span class="ms-1  d-sm-inline">Products</span>
+                                </li>
+                                <li>
+                                    <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                        <i class="fs-4 bi-bootstrap"></i> <span class="ms-1  d-sm-inline fa-bold">REPORT</span>
                                     </a>
                                     <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                      
                                         <li class="w-100">
-                                            <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 1</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 2</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 3</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 4</a>
+                                            <a href="/Report/DetailReport" class="nav-link px-0"> <span class=" d-sm-inline">ATTENDANCE REPORT</span> </a>
                                         </li>
                                     </ul>
+
                                 </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 align-middle">
-                                        <i class="fs-4 bi-people"></i> <span class="ms-1  d-sm-inline">Customers</span>
+                            }
+
+
+                            @*<li>
+            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                <i class="fs-4 bi-grid"></i> <span class="ms-1  d-sm-inline">Products</span>
+            </a>
+            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                <li class="w-100">
+                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 1</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 2</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 3</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 4</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="nav-link px-0 align-middle">
+                <i class="fs-4 bi-people"></i> <span class="ms-1  d-sm-inline">Customers</span>
+            </a>
+        </li>*@
+                            <li>
+                                <hr>
+                                <div class="dropdown pb-3 text-center">
+                                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="~/img/userlogo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                                        <span class=" d-sm-inline mx-1">@this.User.Identity.Name</span>
                                     </a>
-                                </li>*@
+                                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+
+                                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="/Auth/login">Sign out</a></li>
+                                    </ul>
+                                </div>
+                            <li>
                         </ul>
-                        <hr>
 
-                        <div class="dropdown pb-3">
-                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                                <span class=" d-sm-inline mx-1">loser</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="/Auth/login">Sign out</a></li>
-                            </ul>
-                        </div>
+
 
 
                     </div>
@@ -124,17 +143,16 @@
             <main role="main" class="col ps-md-2 pt-2">
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
                     <div class="container-fluid">
-                        @*<a class="navbar-brand" href="#">
-                                <i class="fa-solid fa-bars fa-2xl" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"></i>
-                                <i class="fa-solid fa-bars fa-2xl" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample"></i> <i class="fa-solid fa-bars fa-2xl" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample"></i>
 
-                            </a>*@
                         <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="border rounded-3 p-1 mb-1 text-decoration-none"><i class="fa-solid fa-bars fa-2xl"></i></a>
 
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-2">
                                 <li class="nav-item">
-                                    <h3>Rishi Technovision</h3>
+                                    <h3 class="ml-2"></h3>
+                                </li>
+                                <li class="nav-item">
+                                    <h3 class="ml-2">Rishi Hrms</h3>
                                 </li>
 
                             </ul>
@@ -150,144 +168,16 @@
                     @RenderBody()
 
                 </div>
-                <footer class="border-top footer text-muted ">
-                    <div class="container mt-2">
-                        &copy; 2025 - HRMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </div>
-                </footer>
+
             </main>
 
-
-            @*</main>*@
         </div>
     </div>
 
-
-
-    <!--<nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <i class="fa-solid fa-bars fa-2xl" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"></i>-->
-    @*<i class="fa-solid fa-bars fa-2xl" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample"></i> <i class="fa-solid fa-bars fa-2xl" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample"></i>*@
-
-    <!--</a>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <h3>Rishi Technovision</h3>
-                    </li>
-
-                </ul>
-                <form class="d-flex  ">
-
-                    <button class="border-0" asp-area="" asp-controller="Auth" asp-action="login"><i class="fas fa-sign-out-alt fa-lg" style="color: #74C0FC;"></i> Log Out</button>
-                </form>
-
-            </div>
-        </div>
-    </nav>-->
-    <!--<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">MAIN</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="dropdown mt-3">-->
-    @*<a class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-            Dropdown button
-        </a>*@
-    <!--<a href="#" class="dropdown-toggle link-underline-opacity-0" data-bs-toggle="dropdown">
-                      <i class="fa-solid fa-house fa-sm" style="color: #74C0FC;"></i>
-                     Dashboards
-                  </a>
-                  <ul class="dropdown-menu">
-
-                      @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("Super ADMIN"))
-                      {
-                      <li>
-                          <a href="/Master/employee_master" class="dropdown-item">Employee Master</a>
-                      </li>
-
-                      <li>
-                          <a href="/Master/DesignationsMaster" class="dropdown-item">Designations Master</a>
-                      </li>
-
-                      <li>
-                          <a href="/Attendance/EmployeeAttendanceModifyList" class="dropdown-item">Employee Attendance Modify List</a>
-                      </li>
-    }
-                      <li>
-                          <a href="/Attendance/PunchINPunchOut" class="dropdown-item">Punch IN Punch Out</a>
-                      </li>
-                      <li>
-                          <a href="/Attendance/LeaveApply" class="dropdown-item">Leave Apply</a>
-                      </li>
-                  </ul>
-              </div>
-          </div>
-      </div>-->
-    <!--<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">MAIN</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                        <div class="nav-item dropdown">
-
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fa-solid fa-house fa-sm" style="color: #74C0FC;"></i>
-                                <span class="">Dashboards</span>
-                            </a>
-                            <div class="dropdown-menu m-0">
-                                <a href="/Attendance/PunchINPunchOut" class="dropdown-item">Punch IN Punch Out</a>
-
-                                <a href="/Home/novels" class="dropdown-item"></a>
-                                <a href="/Home/original_poetry" class="dropdown-item"></a>
-                                <a href="/Home/translated_work" class="dropdown-item"></a>
-                                <a href="/Home/written_books" class="dropdown-item"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                        <div class="nav-item dropdown">
-
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fa-solid fa-arrow-right " style="color: #74C0FC;"></i>
-                                <span class="">HRM</span>
-                            </a>
-                            <div class="dropdown-menu m-0">
-                                <a href="/Master/employee_master" class="dropdown-item">Employee Masteer</a>
-                                <a href="/Master/DesignationsMaster" class="dropdown-item">Designations Master</a>
-                                <a href="/Attendance/PunchINPunchOut" class="dropdown-item">Punch IN Punch Out</a>
-                                <a href="/Attendance/EmployeeAttendanceModifyList" class="dropdown-item">Employee Attendance Modify List</a>
-                                <a href="/Attendance/LeaveApply" class="dropdown-item">Leave Apply</a>
-                            </div>-->
-    @*<div class="dropdown-menu m-0">
-        <a href="/Attendance/PunchINPunchOut.cshtml" class="dropdown-item">Employee Masteer</a>
-
-        </div>*@
-
-    <!--</div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>-->
-
-
-
+    <hr>
+    <div class="container m-2 text-center">
+        &copy; 2025 - HRMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
 
 
 
@@ -296,22 +186,7 @@
     <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @*<script type="text/javascript">
-        function btnlogoutOnclick() {
-        window.location.href = "@Url.Action("login", "Auth")";
-        }
 
-        </script>*@
-    <script type="text/javascript">
-
-        function btnlogoutOnclick() {
-            alert("ok");
-            /**/
-            window.location.href = "@Url.Action("login", "Auth")";
-        /**/
-    }
-
-    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

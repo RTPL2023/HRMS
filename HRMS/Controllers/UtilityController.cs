@@ -14,12 +14,14 @@ using HRMS.Includes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HRMS.Models.DataBase;
+using System.Data;
 
 namespace HRMS.Controllers
 {
 
     public class UtilityController : Controller
     {
+        SQLConfig config = new SQLConfig();
 
         //****************For Branch Drop Down
 
@@ -131,13 +133,85 @@ namespace HRMS.Controllers
             return leaves;
 
         }
-
+        //cloud
+        //public DateTime currentDateTime()
+        //{
+        //    DateTime curdt = DateTime.Now.AddHours(13);
+        //    curdt = curdt.AddMinutes(30);
+        //    return curdt;
+        //}
+        //local
         public DateTime currentDateTime()
         {
-            DateTime curdt = DateTime.Now.AddHours(13);
-            curdt = curdt.AddMinutes(30);
+            DateTime curdt = DateTime.Now;
+
             return curdt;
         }
+        public IEnumerable<SelectListItem> getempidDesc()
+        {
+            DetailReportViewModel m = new DetailReportViewModel();
+            Employee_Master em = new Employee_Master();
 
+            m.empiddesc = em.getempidMast().ToList().Select(x => new SelectListItem
+            {
+                Value = x.employee_id.ToString(),
+                Text = x.name.ToString()
+            });
+
+            return m.empiddesc;
+        }
+        //day count
+        public int CountDayOfWeekInMonth(int year, int month, DayOfWeek dayOfWeek)
+        {
+            DateTime startDate = new DateTime(year, month, 1);
+            int days = DateTime.DaysInMonth(startDate.Year, startDate.Month);
+            int weekDayCount = 0;
+            for (int day = 0; day < days; ++day)
+            {
+                weekDayCount += startDate.AddDays(day).DayOfWeek == dayOfWeek ? 1 : 0;
+            }
+            return weekDayCount;
+        }
+
+        //Optional Holiday count
+        public int OpHolidaysInMonthTakenOrNot(string empid, string from_dt, string to_dt)
+        {
+
+            string date = "";
+            int count = 0;
+
+            string sql = "Select * from Holiday_List where convert(date,date,103)>=convert(date,'" + from_dt + "',103) and convert(date,date,103)<=convert(date,'" + to_dt + "',103) and alternative='Yes'";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    date = Convert.ToString(dr["date"]);
+                    sql = "Select * from employee_attendance where employee_id=empid and date='" + date + "' and punch_type='Valid'";
+                    config.singleResult(sql);
+                    if (config.dt.Rows.Count == 0)
+                    {
+                        count = count + 1;
+                    }
+
+                }
+
+            }
+            return count;
+        }
+
+        //Holiday count
+        public int HolidaysInMonth(string from_dt, string to_dt)
+        {
+            int count = 0;
+            string sql = "Select Count(*) as cnt from Holiday_List where convert(date,date,103)>=convert(date,'" + from_dt + "',103) and convert(date,date,103)<=convert(date,'" + to_dt + "',103) and alternative='No'";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                count = Convert.ToInt32(dr["cnt"]);
+            }
+            return count;
+        }
     }
 }

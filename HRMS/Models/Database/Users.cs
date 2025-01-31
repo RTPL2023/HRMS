@@ -52,6 +52,23 @@ namespace HRMS.Models.Database
 
             return us;
         }
+        public string updatePassword(string _employee_id, string oldpass,string newpass)
+        {
+            string msg = "";
+            string sql = "SELECT * FROM users WHERE employee_id = '" + _employee_id + "'  and Password = '" + oldpass + "' ";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                sql = "update users set Password='" + newpass + "' WHERE employee_id = '" + _employee_id + "'  and Password = '" + oldpass + "' ";
+                config.Execute_Query(sql);
+                msg = "Password Updated";
+            }
+            else
+            {
+                msg = "Old Password Miss Match!!";
 
+            }
+            return msg;
+        }
     }
 }

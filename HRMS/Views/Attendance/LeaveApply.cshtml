@@ -3,203 +3,150 @@
     ViewData["Title"] = "Leave Apply";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link href="~/css/card.css" rel="stylesheet" />
 
-<style>
-    .itemtab {
-        font-family: Arial, Helvetica, sans-serif;
-        /*font-size: 15px;*/
-        border-collapse: collapse;
-        width: auto;
-    }
-
-        .itemtab tbody {
-            display: block;
-            width: auto;
-            overflow: auto;
-            height: auto;
-        }
-
-        .itemtab td {
-            border: 2px solid black;
-            padding: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-            text-align: center;
-            font-size: 14px;
-            color: black;
-            font-weight: bold
-        }
-
-        .itemtab td, th {
-            width: auto;
-        }
-
-        .itemtab tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .itemtab tr:hover {
-            background-color: #ddd;
-        }
-
-        .itemtab th {
-            border: 2px solid black;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-            text-align: center;
-            font-size: 16px;
-            /*background-color: #04AA6D;*/
-            background-color: #0437F2;
-            color: white;
-            position: sticky;
-            top: 0;
-        }
-
-    .table__icon.edit {
-        background-color: rgba(26, 188, 156, .1);
-        --tw-text-opacity: 1;
-        color: rgb(26 188 156 / var(--tw-text-opacity, 1));
-    }
-
-    .table__icon {
-        display: flex;
-        height: 30px;
-        width: 30px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        padding: 2px 7px;
-        font-size: 14px;
-        --tw-text-opacity: 1;
-        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-        transition-property: all;
-        transition-timing-function: cubic-bezier(.4,0,.2,1);
-        transition-duration: .3s;
-        transition-timing-function: linear;
-    }
-
-    button {
-        border-width: 0;
-        background-color: transparent;
-        outline: 2px solid transparent;
-        outline-offset: 2px;
-    }
-
-    .table__icon.delete {
-        background-color: rgba(255, 58, 41, .1);
-        --tw-text-opacity: 1;
-        color: rgb(255 58 41 / var(--tw-text-opacity, 1));
-    }
-
-    .bd-badge {
-        display: inline-flex;
-        height: 26px;
-        min-width: 75px;
-        align-items: center;
-        justify-content: center;
-        border-radius: .375rem;
-        padding: .25rem .625rem;
-        text-align: center;
-        font-weight: 400;
-        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-    }
-
-    .bd-badge, code {
-        font-size: 12px;
-        --tw-text-opacity: 1;
-    }
-
-    .bg-success {
-        --tw-bg-opacity: 1;
-        background-color: rgb(52 181 58 / var(--tw-bg-opacity, 1));
-    }
-
-    .bg-warning {
-        --tw-bg-opacity: 1;
-        background-color: rgb(255 178 0 / var(--tw-bg-opacity, 1));
-    }
-
-    .bg-danger {
-        --tw-bg-opacity: 1;
-        background-color: rgb(255 21 0/ var(--tw-bg-opacity, 1));
-    }
-</style>
 <form asp-controller="Attendance" asp-action="LeaveApply" method="post">
-    <div class="container ">
-        <div class="row text-center">
-            <div class="col-12 col-md-12">
-
-                <h1 class="modal-title fs-5">Mark Your Attendance</h1>
-            </div>
-        </div>
-        <div class="row text-center mt-3">
-            <div class="col-12 col-md-2">
-                <button type="button" id="btnapplyLeave" name="btnapplyLeave" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#Applyleave">Apply Leave</button>
-
-            </div>
-            <div class="col-12 col-md-2">
-
-                <label>Total Leaves</label><span style="color:crimson">*</span>
-                <input type="text" id="tot_leave" class="form-control" />
-            </div>
-            <div class="col-12 col-md-2">
-                <label>Sick Leave </label><span style="color:crimson">*</span>
-                <input type="text" id="si_leave" class="form-control" />
-
-            </div>
-            <div class="col-12 col-md-2">
-                <label>Earned Leave</label><span style="color:crimson">*</span>
-                <input type="text" id="el_leave" class="form-control" />
-            </div>
-            <div class="col-12 col-md-2">
-                <label>Casual Leave</label><span style="color:crimson">*</span>
-                <input type="text" id="cl_leave" class="form-control" />
-
-            </div>
-            <div class="col-12 col-md-2">
-                <button type="button" id="btnLeaveRefresh" name="btnLeaveRefresh" class="btn btn-primary" onclick="btnLeaveRefreshOnclick()">Refresh Leave</button>
-
-            </div>
-            <div class="col-12 col-md-2">
-                <button type="button" id="btnLeaveLedger" name="btnLeaveledger"  data-bs-toggle="modal" data-bs-target="#leaveLedger" class="btn btn-primary" onclick="btnLeaveLedgerOnclick()">Leave Ledger</button>
-
-            </div>
+    <div class="row text-center mt-3">
+        <div class="col-3 col-sm-4 col-md-3">
+            <button type="button" id="btnapplyLeave" name="btnapplyLeave" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#Applyleave">Apply Leave</button>
 
         </div>
-        <div class="row mt-3">
-            <div class="col-sm-12 mb-12 mb-sm-0">
-                <div class="card">
+        <div class="col-3 col-sm-4 col-md-3">
+            <button type="button" id="btnLeaveRefresh" name="btnLeaveRefresh" class="btn btn-primary" onclick="btnLeaveRefreshOnclick()">Refresh Leave</button>
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover" align="center">
-                            <tbody id="list">
-                            </tbody>
-                        </table>
+        </div>
+        <div class="col-3 col-sm-4 col-md-3">
+            <button type="button" id="btnLeaveLedger" name="btnLeaveledger" data-bs-toggle="modal" data-bs-target="#leaveLedger" class="btn btn-primary" onclick="btnLeaveLedgerOnclick()">Leave Ledger</button>
+
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+
+        <div class="col-12 col-sm-3 col-md-3">
+            <div class="card__wrapper">
+                <div class="row ">
+                    <div class="col-3 col-sm-3 col-md-3 text-center">
+                        <i class="fa-solid fa-mug-hot fa-2xl" style="color: #B197FC;"></i>
 
                     </div>
-                </div>
-            </div>
-
-        </div>
-        <!-- toast -->
-
-        <div class="toast" id="myToast">
-            <div class="toast-container top-0 end-0 p-3">
-                <div class="toast align-items-center text-bg-success border-0 fade show top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="d-flex">
-                        <div class="toast-body" id="tostmsg">
-
+                    <div class="col-9 col-sm-9 col-md-9">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-5 fw-bold">  Total Leaves</p>
+                            </div>
                         </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+
+                                <p class="fs-3 fw-bold" id="tot_leave"> </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- toast -->
+        <div class="col-12 col-sm-3 col-md-3">
+            <div class="card__wrapper">
+                <div class="row">
+                    <div class="col-3 col-sm-3 col-md-3">
+                        <i class="fa-solid fa-mug-hot fa-2xl" style="color: #B197FC;"></i>
+
+                    </div>
+                    <div class="col-9 col-sm-9 col-md-9">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-5 fw-bold">  Sick Leaves</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-3 fw-bold" id="si_leave"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3">
+            <div class="card__wrapper">
+                <div class="row">
+                    <div class="col-3 col-sm-3 col-md-3">
+                        <i class="fa-solid fa-mug-hot fa-2xl" style="color: #B197FC;"></i>
+
+                    </div>
+                    <div class="col-9 col-sm-9 col-md-9">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-5 fw-bold">  Earned Leaves</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-3 fw-bold" id="el_leave"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3">
+            <div class="card__wrapper">
+                <div class="row">
+                    <div class="col-3 col-sm-3 col-md-3">
+                        <i class="fa-solid fa-mug-hot fa-2xl" style="color: #B197FC;"></i>
+
+                    </div>
+                    <div class="col-9 col-sm-9 col-md-9">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-5 fw-bold">  Casual Leaves</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-3 fw-bold" id="cl_leave"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div class="row mt-3">
+        <div class="col-sm-12 mb-12 mb-sm-0">
+            <div class="card">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" align="center">
+                        <tbody id="list">
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container" style="height:20px">
+    </div>
+    <!-- toast -->
+    <div class="toast" id="myToast">
+        <div class="toast-container top-0 end-0 p-3">
+            <div class="toast align-items-center text-bg-success border-0 fade show top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" id="tostmsg">
+
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- toast -->
+   
     <!--ADD Leave Modal  Start -->
     <div class="modal fade" id="Applyleave" tabindex="-1" aria-labelledby="ApplyleaveLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered  modal-lg">
@@ -213,14 +160,16 @@
                     <div class="row m-3">
                         <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
                             <div class="form-group">
-                                <label>Leave Type</label><span style="color:crimson">*</span>
+                                <label>Leave Type</label>
+                                <span style="color:crimson">*</span>
                                 <select name="leave_type" id="leave_type" class="form-control" required>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
                             <div class="form-group">
-                                <label>Leave Duration</label><span style="color:crimson">*</span>
+                                <label>Leave Duration</label>
+                                <span style="color:crimson">*</span>
                                 <input type="text" id="leave_duration" class="form-control" />
                             </div>
                         </div>
@@ -229,7 +178,8 @@
                     <div class="row m-3">
                         <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
                             <div class="form-group">
-                                <label>Start Date</label><span style="color:crimson">*</span>
+                                <label>Start Date</label>
+                                <span style="color:crimson">*</span>
                                 <input type="date" id="leave_from_date" class="form-control" />
                             </div>
                         </div>
@@ -239,7 +189,8 @@
                     <div class="row m-3">
                         <div class="col-lg-12 col-12 col-sm-12 text-start">
                             <div class="form-group">
-                                <label>Reason</label><span style="color:crimson">*</span>
+                                <label>Reason</label>
+                                <span style="color:crimson">*</span>
 
                                 <textarea class="form-control" id="leave_reason" aria-label="With textarea" maxlength="100"></textarea>
                             </div>
@@ -297,17 +248,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="leaveLedgerLabel">
-                      Leave Ledger
+                        Leave Ledger
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <from>
                     <div class="row m-3">
                         <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
-                        
+
                             <div class="table-responsive">
                                 <table class="table table-hover" align="center" id="ledgertable">
-                                    
                                 </table>
 
                             </div>
@@ -317,7 +267,7 @@
                     </div>
 
                 </from>
-                
+
             </div>
         </div>
     </div>
@@ -362,11 +312,12 @@
                 type: "POST",
                 url: '@Url.Action("getNumberOfleaves", "Attendance")',
                 dataType: "json",
-                  success: function (data) {
-                      $("#si_leave").val(data.sl_balance);
-                      $("#el_leave").val(data.el_balance);
-                      $("#cl_leave").val(data.cl_balance);
-                      $("#tot_leave").val(parseFloat(data.cl_balance) + parseFloat(data.sl_balance) + parseFloat(data.el_balance));
+                   success: function (data) {
+                       document.getElementById('si_leave').innerHTML = data.sl_balance;
+                       document.getElementById('el_leave').innerHTML = data.el_balance;
+                       document.getElementById('cl_leave').innerHTML = data.cl_balance;
+                       document.getElementById('tot_leave').innerHTML = parseFloat(data.cl_balance) + parseFloat(data.sl_balance) + parseFloat(data.el_balance);
+
 
 
 
@@ -510,7 +461,7 @@
                     });
         }
         function btnLeaveLedgerOnclick() {
-           
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("getleaveledgerList", "Attendance")',
@@ -524,6 +475,6 @@
                 }
             });
         }
-        
+
     </script>
 }
