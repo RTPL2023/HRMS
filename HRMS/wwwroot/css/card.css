@@ -20,7 +20,25 @@
         padding: 25px
     }
 }
-
+.edit-icon {
+    background-color: rgba(108, 95, 252, .1);
+    --tw-text-opacity: 1;
+    color: rgb(108 95 252 / var(--tw-text-opacity, 1));
+}
+.edit-icon {
+    display: flex;
+    height: 30px;
+    width: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 12px;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: .15s;
+    transition-duration: .3s;
+    transition-timing-function: cubic-bezier(0.42, 0, 0.06, 1.37);
+}
 .card__wrapper {
     --tw-bg-opacity: 1;
     background-color: rgb(255 255 255/var(--tw-bg-opacity,1))

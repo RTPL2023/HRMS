@@ -29,6 +29,9 @@ namespace HRMS.Controllers
             try
             {
                 users _user = new users();
+                UtilityController u = new UtilityController();
+                model.password = u.Encryptdata(model.password);
+                model.emp_id = model.emp_id.ToUpper();
                 _user = _user.getLoggin(model.emp_id, model.password);
                 if (_user.valid == 1)
                 {
@@ -55,6 +58,9 @@ namespace HRMS.Controllers
         public JsonResult forgatepassword(string employee_id, string oldpass, string newpass)
         {
             users _user = new users();
+            UtilityController u = new UtilityController();
+            oldpass = u.Encryptdata(oldpass);
+            newpass = u.Encryptdata(newpass);
             string msg = _user.updatePassword(employee_id, oldpass, newpass);
             return Json(msg);
         }

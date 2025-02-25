@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using HRMS.Models.ViewModel;
 using HRMS.Models.Database;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace HRMS.Controllers
 {
-    [Authorize]
+    // [Authorize]
     public class MasterController : Controller
     {
-        
+
         public IActionResult Index()
         {
             return View();
@@ -31,7 +32,7 @@ namespace HRMS.Controllers
         public JsonResult SaveEmployeedetails(employee_masterViewModel model)
         {
             Employee_Master em = new Employee_Master();
-            string msg = em.saveEmployeedetails(model);
+            string msg = em.saveEmployeedetails(model,User.Identity.Name);
 
             return Json(msg);
         }
@@ -79,7 +80,7 @@ namespace HRMS.Controllers
                 foreach (var a in emlst)
                 {
 
-                    tableemenent = tableemenent + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td><a href = '" + @Url.Action("EmployeeDocumentAndOtherDetailsUpload", "Master", new { id = a.employee_id }) + "' class = \"table__icon edit\"><i class = \"fa-solid fa-pen fa-lg\"></i></a></td></tr>";
+                    tableemenent = tableemenent + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td><a href = '" + @Url.Action("Employee_Profile", "Master", new { id = a.employee_id }) + "' class = \"table__icon edit\"><i class = \"fa-solid fa-pen fa-lg\"></i></a></td></tr>";
 
 
                 }
@@ -89,14 +90,14 @@ namespace HRMS.Controllers
         [HttpGet]
         public IActionResult DesignationsMaster(employee_masterViewModel model)
         {
-            
+
             return View(model);
         }
 
         public JsonResult Savedesignation(employee_masterViewModel model)
         {
             Designation_Master em = new Designation_Master();
-            string msg = em.saveDesignationMaster(model);
+            string msg = em.saveDesignationMaster(model.designation);
 
             return Json(msg);
         }
@@ -110,14 +111,14 @@ namespace HRMS.Controllers
         public JsonResult editdesignationByid(employee_masterViewModel model)
         {
             Designation_Master em = new Designation_Master();
-          string msg= em.modifydesignationByid(model);
+            string msg = em.modifydesignationByid(model);
 
             return Json(msg);
-        } 
+        }
         public JsonResult deletedesignationByid(employee_masterViewModel model)
         {
             Designation_Master em = new Designation_Master();
-          string msg= em.deletedesignationByid(model);
+            string msg = em.deletedesignationByid(model);
 
             return Json(msg);
         }
@@ -169,7 +170,8 @@ namespace HRMS.Controllers
             string msg = em.modifydepartmentByid(model);
 
             return Json(msg);
-        } public JsonResult deleteDepartmentByid(employee_masterViewModel model)
+        }
+        public JsonResult deleteDepartmentByid(employee_masterViewModel model)
         {
             Department_Master em = new Department_Master();
             string msg = em.deletedepartmentByid(model);
@@ -196,6 +198,175 @@ namespace HRMS.Controllers
                 }
             }
             return Json(tableemenent);
+        }
+
+        [HttpGet]
+        public IActionResult Employee_Profile(string id)
+        {
+            employee_masterViewModel model = new employee_masterViewModel();
+            if (id != null && id != "")
+            {
+                model.employee_id = id;
+            }
+            else
+            {
+                model.employee_id = User.Identity.Name;
+            }
+           
+            return View(model);
+        }
+        public JsonResult getEmployeeDataByEmployeeId( string employee_id)
+        {
+
+            Employee_Master em = new Employee_Master();
+
+            var data = em.getEmployeeDetailByemployee_id(employee_id);
+            return Json(data);
+        }
+        public JsonResult UpdateEmployeedetailsByid(employee_masterViewModel model)
+        {
+            Employee_Master em = new Employee_Master();
+            string msg = em.UpdateEmployeedetailsByEmployee_id(model,User.Identity.Name);
+
+            return Json(msg);
+        }
+        public JsonResult getemployeeEmargencyContactDetails(employee_masterViewModel model)
+        {
+            Employee_Master em = new Employee_Master();
+            var data = em.getEmargencyContact(model.employee_id);
+
+            return Json(data);
+        }
+        public JsonResult UpdateEmployee_EmergencybyEmployee_id(employee_masterViewModel model)
+        {
+            Employee_Master em = new Employee_Master();
+            string msg = em.SAVEUpdateEmployee_Emergency_details(model);
+            return Json(msg);
+        }
+        public JsonResult getemployeeBanktDetails(employee_masterViewModel model)
+        {
+            Employee_bankid_details ebd = new Employee_bankid_details();
+            var data = ebd.getemployeeBankdetails(model.employee_id);
+
+            return Json(data);
+        }
+        public JsonResult saveupdateBankAndOtherDocument(employee_masterViewModel model)
+        {
+            Employee_bankid_details ebd = new Employee_bankid_details();
+            var data = ebd.SaveUpdateBankdetails(model);
+
+            return Json(data);
+        }
+        public JsonResult EmployeeDocumentUoload(employee_masterViewModel model)
+        {
+            Employee_Document ed = new Employee_Document();
+            var data = ed.updateDocument(model);
+
+            return Json(data);
+        }
+        public JsonResult getdocumentbyemployee_id(employee_masterViewModel model)
+        {
+            Employee_Document ed = new Employee_Document();
+            var data = ed.getdocument(model.employee_id);
+
+            return Json(data);
+        }
+
+        public IActionResult DownloadDocument(string value,string employee_id)
+        {
+       
+            Employee_Document ed = new Employee_Document();
+            ed= ed.getdocument(employee_id);
+            if (value== "bank_detail" && ed.aadhar != null)
+            {
+                var document = ed.bank_detail;
+                MemoryStream stream = new MemoryStream(document);
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("content-length", stream.Length.ToString());
+                byte[] bytes = stream.ToArray();
+                stream.Close();
+                return File(bytes, "application/pdf", "bank_detail_"+ employee_id + ".pdf");
+            }
+            if (value == "aadhar" && ed.aadhar !=null)
+            {
+                var document = ed.aadhar;
+                MemoryStream stream = new MemoryStream(document);
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("content-length", stream.Length.ToString());
+                byte[] bytes = stream.ToArray();
+                stream.Close();
+                return File(bytes, "application/pdf", "aadhar_" + employee_id + ".pdf");
+            }
+            if (value == "pan" && ed.pan != null)
+            {
+                var document = ed.pan;
+                MemoryStream stream = new MemoryStream(document);
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("content-length", stream.Length.ToString());
+                byte[] bytes = stream.ToArray();
+                stream.Close();
+                return File(bytes, "application/pdf", "pan_"+ employee_id + ".pdf");
+            }
+            if (value == "voter_id" && ed.voter_id != null)
+            {
+                var document = ed.voter_id;
+                MemoryStream stream = new MemoryStream(document);
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("content-length", stream.Length.ToString());
+                byte[] bytes = stream.ToArray();
+                stream.Close();
+                return File(bytes, "application/pdf", "voter_id_"+ employee_id + ".pdf");
+            }
+            if (value == "joining_letter" && ed.joining_letter != null)
+            {
+                var document = ed.joining_letter;
+                MemoryStream stream = new MemoryStream(document);
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("content-length", stream.Length.ToString());
+                byte[] bytes = stream.ToArray();
+                stream.Close();
+                return File(bytes, "application/pdf", "joining_letter_"+ employee_id + ".pdf");
+            } 
+            if (value == "police_verification" && ed.police_verification != null)
+            {
+                var document = ed.police_verification;
+                MemoryStream stream = new MemoryStream(document);
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("content-length", stream.Length.ToString());
+                byte[] bytes = stream.ToArray();
+                stream.Close();
+                return File(bytes, "application/pdf", "police_verification_"+ employee_id + ".pdf");
+            } 
+            if (value == "permanent_letter" && ed.permanent_letter != null)
+            {
+                var document = ed.permanent_letter;
+                MemoryStream stream = new MemoryStream(document);
+                Response.ContentType = "application/pdf";
+                Response.Headers.Add("content-length", stream.Length.ToString());
+                byte[] bytes = stream.ToArray();
+                stream.Close();
+                return File(bytes, "application/pdf", "permanent_letter_"+ employee_id + ".pdf");
+            } 
+            else
+            {
+
+               
+                return Json("");
+
+            }
+        }
+
+        public JsonResult getphoto(string employee_id)
+        {
+            var data = "";
+
+            Employee_Document ed = new Employee_Document();
+            ed = ed.getdocument(employee_id);
+            if (ed.employee_img != null)
+            {
+                data= "data:image/jpg;base64," + Convert.ToBase64String(ed.employee_img);  
+            }
+            return Json(data);
         }
     }
 }

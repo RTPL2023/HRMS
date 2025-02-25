@@ -13,171 +13,212 @@
         <link href="~/css/66a8d3968b62c58b.css" rel="stylesheet" />*@
 
     <style>
-        #sidebar-nav {
+        /*#sidebar-nav {
             width: 160px;
+        }*/
+
+        .sidebar-large {
+            width: 200px; /* Default for larger screens */
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar-large {
+                width: 170px; /* Smaller width for tablets/phones */
+            }
         }
     </style>
 </head>
 <body>
+    <section>
 
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
-            <div class="col-auto px-0">
-                <div id="sidebar" class="collapse collapse-horizontal border-end show">
-                    <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+        <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto px-0">
+                    <div id="sidebar" class="collapse collapse-horizontal  sidebar-large">
+                        <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start ">
 
-                        <a href="#" class="d-flex align-items-center pb-3 p-3 mb-md-0 me-md-auto text-decoration-none">
-                            <span class="fs-5 d-sm-inline">Menu</span>
-                        </a>
-                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start align-items-sm-start p-3" id="menu">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link align-middle px-0">
-                                    <i class="fs-4 bi-house"></i> <span class="ms-1  d-sm-inline fa-bold">HOME</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1  d-sm-inline fa-bold">DASHBOARD</span>
-                                </a>
-                                <ul class="collapse  nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                                    <li class="w-100">
+                            <a href="#" class="d-flex align-items-center pb-3 p-3 mb-md-0 me-md-auto text-decoration-none">
+                                <span class="fs-5 d-sm-inline">Menu</span>
+                            </a>
+                            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start align-items-sm-start p-3" id="menu">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link align-middle px-0">
+                                        <i class="fs-4 bi-house"></i> <span class="ms-1  d-sm-inline fa-bold fs-5 text-black bg-white">HOME</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                        <i class="fs-4 bi-speedometer2"></i> <span class="ms-1  d-sm-inline fa-bold  fs-5 text-black bg-white">DASHBOARD</span>
+                                    </a>
+                                    <ul class="collapse  nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                                        <li class="w-100">
 
-                                        <a href="/Attendance/PunchINPunchOut" class="nav-link px-0"> <span class=" d-sm-inline">PUNCH IN-OUT</span> </a>
+                                            <a href="/Attendance/PunchINPunchOut" class="nav-link px-0"> <span class=" d-sm-inline">PUNCH IN-OUT</span> </a>
+                                        </li>
+                                        <li>
+                                            <a href="/Attendance/LeaveApply" class="nav-link px-0"> <span class=" d-sm-inline">APPLY LEAVE</span></a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/Salary/SalaryStructure" class="nav-link px-0"> <span class=" d-sm-inline">My Salary Structure</span> </a>
+                                        </li>
+                                        <li>
+                                            <a href="/Salary/employeePayslip" class="nav-link px-0"> <span class=" d-sm-inline">Pay Slip</span> </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
+                                {
+
+
+                                    <li>
+                                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1  d-sm-inline fa-bold  fs-5 text-black bg-white">MASTER</span>
+                                        </a>
+                                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                                            <li class="w-100">
+                                                <a href="/Master/employee_master" class="nav-link px-0"> <span class=" d-sm-inline">EMPLOYEE MASTER</span> </a>
+                                            </li>
+                                            <li>
+                                                <a href="/Master/DesignationsMaster" class="nav-link px-0"> <span class=" d-sm-inline">DESIGNATION MASTER</span> </a>
+                                            </li>
+                                            <li>
+                                                <a href="/Master/DepartmentMaster" class="nav-link px-0"> <span class=" d-sm-inline">DEPARTMENT MASTER</span> </a>
+                                            </li>
+                                            <li>
+                                                <a href="/Attendance/EmployeeAttendanceModifyList" class="nav-link px-0"> <span class=" d-sm-inline">ATTENDANCE-LEAVE APPROVAL</span> </a>
+                                            </li>
+                                            <li>
+                                                <a href="/Attendance/AddCompOff" class="nav-link px-0"> <span class=" d-sm-inline">ADD COMP OFF</span> </a>
+                                            </li>
+
+
+                                            @if (this.User.IsInRole("SUPERADMIN"))
+                                            {
+                                                <li>
+                                                    <a href="/Salary/SalaryMaster" class="nav-link px-0"> <span class=" d-sm-inline">SALARY MASTER ENTRY</span> </a>
+                                                </li>
+                                            }
+
+                                        </ul>
+
+                                    </li>
+                                    @if (this.User.IsInRole("SUPERADMIN"))
+                                    {
+                                        <li>
+                                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                                <i class="fs-4 bi-bootstrap"></i> <span class="ms-1  d-sm-inline fa-bold  fs-5 text-black bg-white">REPORT</span>
+                                            </a>
+                                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+
+                                                <li class="w-100">
+                                                    <a href="/Report/DetailReport" class="nav-link px-0"> <span class=" d-sm-inline">ATTENDANCE REPORT</span> </a>
+                                                </li>
+                                            </ul>
+
+                                        </li>
+                                    }
+                                }
+
+
+                                @*<li>
+                                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                            <i class="fs-4 bi-grid"></i> <span class="ms-1  d-sm-inline">Products</span>
+                                        </a>
+                                        <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                            <li class="w-100">
+                                                <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 2</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 3</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 4</a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     <li>
-                                        <a href="/Attendance/LeaveApply" class="nav-link px-0"> <span class=" d-sm-inline">APPLY LEAVE</span></a>
-                                    </li>
-                                </ul>
-                            </li>
-                            @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
-                            {
+                                        <a href="#" class="nav-link px-0 align-middle">
+                                            <i class="fs-4 bi-people"></i> <span class="ms-1  d-sm-inline">Customers</span>
+                                        </a>
+                                    </li>*@
                                 <li>
-                                    <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                        <i class="fs-4 bi-bootstrap"></i> <span class="ms-1  d-sm-inline fa-bold">MASTER</span>
-                                    </a>
-                                    <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                                        <li class="w-100">
-                                            <a href="/Master/employee_master" class="nav-link px-0"> <span class=" d-sm-inline">EMPLOYEE MASTER</span> </a>
-                                        </li>
-                                        <li>
-                                            <a href="/Master/DesignationsMaster" class="nav-link px-0"> <span class=" d-sm-inline">DESIGNATION MASTER</span> </a>
-                                        </li>
-                                        <li>
-                                            <a href="/Master/DepartmentMaster" class="nav-link px-0"> <span class=" d-sm-inline">DEPARTMENT MASTER</span> </a>
-                                        </li>
-                                        <li>
-                                            <a href="/Attendance/EmployeeAttendanceModifyList" class="nav-link px-0"> <span class=" d-sm-inline">ATTENDANCE-LEAVE APPROVAL</span> </a>
-                                        </li>
-                                       
-                                    </ul>
+                                    <hr>
+                                    <div class="dropdown pb-3 text-center">
+                                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="~/img/userlogo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                                            <span class=" d-sm-inline mx-1">@this.User.Identity.Name</span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 
-                                </li>
+                                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                                            <li><a class="dropdown-item" href="/Master/employee_profile">Profile</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="/Auth/login">Sign out</a></li>
+                                        </ul>
+                                    </div>
                                 <li>
-                                    <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                        <i class="fs-4 bi-bootstrap"></i> <span class="ms-1  d-sm-inline fa-bold">REPORT</span>
-                                    </a>
-                                    <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                      
-                                        <li class="w-100">
-                                            <a href="/Report/DetailReport" class="nav-link px-0"> <span class=" d-sm-inline">ATTENDANCE REPORT</span> </a>
-                                        </li>
-                                    </ul>
-
-                                </li>
-                            }
-
-
-                            @*<li>
-            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-grid"></i> <span class="ms-1  d-sm-inline">Products</span>
-            </a>
-            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                <li class="w-100">
-                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 1</a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 2</a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 3</a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link px-0"> <span class=" d-sm-inline">Product</span> 4</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a href="#" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-people"></i> <span class="ms-1  d-sm-inline">Customers</span>
-            </a>
-        </li>*@
-                            <li>
-                                <hr>
-                                <div class="dropdown pb-3 text-center">
-                                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="~/img/userlogo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                                        <span class=" d-sm-inline mx-1">@this.User.Identity.Name</span>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-
-                                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="/Auth/login">Sign out</a></li>
-                                    </ul>
-                                </div>
-                            <li>
-                        </ul>
-
-
-
-
-
-                    </div>
-                </div>
-            </div>
-            @*<main class="col ps-md-2 pt-2">*@
-
-            <main role="main" class="col ps-md-2 pt-2">
-                <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                    <div class="container-fluid">
-
-                        <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="border rounded-3 p-1 mb-1 text-decoration-none"><i class="fa-solid fa-bars fa-2xl"></i></a>
-
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-2">
-                                <li class="nav-item">
-                                    <h3 class="ml-2"></h3>
-                                </li>
-                                <li class="nav-item">
-                                    <h3 class="ml-2">Rishi Hrms</h3>
-                                </li>
-
                             </ul>
-                            <form class="d-flex  ">
 
-                                <button class="border-0" asp-area="" asp-controller="Auth" asp-action="login"><i class="fas fa-sign-out-alt fa-lg" style="color: #74C0FC;"></i> Log Out</button>
-                            </form>
+
+
+
 
                         </div>
                     </div>
-                </nav>
-                <div class="container mt-2">
-                    @RenderBody()
-
                 </div>
+                @*<main class="col ps-md-2 pt-2">*@
 
-            </main>
+                <main role="main" class="col ps-md-2 pt-2">
+                    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                        <div class="container-fluid">
+
+                            <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="border rounded-3 p-1 mb-1 text-decoration-none"><i class="fa-solid fa-bars fa-2xl"></i></a>
+
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ml-2">
+                                    <li class="nav-item">
+                                        <h3 class="ml-2"></h3>
+                                    </li>
+                                    <li class="nav-item">
+                                        <h3 class="ml-2">Rishi Hrms</h3>
+                                    </li>
+
+                                </ul>
+                                <form class="d-flex  ">
+
+                                    <button class="border-0" asp-area="" asp-controller="Auth" asp-action="login"><i class="fas fa-sign-out-alt fa-lg" style="color: #74C0FC;"></i> Log Out</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </nav>
+                    <div class="container mt-2">
+                        @RenderBody()
+
+                    </div>
+                    <div style="height:100px">
+                    </div>
+                    <footer class="border-top footer ">
+                        <div class="container m-2 text-center">
+                            &copy; 2025 - HRMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </div>
+                    </footer>
+                </main>
+
+            </div>
 
         </div>
-    </div>
+    </section>
 
-    <hr>
-    <div class="container m-2 text-center">
-        &copy; 2025 - HRMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
+
+
+
 
 
 

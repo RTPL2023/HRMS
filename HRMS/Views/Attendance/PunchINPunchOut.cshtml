@@ -6,33 +6,34 @@
 
 <link href="~/css/card.css" rel="stylesheet" />
 <style>
+  
 </style>
 <form asp-controller="Attendance" asp-action="PunchINPunchOut" method="post">
     <div class="container ">
         <div class="row">
             <div class="card__wrapper no-height">
-                <div class="card__title-wrap flex items-center justify-between mb-[20px]">
-                    <h5 class="card__heading-title">Mark Attendance</h5>
-
+                <div class="row">
+                    <div class="col-lg-5 col-12 col-sm-12"><h5 class="card__heading-title">Mark Attendance</h5></div>
+                    <div class="col-lg-3 col-12 col-sm-3"><p id="tot_days_in_month" class="bd-badge bg-info fs-6 fw-bold"></p></div>
+                    <div class="col-lg-2 col-12 col-sm-3"><p id="sundays" class="bd-badge bg-info fs-6 fw-bold" onclick="totalSundayonclick()"></p></div>
+                    <div class="col-lg-2 col-12 col-sm-3"><p id="holidays" class="bd-badge bg-info fs-6 fw-bold" onclick="holidaysonclick()"></p></div>
                 </div>
-                <p class="text-muted">Office Time: 09:30AM to 06:30PM</p>
+                <div class="row">
+                    <div class="col-lg-5 col-12 col-sm-12"><p class="text-muted">Office Time: 09:30AM to 06:30PM</p></div>
+                    <div class="col-lg-3 col-12 col-sm-3"><p id="full_day_view" class="bd-badge bg-info fs-6 fw-bold" onclick="getfulldaylist('full')"></p></div>
+                    <div class="col-lg-2 col-12 col-sm-3"><p id="half_day_view" class="bd-badge bg-warning fs-6 fw-bold" onclick="getfulldaylist('half')"></p></div>
+                    <div class="col-lg-2 col-12 col-sm-3"><p id="absent_view" class="bd-badge bg-danger fs-6 fw-bold" onclick="getfulldaylist('absent')"></p></div>
+                </div>
                 <div class="d-flex flex-row mb-3">
-                    <div class="p-2">
-                        <button type="button" id="punchin" name="punchin" class="btn btn-primary " onclick="btnPunchinOnclick()">PUNCH IN</button>
-                    </div>
-                    <div class="p-2">
-                        <button type="button" id="punchout" name="punchout" class="btn btn-danger " onclick="btnPunchoutOnclick()">PUNCH OUT</button>
-
-                    </div>
+                    <div class="p-2"><button type="button" id="punchin" name="punchin" class="btn btn-primary btn-lg" onclick="btnPunchinOnclick()">PUNCH IN</button></div>
+                    <div class="p-2"><button type="button" id="punchout" name="punchout" class="btn btn-danger btn-lg" onclick="btnPunchoutOnclick()">PUNCH OUT</button></div>
                 </div>
-
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-sm-12 mb-12 mb-sm-0">
                 <div class="card">
-
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="height:350px">
                         <table class="table table-bordered table-hover" align="center">
                             <tbody id="attlist">
                             </tbody>
@@ -42,151 +43,167 @@
                 </div>
             </div>
         </div>
-        </div>
-        <!--<div class="container ">
-    <div class="row text-center">
-        <div class="col-12 col-md-12">
+    </div>
 
-            <h1 class="modal-title fs-5">Mark Your Attendance</h1>
+
+    <!-- toast -->
+    <div class="toast" id="myToast">
+        <div class="toast-container top-0 end-0 p-3">
+            <div class="toast align-items-center text-bg-success border-0 fade show top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" id="tostmsg">
+
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row text-center mt-3">
-        <div class="col-12 col-md-6">
-            <button type="button" id="punchin" name="punchin" class="btn btn-primary " onclick="btnPunchinOnclick()">PUNCH IN</button>
+    <!-- toast -->
+    <!--</div>-->
+    <!--ADD Designation Modal  Start -->
+    <div class="modal fade" id="EditInvalid" tabindex="-1" aria-labelledby="EditInvalidLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
 
-        </div>
-        <div class="col-12 col-md-6 text-start">
-            <button type="button" id="punchout" name="punchout" class="btn btn-danger " onclick="btnPunchoutOnclick()">PUNCH OUT</button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="EditInvalidLabel">Modify Attendance</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <span style="color:crimson">*</span>
+                                <input type="text" id="attendance_date" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>In Time</label>
+                                <span style="color:crimson">*</span>
+                                <input type="time" id="requested_in_time" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3">
 
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Out Time</label>
+                                <span style="color:crimson">*</span>
+                                <input type="time" id="requested_out_time" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Day Type</label>
+                                <span style="color:crimson">*</span>
+
+                                <select name="requested_day_count" id="requested_day_count" class="form-control" required>
+                                    <option value="">Select Day Type</option>
+                                    <option value="1">Full Day</option>
+                                    <option value="0.5">Half Day</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Reason</label>
+                                <span style="color:crimson">*</span>
+                                <input type="text" id="reason" class="form-control" maxlength="100" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3" id="disbledtextbox">
+                        <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+
+                                <input type="text" id="attendance_Id" class="form-control" readonly />
+                                <input type="text" id="actual_In_time" class="form-control" readonly />
+                                <input type="text" id="actual_out_time" class="form-control" readonly />
+                                <input type="text" id="actual_punch_type" class="form-control" readonly />
+                                <input type="text" id="actual_day_count" class="form-control" readonly />
+                            </div>
+                        </div>
+
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-sm-12 mb-12 mb-sm-0">
-            <div class="card">
+    <!-- Modal End -->
+    <!--ADD List Modal  Start -->
+    <div class="modal fade" id="ListModal" tabindex="-1" aria-labelledby="ListModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-lg">
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover" align="center">
-                        <tbody id="attlist">
-                        </tbody>
-                    </table>
-
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ListModalLabel"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <from>
+                    <div class="row m-3">
+                        <div class="table-responsive" >
+                            <table class="table  table-hover" align="center">
+                                <tbody id="viewlist">
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    
+                    
+                </from>
+                
             </div>
         </div>
-
-    </div>-->
-        <!-- toast -->
-        <div class="toast" id="myToast">
-            <div class="toast-container top-0 end-0 p-3">
-                <div class="toast align-items-center text-bg-success border-0 fade show top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="d-flex">
-                        <div class="toast-body" id="tostmsg">
-
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- toast -->
-        <!--</div>-->
-        <!--ADD Designation Modal  Start -->
-        <div class="modal fade" id="EditInvalid" tabindex="-1" aria-labelledby="EditInvalidLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="EditInvalidLabel">Modify Attendance</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <from>
-                        <div class="row m-3">
-                            <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
-                                <div class="form-group">
-                                    <label>Date</label>
-                                    <span style="color:crimson">*</span>
-                                    <input type="text" id="attendance_date" class="form-control" readonly />
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
-                                <div class="form-group">
-                                    <label>In Time</label>
-                                    <span style="color:crimson">*</span>
-                                    <input type="time" id="requested_in_time" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row m-3">
-
-                            <div class="col-lg-6 col-12 col-sm-12 text-start">
-                                <div class="form-group">
-                                    <label>Out Time</label>
-                                    <span style="color:crimson">*</span>
-                                    <input type="time" id="requested_out_time" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 col-sm-12 text-start">
-                                <div class="form-group">
-                                    <label>Day Type</label>
-                                    <span style="color:crimson">*</span>
-
-                                    <select name="requested_day_count" id="requested_day_count" class="form-control" required>
-                                        <option value="">Select Day Type</option>
-                                        <option value="1">Full Day</option>
-                                        <option value="0.5">Half Day</option>
-
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-12 col-sm-12 text-start">
-                                <div class="form-group">
-                                    <label>Reason</label>
-                                    <span style="color:crimson">*</span>
-                                    <input type="text" id="reason" class="form-control" maxlength="100" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row m-3" id="disbledtextbox">
-                            <div class="col-lg-12 col-12 col-sm-12 text-start formTitle">
-                                <div class="form-group">
-
-                                    <input type="text" id="attendance_Id" class="form-control" readonly />
-                                    <input type="text" id="actual_In_time" class="form-control" readonly />
-                                    <input type="text" id="actual_out_time" class="form-control" readonly />
-                                    <input type="text" id="actual_punch_type" class="form-control" readonly />
-                                    <input type="text" id="actual_day_count" class="form-control" readonly />
-                                </div>
-                            </div>
-
-                        </div>
-                    </from>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal End -->
-
+    </div>
+    <!-- Modal End -->
 </form>
 @section scripts
 {
 
     <script type="text/javascript">
 
+
         $(document).ready(function () {
             ShowTable();
 
            /* $('#myToast').hide();*/
             $('#disbledtextbox').hide();
-
+              $.ajax({
+                type: "POST",
+                url: '@Url.Action("getfulldayHalfdayAndAbsent", "Attendance")',
+                dataType: "json",
+                  success: function (data) {
+                      console.log(data);
+                      document.getElementById("full_day_view").innerHTML ='<i class="fa-solid fa-circle-check"></i> Full Day : '+ data.fday;
+                      document.getElementById("half_day_view").innerHTML ='<i class="fa-solid fa-triangle-exclamation"></i> Half Day : '+ data.hday;
+                      document.getElementById("absent_view").innerHTML = '<i class="fa fa-window-close" aria-hidden="true"></i> Invalid : ' +data.absent;
+                      document.getElementById("tot_days_in_month").innerHTML = '<i class="fa-solid fa-calendar-days"></i> Total Days : ' + data.tot_days_in_month;
+                      document.getElementById("sundays").innerHTML = '<i class="fas fa-holly-berry"></i> Sundays : ' + data.sundays;
+                      document.getElementById("holidays").innerHTML = '<i class="fas fa-cookie-bite"></i> Holidays : ' + data.holidays;
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
 
         });
 
 
         function btnPunchinOnclick() {
+            document.getElementById("punchin").disabled = true;
+
+
             if (navigator.geolocation) {
 
                 navigator.geolocation.getCurrentPosition(in_showPosition);
@@ -198,15 +215,51 @@
 
         function in_showPosition(position) {
 
-            var inloc = "";
-            if ((22.6295808 - 0.001) < position.coords.latitude < (22.6295808 + 0.001) && (88.4310016 - 0.001) < position.coords.longitude < (88.4310016 + 0.001)) {
 
-                inloc = "Valid";
+
+
+            var inloc = "";
+             //if (((22.597269 - 0.0002) < position.coords.latitude < (22.597269 + 0.0002) )&& ((88.417978 - 0.0004) < position.coords.longitude < (88.417978 + 0.0004))) {
+
+             //   inloc = "Valid";
+             //   alert("Valid");
+             //}
+
+             //else {
+             //   inloc = "Invalid";
+             //   alert("Invalid");
+
+            //}
+            //alert(JSON.stringify(position.coords.latitude));
+            //alert(JSON.stringify(position.coords.longitude));
+
+            if ((22.597269 - 0.0003) < position.coords.latitude) {
+                if (position.coords.latitude < (22.597269 + 0.0003)) {
+                    if ((88.417978 - 0.0004) < position.coords.longitude) {
+                        if (position.coords.longitude < (88.417978 + 0.0004)) {
+                            inloc = "Valid";
+                            /*alert("Location Valid");*/
+                        }
+                        else {
+                            inloc = "Invalid";
+                        }
+                    }
+                    else {
+                        inloc = "Invalid";
+                    }
+                }
+                else {
+                    inloc = "Invalid";
+                }
+
+
             }
             else {
                 inloc = "Invalid";
-
             }
+
+
+
             let ModelObject = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
@@ -220,16 +273,29 @@
                         dataType: "json",
                         success: function (data) {
                             alert(data);
+                            if (inloc == "Valid") {
+                                alert("Location Valid");
+
+
+                            }
+                            else {
+                                alert("Location Invalid")
+                            }
+                            document.getElementById("punchin").disabled = false;
                             ShowTable();
                         },
                         error: function (err) {
                             alert("Error Occured");
+                            document.getElementById("punchin").disabled = false;
+
                         }
                     });
 
         }
 
         function btnPunchoutOnclick() {
+            document.getElementById("punchout").disabled = true;
+
             if (navigator.geolocation) {
 
                 navigator.geolocation.getCurrentPosition(out_showPosition);
@@ -242,14 +308,42 @@
         function out_showPosition(position) {
 
               var outloc = "";
-            if ((22.6295808 - 0.001) < position.coords.latitude < (22.6295808 + 0.001) && (88.4310016 - 0.001) < position.coords.longitude < (88.4310016 + 0.001)) {
+            //if ((22.6295808 - 0.001) < position.coords.latitude < (22.6295808 + 0.001) && (88.4310016 - 0.001) < position.coords.longitude < (88.4310016 + 0.001)) {
 
-                outloc = "Valid";
+            //    outloc = "Valid";
+            //}
+            //else {
+            //    outloc = "Invalid";
+
+            //}
+
+
+            if ((22.597269 - 0.0003) < position.coords.latitude) {
+                if (position.coords.latitude < (22.597269 + 0.0003)) {
+                    if ((88.417978 - 0.0004) < position.coords.longitude) {
+                        if (position.coords.longitude < (88.417978 + 0.0004)) {
+                            outloc = "Valid";
+                            /*alert("Location Valid");*/
+                        }
+                        else {
+                            outloc = "Invalid";
+                        }
+                    }
+                    else {
+                        outloc = "Invalid";
+                    }
+                }
+                else {
+                    outloc = "Invalid";
+                }
+
+
             }
             else {
                 outloc = "Invalid";
-
             }
+
+
             let ModelObject = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
@@ -263,11 +357,21 @@
                         dataType: "json",
                         success: function (data) {
                             alert(data);
+                            if (outloc == "Valid") {
+                                alert("Location Valid")
+                            }
+                            else {
+                                alert("Location Invalid")
+                            }
                             ShowTable();
+                            document.getElementById("punchout").disabled = false;
+
                         },
                         error: function (err) {
                             console.log(err);
                             alert("Error Occured");
+                            document.getElementById("punchout").disabled = false;
+
                         }
                     });
 
@@ -319,14 +423,11 @@
             }
             else if ($('#requested_day_count').val() == "") {
                 alert("Day Type Can't Be Blank!");
-
-
             } else if ($('#requested_in_time').val() == "") {
                 alert("In Time Can't Be Blank!");
 
             } else if ($('#requested_out_time').val() == "") {
                 alert("Out Time Can't Be Blank!");
-
             } else {
                     let ModelObject = {
                             requested_in_time: $('#requested_in_time').val(),
@@ -362,6 +463,56 @@
                         }
                     });
             }
+        }
+        function totalSundayonclick() {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getsundayList", "Attendance")',
+
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("viewlist").innerHTML = data;
+                    $("#ListModal").modal('show');
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function holidaysonclick() {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getholidaysList", "Attendance")',
+
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("viewlist").innerHTML = data;
+                    $("#ListModal").modal('show');
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function getfulldaylist(day) {
+           
+            let ModelObject = { day: day };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getFullDaylist", "Attendance")',
+
+                dataType: "json",
+                data: ModelObject,
+                success: function (data) {
+                    document.getElementById("viewlist").innerHTML = data;
+                    $("#ListModal").modal('show');
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
         }
     </script>
 }

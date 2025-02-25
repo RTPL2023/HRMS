@@ -53,6 +53,8 @@ namespace HRMS.Controllers
             model.sundays = Convert.ToString(u.CountDayOfWeekInMonth(year, month, DayOfWeek.Sunday));
             model.holidays = Convert.ToString(u.HolidaysInMonth(model.from_date, model.to_date));
             model.op_holidays = Convert.ToString(u.OpHolidaysInMonthTakenOrNot(model.employee_id,model.from_date, model.to_date));
+            salary_master sm = new salary_master();
+            sm = sm.GetSalaryDetailByEmployeeid(model.employee_id);
             leave_details ld = new leave_details();
             model.leaves_taken = ld.GetLeaveCountByEmpid(model).ToString("0.0");
             decimal work_day = 0;
@@ -149,6 +151,20 @@ namespace HRMS.Controllers
             }
             model.total_working_days = Convert.ToString(work_day);
             model.lop = Convert.ToString(Convert.ToDecimal(model.tot_days_in_month) - (Convert.ToDecimal(model.sundays) + Convert.ToDecimal(model.holidays) + Convert.ToDecimal(model.op_holidays)+ Convert.ToDecimal(model.leaves_taken)+ Convert.ToDecimal(model.total_working_days)));
+            model.act_salary = sm.emp_net.ToString("0.00");
+            model.cal_salary = (sm.emp_net - Convert.ToDecimal(Math.Round((sm.emp_net / 30) * Convert.ToDecimal(model.lop)))).ToString("0.00");
+
+            Salary_Ledger sl = new Salary_Ledger();
+            string monthname = Convert.ToDateTime(model.from_date, usCinfo).ToString("MMMM");
+            sl.employee_id = model.employee_id;
+            sl.month = monthname;
+            sl.days_in_month = model.tot_days_in_month;
+            sl.year = Convert.ToString(year);
+            sl.actual_net_pay = Convert.ToDecimal(model.act_salary);
+            sl.calculated_net_pay = Convert.ToDecimal(model.cal_salary);
+            sl.lop = model.lop;
+            sl.SaveSalaryLedger(sl);
+
             return Json(model);
         }
 
@@ -209,8 +225,8 @@ namespace HRMS.Controllers
                 worksheet.Cell(currentRow, 5).Value = "Duration";
                 worksheet.Cell(currentRow, 6).Value = "Punch Type";
                 worksheet.Cell(currentRow, 7).Value = "Modified"; 
-                worksheet.Cell(currentRow, 9).Value = "Leave Date";
-                worksheet.Cell(currentRow, 10).Value = "Leave Type";
+                worksheet.Cell(currentRow, 11).Value = "Leave Date";
+                worksheet.Cell(currentRow, 12).Value = "Leave Type";
 
 
 
@@ -272,8 +288,8 @@ namespace HRMS.Controllers
                     {
                         a.leave_type = "Comp-Off";
                     }
-                    worksheet.Cell(currentRow, 9).Value = a.apply_date;
-                    worksheet.Cell(currentRow, 10).Value = a.leave_type;
+                    worksheet.Cell(currentRow, 11).Value = a.apply_date;
+                    worksheet.Cell(currentRow, 12).Value = a.leave_type;
                    
 
 
@@ -287,10 +303,14 @@ namespace HRMS.Controllers
                 worksheet.Cell(currentRow, 5).Value = "Leaves";
                 worksheet.Cell(currentRow, 6).Value = "LOP";
                 worksheet.Cell(currentRow, 7).Value = "Total Working Day";
-
+                worksheet.Cell(currentRow, 8).Value = "Actual Net Pay";
+                worksheet.Cell(currentRow, 9).Value = "Calculated Net Pay";
+                salary_master sm = new salary_master();
+                sm = sm.GetSalaryDetailByEmployeeid(model.employee_id);
                 model.total_working_days = Convert.ToString(work_day);
                 model.lop = Convert.ToString(Convert.ToDecimal(model.tot_days_in_month) - (Convert.ToDecimal(model.sundays) + Convert.ToDecimal(model.holidays) + Convert.ToDecimal(model.op_holidays) + Convert.ToDecimal(model.leaves_taken) + Convert.ToDecimal(model.total_working_days)));
-
+                model.act_salary = sm.emp_net.ToString("0.00");
+                model.cal_salary = (sm.emp_net - Convert.ToDecimal(Math.Round((sm.emp_net / 30) * Convert.ToDecimal(model.lop)))).ToString("0.00");
 
                 currentRow++;
                 worksheet.Cell(currentRow, 1).Value = model.tot_days_in_month;
@@ -300,7 +320,19 @@ namespace HRMS.Controllers
                 worksheet.Cell(currentRow, 5).Value = model.leaves_taken;
                 worksheet.Cell(currentRow, 6).Value = model.lop;
                 worksheet.Cell(currentRow, 7).Value = model.total_working_days;
+                worksheet.Cell(currentRow, 8).Value = model.act_salary;
+                worksheet.Cell(currentRow, 9).Value = model.cal_salary;
 
+                Salary_Ledger sl = new Salary_Ledger();
+                string monthname = Convert.ToDateTime(model.from_date, usCinfo).ToString("MMMM");
+                sl.employee_id = model.employee_id;
+                sl.month = monthname;
+                sl.days_in_month = model.tot_days_in_month;
+                sl.year = Convert.ToString(year);
+                sl.actual_net_pay = Convert.ToDecimal(model.act_salary);
+                sl.calculated_net_pay = Convert.ToDecimal(model.cal_salary);
+                sl.lop = model.lop;
+                sl.SaveSalaryLedger(sl);
 
                 using (var stream = new MemoryStream())
                 {
@@ -347,6 +379,8 @@ namespace HRMS.Controllers
                 worksheet.Cell(currentRow, 7).Value = "Leaves";
                 worksheet.Cell(currentRow, 8).Value = "LOP";
                 worksheet.Cell(currentRow, 9).Value = "Total Working Day";
+                worksheet.Cell(currentRow, 10).Value = "Actual Net Pay";
+                worksheet.Cell(currentRow, 11).Value = "Calculated Net Pay";
                 foreach (var ab in empl)
                 {
                     DetailReportViewModel model = new DetailReportViewModel();
@@ -361,6 +395,8 @@ namespace HRMS.Controllers
                     model.op_holidays = Convert.ToString(u.OpHolidaysInMonthTakenOrNot(model.employee_id, model.from_date, model.to_date));
                     leave_details ld = new leave_details();
                     model.leaves_taken = ld.GetLeaveCountByEmpid(model).ToString("0.0");
+                    salary_master sm = new salary_master();
+                    sm = sm.GetSalaryDetailByEmployeeid(model.employee_id);
                     decimal work_day = 0;
 
                     employee_attendance ea = new employee_attendance();
@@ -381,6 +417,8 @@ namespace HRMS.Controllers
                     
                     model.total_working_days = Convert.ToString(work_day);
                     model.lop = Convert.ToString(Convert.ToDecimal(model.tot_days_in_month) - (Convert.ToDecimal(model.sundays) + Convert.ToDecimal(model.holidays) + Convert.ToDecimal(model.op_holidays) + Convert.ToDecimal(model.leaves_taken) + Convert.ToDecimal(model.total_working_days)));
+                    model.act_salary = sm.emp_net.ToString("0.00");
+                    model.cal_salary = (sm.emp_net - Convert.ToDecimal(Math.Round((sm.emp_net / 30) * Convert.ToDecimal(model.lop)))).ToString("0.00");
 
 
                     currentRow++;
@@ -393,9 +431,20 @@ namespace HRMS.Controllers
                     worksheet.Cell(currentRow, 7).Value = model.leaves_taken;
                     worksheet.Cell(currentRow, 8).Value = model.lop;
                     worksheet.Cell(currentRow, 9).Value = model.total_working_days;
+                    worksheet.Cell(currentRow, 10).Value = model.act_salary;
+                    worksheet.Cell(currentRow, 11).Value = model.cal_salary;
 
+                    Salary_Ledger sl = new Salary_Ledger();
+                    string monthname = Convert.ToDateTime(model.from_date, usCinfo).ToString("MMMM");
+                    sl.employee_id = model.employee_id;
+                    sl.month = monthname;
+                    sl.days_in_month = model.tot_days_in_month;
+                    sl.year = Convert.ToString(year);
+                    sl.actual_net_pay = Convert.ToDecimal(model.act_salary);
+                    sl.calculated_net_pay = Convert.ToDecimal(model.cal_salary);
+                    sl.lop = model.lop;
+                    sl.SaveSalaryLedger(sl);
 
-                   
                 }
                 using (var stream = new MemoryStream())
                 {

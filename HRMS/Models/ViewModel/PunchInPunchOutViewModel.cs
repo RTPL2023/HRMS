@@ -28,6 +28,11 @@ namespace HRMS.Models.ViewModel
         public int is_approved { get; set; }
         public string attlist { get; set; }
         public string leavelist { get; set; }
-
+        public int hday { get; set; }
+        public int fday { get; set; }
+        public int absent { get; set; }
+        public string tot_days_in_month { get; set; }
+        public string sundays { get; set; }
+        public string holidays { get; set; }
     }
 }

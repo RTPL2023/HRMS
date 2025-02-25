@@ -29,11 +29,11 @@ namespace HRMS.Models.Database
         public string manager_remarks { get; set; }
         public string approved_rejected_by { get; set; }
         public string approved_rejected_on { get; set; }
-
+      
 
         public string UpdateLeaveApplydetails(LeaveApplyViewModel model, string employee_id)
         {
-        
+
             string msg = "";
             string sql = "Select * from leave_details where employee_id='" + employee_id + "' and id=" + model.id + "";
             config.singleResult(sql);
@@ -58,9 +58,9 @@ namespace HRMS.Models.Database
         {
             Leave_ledger ld = new Leave_ledger();
             decimal lbal_prin = 0;
-           
+
             int i = 1;
-          
+
             string sql = "SELECT * FROM Leave_ledger WHERE lv_hd='" + lv_hd + "' AND employee_id='" + employee_id + "' ORDER BY id";
             config.singleResult(sql);
 
@@ -74,12 +74,12 @@ namespace HRMS.Models.Database
                         lbal_prin = !Convert.IsDBNull(dr["lv_amount"]) ? Convert.ToDecimal(dr["lv_amount"]) : Convert.ToDecimal(00);
 
 
-                       
+
                         ld.id = Convert.ToInt32(dr["id"]);
 
                         string qry = "Update Leave_ledger set lv_balance=" + lbal_prin + " where id=" + ld.id + "";
                         config.Execute_Query(qry);
-                      
+
                     }
                     else
                     {
@@ -87,12 +87,12 @@ namespace HRMS.Models.Database
                         if (ld.dr_cr == "D")
                         {
                             lbal_prin = lbal_prin - (!Convert.IsDBNull(dr["lv_amount"]) ? Convert.ToDecimal(dr["lv_amount"]) : Convert.ToDecimal(00));
-                           
+
                         }
                         else
                         {
                             lbal_prin = lbal_prin + (!Convert.IsDBNull(dr["lv_amount"]) ? Convert.ToDecimal(dr["lv_amount"]) : Convert.ToDecimal(00));
-                            
+
                         }
 
                         ld.id = Convert.ToInt32(dr["id"]);
@@ -100,7 +100,7 @@ namespace HRMS.Models.Database
                         string qry = "Update Leave_ledger set lv_balance=" + lbal_prin + " where id=" + ld.id + "";
                         config.Execute_Query(qry);
 
-                       
+
                     }
 
                     i = i + 1;
@@ -148,7 +148,7 @@ namespace HRMS.Models.Database
             string sql = "";
             decimal leave_bal = 0;
             string lv_dur = "0";
-           
+
             if (Convert.ToDecimal(model.leave_duration) == Convert.ToDecimal(0.5))
             {
                 lv_dur = "1";
@@ -157,14 +157,8 @@ namespace HRMS.Models.Database
             {
                 lv_dur = model.leave_duration;
             }
-            //model.leave_from_date = DateTime.ParseExact(model.leave_from_date, "dd-MM-yyyy", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy").Replace("-", "/");
-             model.leave_from_date = Convert.ToDateTime(model.leave_from_date, usCinfo).ToString("dd/MM/yyyy").Replace("-", "/");
-
-            //model.leave_to_date = DateTime.ParseExact(model.leave_from_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(Convert.ToInt32(lv_dur) - 1).ToString("dd/MM/yyyy").Replace("-", "/");
-
-
+            model.leave_from_date = Convert.ToDateTime(model.leave_from_date, usCinfo).ToString("dd/MM/yyyy").Replace("-", "/");
             model.leave_to_date = Convert.ToDateTime(model.leave_from_date, usCinfo).AddDays(Convert.ToInt32(lv_dur) - 1).ToString("dd/MM/yyyy").Replace("-", "/");
-
             sql = "select * from Leave_ledger where employee_id='" + employee_id + "' and lv_hd='" + model.leave_type + "' order by id";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
@@ -177,8 +171,6 @@ namespace HRMS.Models.Database
                 for (int i = 0; i < Convert.ToInt32(lv_dur); i++)
                 {
                     dt = Convert.ToDateTime(model.leave_from_date, usCinfo).AddDays(i).ToString("dd/MM/yyyy").Replace("-", "/");
-                    //dt= DateTime.ParseExact(model.leave_from_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture).AddDays(i).ToString("dd/MM/yyyy").Replace("-", "/");
-
 
                     sql = "Select * from leave_details where employee_id='" + employee_id + "' and Convert(date,'" + dt + "',103)>=Convert(date,leave_from_date,103) and Convert(date,'" + dt + "',103)<= Convert(date,leave_to_date,103) and is_approved<>0";
                     config.singleResult(sql);
@@ -202,8 +194,8 @@ namespace HRMS.Models.Database
                             { "create_date",date},
                             { "created_by",employee_id},
                             });
-                        sql = "Select * from Leave_ledger where employee_id='" + employee_id + "' and lv_hd='"+model.leave_type+"' and date='"+ date + "' and dr_cr='D' " +
-                            "and create_date='"+ date + "' and lv_amount="+ Convert.ToDecimal(model.leave_duration) + " and remarks='Debit For Leave Apply'";
+                        sql = "Select * from Leave_ledger where employee_id='" + employee_id + "' and lv_hd='" + model.leave_type + "' and date='" + date + "' and dr_cr='D' " +
+                            "and create_date='" + date + "' and lv_amount=" + Convert.ToDecimal(model.leave_duration) + " and remarks='Debit For Leave Apply'";
                         config.singleResult(sql);
                         if (config.dt.Rows.Count > 0)
                         {
@@ -220,7 +212,7 @@ namespace HRMS.Models.Database
                             { "lv_ledger_id",Convert.ToInt32(dr["id"])},
                             });
                         }
-                           
+
                         msg = "Leave Applied successfully!";
                     }
                 }
@@ -228,7 +220,7 @@ namespace HRMS.Models.Database
             }
             else
             {
-                msg = "Leave Balance Cannot Be Less Than Applied Leave Duration";
+                msg = model.leave_duration + " Days Leave Are Not Available";
             }
 
 
@@ -261,13 +253,13 @@ namespace HRMS.Models.Database
         public List<leave_details> getleaveDetailsbyemployee_id(string empl_id)
         {
             List<leave_details> ldlist = new List<leave_details>();
-            string sql = "Select * from Employee_Master Where Reporting_mg_id=" + empl_id + " order by id";
+            string sql = "Select * from Employee_Master Where Reporting_mg_id='" + empl_id + "' order by id";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
                 foreach (DataRow dr1 in config.dt.Rows)
                 {
-                   
+
                     string employee_id = Convert.ToString(dr1["employee_id"]);
                     sql = "Select * from leave_details Where employee_Id='" + employee_id + "' and is_approved is NUll order by id";
                     config.singleResult(sql);
@@ -303,6 +295,21 @@ namespace HRMS.Models.Database
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
+                leave_details ld = new leave_details();
+                DataRow dr = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+
+                ld.employee_id = Convert.ToString(dr["employee_id"]);
+                ld.leave_type = Convert.ToString(dr["leave_type"]);
+                ld.leave_duration = Convert.ToString(dr["leave_duration"]);
+                ld.leave_from_date = Convert.ToString(dr["leave_from_date"]);
+                ld.leave_to_date = Convert.ToString(dr["leave_to_date"]);
+                double diff = 0;
+                if (ld.leave_from_date != ld.leave_to_date)
+                {
+                    diff = (Convert.ToDateTime(ld.leave_to_date, usCinfo) - Convert.ToDateTime(ld.leave_from_date, usCinfo)).TotalDays + 1;
+                }
+
+
 
                 //---- leave_details update------
 
@@ -314,6 +321,17 @@ namespace HRMS.Models.Database
                 sql = sql + "where ";
                 sql = sql + "employee_Id='" + employee_id + "' and id='" + id + "'";
                 config.Execute_Query(sql);
+                for (double i = 0; i < diff; i++)
+                {
+                    config.Insert("leave_count", new Dictionary<string, object>()
+                    {
+                        { "employee_id",employee_id },
+                        { "lv_hd",ld.leave_type },
+                        { "date",Convert.ToDateTime(ld.leave_from_date, usCinfo).AddDays(i).ToString("dd/MM/yyyy").Replace("-","/") },
+                        { "duration",1},
+                        });
+                }
+
 
             }
             msg = "Leave Approved";
@@ -338,7 +356,7 @@ namespace HRMS.Models.Database
                 sql = sql + "employee_Id='" + employee_id + "' and id=" + id + "";
                 config.Execute_Query(sql);
 
-                 sql = "Select * from leave_details where employee_id='" + employee_id + "' and id=" + id + "";
+                sql = "Select * from leave_details where employee_id='" + employee_id + "' and id=" + id + "";
                 config.singleResult(sql);
                 if (config.dt.Rows.Count > 0)
                 {
@@ -393,6 +411,80 @@ namespace HRMS.Models.Database
 
             }
             return ldl;
+
+        }
+        public string SaveCompOffByEmployeeID(LeaveApplyViewModel model, string user)
+        {
+            model.apply_date = Convert.ToDateTime(model.apply_date, usCinfo).ToString("dd/MM/yyyy").Replace("-", "/");
+            int lv_count = 0;
+            int holiday_count = 0;
+            int sunday = 0;
+            decimal lv_balance = 0;
+            string msg = "";
+            string sql = "Select * from Leave_ledger where employee_id='" + model.employee_id + "' and Convert(varchar,compoff_against,103)=Convert(varchar,'" + model.apply_date + "',103) and lv_hd='CO' ";
+            config.singleResult(sql);
+
+            if (config.dt.Rows.Count > 0)
+            {
+                msg = "Comp Off Already Added";
+            }
+            else
+            {
+
+
+                leave_details ld = new leave_details();
+                //check leaves on date
+
+                sql = "Select * from Leave_count where employee_id='" + model.employee_id + "' and Convert(varchar,date,103)=Convert(varchar,'" + model.apply_date + "',103)";
+                config.singleResult(sql);
+
+                if (config.dt.Rows.Count > 0)
+                {
+                    lv_count++;
+                }
+                //check Hiliday
+                sql = "Select * from Holiday_List where  Convert(varchar,date,103)=Convert(varchar,'" + model.apply_date + "',103)";
+                config.singleResult(sql);
+
+                if (config.dt.Rows.Count > 0)
+                {
+                    holiday_count++;
+                }
+                if (Convert.ToDateTime(model.apply_date, usCinfo).DayOfWeek == DayOfWeek.Sunday)
+                {
+                    sunday++;
+                }
+                if (lv_count == 1 || holiday_count == 1 || sunday == 1)
+                {
+                    sql = "select * from Leave_ledger where employee_id='" + model.employee_id + "' and lv_hd='CO' order by id";
+                    config.singleResult(sql);
+                    if (config.dt.Rows.Count > 0)
+                    {
+                        DataRow drsl = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                        lv_balance = !Convert.IsDBNull(drsl["lv_balance"]) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
+                    }
+                    config.Insert("Leave_ledger", new Dictionary<string, object>()
+                            {
+                            { "employee_id",model.employee_id },
+                            { "lv_hd","CO" },
+                            { "date",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/")},
+                            { "compoff_against",model.apply_date},
+                            { "lv_amount",1},
+                            { "dr_cr","C"},
+                            { "lv_balance",lv_balance+1},
+                            { "remarks","Credit"},
+                            { "create_date",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/")},
+                            { "created_by",user},
+                            });
+                    msg = "Saved";
+                }
+                else
+                {
+                    msg = "Given Date Is Not Applicable For Comp Off For This Employee";
+                }
+            }
+            return msg;
+
 
         }
     }

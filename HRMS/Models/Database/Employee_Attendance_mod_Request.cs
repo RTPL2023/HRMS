@@ -37,10 +37,10 @@ namespace HRMS.Models.Database
             config.singleResult(sql);
             if (config.dt.Rows.Count == 0)
             {
-                
-                    model.requested_punch_type = "Valid";
-                    
-                    config.Insert("Employee_Attendance_mod_Request", new Dictionary<string, object>()
+
+                model.requested_punch_type = "Valid";
+               
+                config.Insert("Employee_Attendance_mod_Request", new Dictionary<string, object>()
                     {
                         { "attendance_Id",model.attendance_Id },
                         { "employee_id",employee_id },
@@ -67,8 +67,8 @@ namespace HRMS.Models.Database
                 model.requested_punch_type = "Valid";
 
                 sql = "update Employee_Attendance_mod_Request set ";
-                sql = sql + "attendance_date='" +model.attendance_date  + "',";
-                sql = sql + "Application_date='" + u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/") + "',";
+                sql = sql + "attendance_date='" + model.attendance_date + "',";
+                sql = sql + "Application_date='" + u.currentDateTime().ToString("dd/MM/yyyy").Replace("-", "/") + "',";
                 sql = sql + "actual_In_time='" + model.actual_In_time + "',";
                 sql = sql + "Requested_In_time='" + model.requested_in_time + "',";
                 sql = sql + "actual_out_time='" + model.actual_out_time + "',";
@@ -83,14 +83,14 @@ namespace HRMS.Models.Database
                 config.Execute_Query(sql);
                 msg = "Application Modified Successfully";
             }
-            
+
             return (msg);
         }
         public List<Employee_Attendance_mod_Request> getEmployeeAttModifyApplylistUndermanagers(string empl_id)
         {
             List<Employee_Attendance_mod_Request> amrlist = new List<Employee_Attendance_mod_Request>();
 
-            string sql = "Select * from Employee_Master Where Reporting_mg_id=" + empl_id + " Order By id";
+            string sql = "Select * from Employee_Master Where Reporting_mg_id='" + empl_id + "' Order By id";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {

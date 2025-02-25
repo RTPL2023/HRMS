@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,5 +20,7 @@ namespace HRMS.Models.ViewModel
         public string manager_remarks { get; set; }
         public string approved_by { get; set; }
         public string approved_on { get; set; }
+        public IEnumerable<SelectListItem> empiddesc { get; set; }
+
     }
 }

@@ -19,7 +19,7 @@ namespace HRMS.Controllers
         UtilityController u = new UtilityController();
 
         public DateTimeFormatInfo UsCinfo { get => usCinfo; set => usCinfo = value; }
-       
+
         [HttpGet]
         public IActionResult PunchINPunchOut(PunchInPunchOutViewModel model)
         {
@@ -27,7 +27,7 @@ namespace HRMS.Controllers
         }
         public JsonResult EmployeeInAttendanceMark(PunchInPunchOutViewModel model)
         {
-            
+
             employee_attendance ea = new employee_attendance();
             ea.employee_id = User.Identity.Name;
             ea.date = u.currentDateTime().ToString("dd/MM/yyyy").Replace("-", "/");
@@ -56,12 +56,12 @@ namespace HRMS.Controllers
                 ea = ea.SaveOutAttendance(ea);
                 msg = ea.msg;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 msg = Convert.ToString(ex);
             }
 
-          
+
             return Json(msg);
         }
 
@@ -141,8 +141,43 @@ namespace HRMS.Controllers
             return Json(tableemenent);
         }
 
+        public JsonResult getfulldayHalfdayAndAbsent(PunchInPunchOutViewModel model)
+        {
+            employee_attendance ea = new employee_attendance();
+            List<employee_attendance> ealst = new List<employee_attendance>();
+            string month = u.currentDateTime().Month.ToString().Length == 1 ? "0" + u.currentDateTime().Month.ToString() : u.currentDateTime().Month.ToString();
+            string fdate = "01/" + month + "/" + u.currentDateTime().Year;
+            string tdate = u.currentDateTime().ToString("dd/MM/yyyy").Replace("-", "/");
+            ealst = ea.getdataBydate(User.Identity.Name, fdate, tdate);
+
+            foreach (var a in ealst)
+            {
+
+                if (a.duration == Convert.ToDecimal(1))
+                {
+                    model.fday++;
+
+                }
+                else if (a.duration == Convert.ToDecimal(0.5))
+                {
+                    model.hday++;
 
 
+
+                }
+                else if (a.duration < Convert.ToDecimal(0.5))
+                {
+                    model.absent++;
+
+
+                }
+            }
+
+            model.tot_days_in_month = Convert.ToString(DateTime.DaysInMonth(u.currentDateTime().Year, u.currentDateTime().Month));
+            model.sundays = Convert.ToString(u.CountDayOfWeekInMonth(u.currentDateTime().Year, u.currentDateTime().Month, DayOfWeek.Sunday));
+            model.holidays = Convert.ToString(u.HolidaysInMonth(fdate, tdate));
+            return Json(model);
+        }
         public JsonResult editIntimeOutTime(PunchInPunchOutViewModel model)
         {
             Employee_Attendance_mod_Request amr = new Employee_Attendance_mod_Request();
@@ -320,7 +355,7 @@ namespace HRMS.Controllers
             Leave_ledger ll = new Leave_ledger();
             string date = "01/" + u.currentDateTime().ToString("MM") + "/" + u.currentDateTime().Year.ToString();
             string msg = "";
-            if (Convert.ToDateTime(date,UsCinfo) <= u.currentDateTime())
+            if (Convert.ToDateTime(date, UsCinfo) <= u.currentDateTime())
             {
                 msg = ll.refreshleaveBalance(User.Identity.Name, date);
             }
@@ -344,30 +379,149 @@ namespace HRMS.Controllers
             List<Leave_ledger> lllst = new List<Leave_ledger>();
             lllst = ll.getleaveLedger(User.Identity.Name);
             string tableemenent = "";
-            string atttype = "";
+            //string atttype = "";
             string tagColor = "";
             if (lllst.Count > 0)
             {
                 tableemenent = "<tr><th>Date</th><th>Leave Type</th><th>Amount</th><th>Balance</th><th>Remarks</th></tr>";
                 foreach (var a in lllst)
                 {
-
                     if (a.dr_cr == "C")
                     {
                         tagColor = "class=\"table-primary\"";
                         tableemenent += "<tr " + tagColor + " ><td>" + a.date + "</td><td>" + a.lv_hd + "</td><td>" + a.lv_amount + "</td><td>" + a.lv_balance + "</td><td>" + a.remarks + "</td></tr>";
-
                     }
                     else
                     {
                         tagColor = " class=\"table-danger\"";
                         tableemenent += "<tr " + tagColor + " ><td>" + a.date + "</td><td>" + a.lv_hd + "</td><td>" + a.lv_amount + "</td><td>" + a.lv_balance + "</td><td>" + a.remarks + "</td></tr>";
-
                     }
-
                 }
             }
             return Json(tableemenent);
+        }
+
+
+
+        [HttpGet]
+
+        public IActionResult AddCompOff(LeaveApplyViewModel model)
+        {
+            model.empiddesc = u.getempidDesc();
+            return View(model);
+        }
+
+        public JsonResult saveCompOff(LeaveApplyViewModel model)
+        {
+            leave_details ld = new leave_details();
+            string msg = ld.SaveCompOffByEmployeeID(model, User.Identity.Name);
+            return Json(msg);
+        }
+
+
+        public string monthstartdate()
+        {
+            string startdt = "01/" + u.currentDateTime().Month + "/" + u.currentDateTime().Year;
+            return startdt;
+        }
+        public string monthlastdate()
+        {
+
+            int lastDayOfMonth = DateTime.DaysInMonth(u.currentDateTime().Year, u.currentDateTime().Month);
+            string enddt = lastDayOfMonth + "/" + u.currentDateTime().Month + "/" + u.currentDateTime().Year;
+
+            return enddt;
+        }
+
+        public JsonResult getsundayList()
+        {
+            List<employee_attendance> ealst = new List<employee_attendance>();
+            DateTime startdt = Convert.ToDateTime(monthstartdate(), usCinfo);
+            var tbl = "";
+            tbl = "<tr><th>Date</th><th>Day</th></tr>";
+            int lastDayOfMonth = DateTime.DaysInMonth(u.currentDateTime().Year, u.currentDateTime().Month);
+
+            for (int i = 1; i <= lastDayOfMonth; i++)
+            {
+                employee_attendance ea = new employee_attendance();
+
+                if (startdt.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    ea.date = Convert.ToString(startdt);
+                    tbl += "<tr>";
+                    tbl += "<td>" + startdt.ToString("dd/MM/yyyy") + "</td>";
+                    tbl += "<td>Sunday</td><tr>";
+
+                }
+                startdt = startdt.AddDays(1);
+            }
+
+            return Json(tbl);
+        }
+        public JsonResult getholidaysList()
+        {
+            List<Holiday_List> hlist = new List<Holiday_List>();
+            Holiday_List hl = new Holiday_List();
+            DateTime startdt = new DateTime(u.currentDateTime().Year, u.currentDateTime().Month, 1);
+            var tbl = "";
+            tbl = "<tr><th>Date</th><th>Holiday</th></tr>";
+            int lastDayOfMonth = DateTime.DaysInMonth(u.currentDateTime().Year, u.currentDateTime().Month);
+            DateTime enddt = new DateTime(u.currentDateTime().Year, u.currentDateTime().Month, lastDayOfMonth);
+            hlist = hl.getemployeeLeaveListByEmployee_id(monthstartdate(), monthlastdate());
+            foreach (var a in hlist)
+            {
+                tbl += "<tr>";
+                tbl += "<td>" + a.date + "</td>";
+                tbl += "<td>" + a.description + "</td><tr>";
+            }
+
+            return Json(tbl);
+        }
+
+        public JsonResult getFullDaylist(string day)
+        {
+            var tbl = "";
+            tbl = "<tr><th>Date</th><th>Day</th><th>In Time</th><th>Out Time</th><th>Half/Full Day</th><th>Punch Valid/Invalid</th></tr>";
+
+
+            employee_attendance ea = new employee_attendance();
+            List<employee_attendance> ealst = new List<employee_attendance>();
+            ealst = ea.getdataBydate(User.Identity.Name, monthstartdate(), monthlastdate());
+
+            foreach (var a in ealst)
+            {
+                if (day == "full")
+                {
+                    if (a.duration == Convert.ToDecimal(1))
+                    {
+
+                        tbl += "<tr class=\"table-primary\"><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>Full Day</td><td>" + a.punch_type + "</td>" +
+                             "<td></td></tr>";
+                    }
+                }
+                else if (day == "half")
+                {
+                    if (a.duration == Convert.ToDecimal(0.5))
+                    {
+
+                        tbl += "<tr class=\"table-warning\"><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>Half Day</td><td>" + a.punch_type + "</td>" +
+                            "<td></td></tr>";
+                    }
+                }
+                else
+                {
+                    if (a.duration < Convert.ToDecimal(0.5))
+                    {
+
+                        tbl += "<tr class=\"table-danger\"><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>Less Then Half Day</td><td>" + a.punch_type + "</td>" +
+                           "<td></td></tr>";
+                    }
+                }
+
+
+            }
+
+            return Json(tbl);
         }
     }
 }

@@ -33,7 +33,7 @@
                     <div class="col-9 col-sm-9 col-md-9">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12">
-                                <p class="fs-5 fw-bold">  Total Leaves</p>
+                                <p class="fs-5 fw-bold text-body-secondary">  Total Leaves</p>
                             </div>
                         </div>
                         <div class="row">
@@ -56,7 +56,7 @@
                     <div class="col-9 col-sm-9 col-md-9">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12">
-                                <p class="fs-5 fw-bold">  Sick Leaves</p>
+                                <p class="fs-5  text-body-secondary">  Sick Leaves</p>
                             </div>
                         </div>
                         <div class="row">
@@ -78,7 +78,7 @@
                     <div class="col-9 col-sm-9 col-md-9">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12">
-                                <p class="fs-5 fw-bold">  Earned Leaves</p>
+                                <p class="fs-5 text-body-secondary">  Earned Leaves</p>
                             </div>
                         </div>
                         <div class="row">
@@ -100,12 +100,34 @@
                     <div class="col-9 col-sm-9 col-md-9">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12">
-                                <p class="fs-5 fw-bold">  Casual Leaves</p>
+                                <p class="fs-5  text-body-secondary">  Casual Leaves</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12">
                                 <p class="fs-3 fw-bold" id="cl_leave"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3">
+            <div class="card__wrapper">
+                <div class="row">
+                    <div class="col-3 col-sm-3 col-md-3">
+                        <i class="fa-solid fa-mug-hot fa-2xl" style="color: #B197FC;"></i>
+
+                    </div>
+                    <div class="col-9 col-sm-9 col-md-9">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-5  text-body-secondary">  Comp Off</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12">
+                                <p class="fs-3 fw-bold" id="compoff"></p>
                             </div>
                         </div>
                     </div>
@@ -170,7 +192,24 @@
                             <div class="form-group">
                                 <label>Leave Duration</label>
                                 <span style="color:crimson">*</span>
-                                <input type="text" id="leave_duration" class="form-control" />
+                               
+                                <select name="leave_duration" id="leave_duration" class="form-control" required>
+                                    <option value="0.5">0.5 Day</option>
+                                    <option value="1">1 Day</option>
+                                    <option value="2">2 Day</option>
+                                    <option value="3">3 Day</option>
+                                    <option value="4">4 Day</option>
+                                    <option value="5">5 Day</option>
+                                    <option value="6">6 Day</option>
+                                    <option value="7">7 Day</option>
+                                    <option value="8">8 Day</option>
+                                    <option value="9">9 Day</option>
+                                    <option value="10">10 Day</option>
+                                    <option value="11">11 Day</option>
+                                    <option value="12">12 Day</option>
+
+
+                                </select>
                             </div>
                         </div>
 
@@ -316,7 +355,8 @@
                        document.getElementById('si_leave').innerHTML = data.sl_balance;
                        document.getElementById('el_leave').innerHTML = data.el_balance;
                        document.getElementById('cl_leave').innerHTML = data.cl_balance;
-                       document.getElementById('tot_leave').innerHTML = parseFloat(data.cl_balance) + parseFloat(data.sl_balance) + parseFloat(data.el_balance);
+                       document.getElementById('compoff').innerHTML = data.co_balance;
+                       document.getElementById('tot_leave').innerHTML = parseFloat(data.cl_balance) + parseFloat(data.sl_balance) + parseFloat(data.el_balance) + parseFloat(data.co_balance);
 
 
 
@@ -369,7 +409,7 @@
                             document.getElementById('tostmsg').innerHTML =
                                 data;
                             ShowTable();
-
+                            getleavebalance();
                         },
                         error: function (err) {
                             alert("Error Occured");

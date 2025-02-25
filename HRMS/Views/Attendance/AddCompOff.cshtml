@@ -1,0 +1,203 @@
+﻿
+@model HRMS.Models.ViewModel.LeaveApplyViewModel
+@{
+    ViewData["Title"] = "Add Comp Off";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/card.css" rel="stylesheet" />
+
+<form asp-controller="Attendance" asp-action="AddCompOff" method="post">
+    <div class="row text-center mt-3">
+        <h3> ADD COMP OFF</h3>
+    </div>
+    <hr />
+    <div class="row">
+
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="card__wrapper">
+                <from>
+                    <div class="row m-3">
+                        <div class="col-lg-4 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <span style="color:crimson">*</span>
+                                @Html.DropDownListFor(p => p.employee_id, new SelectList(Model.empiddesc, "Value", "Text"), new { @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>Behalf date</label>
+                                <span style="color:crimson">*</span>
+                              
+                                <input type="date" id="apply_date" name="apply_date" class="form-control" />
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="row m-3">
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+
+                            <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
+
+                        </div>
+
+                    </div>
+
+
+                </from>
+            </div>
+        </div>
+
+    </div>
+
+
+</form>
+@section scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+          
+        });
+      
+        function btnsubmitOnclick() {
+            if ($('#employee_id').val() == "") {
+                alert("Employee Id Can't Blank!!!!");
+                $('#employee_id').focus();
+            }
+            else if ($('#apply_date').val() == "") {
+                alert("apply Date Can't Blank!!");
+                $('#apply_date').focus();
+
+            }
+            else if ($('#leave_duration').val() == "") {
+                alert("leave Duration Can't Blank!!");
+                $('#leave_duration').focus();
+
+            }
+         
+            else {
+                    let ModelObject = {
+                        employee_id: $('#employee_id').val(),
+                        apply_date: $('#apply_date').val(),
+                        leave_duration: $('#leave_duration').val(),
+                       
+                      };
+                    $.ajax({
+                        url: '@Url.Action("saveCompOff", "Attendance")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data);
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+                 }
+
+        }
+
+        function ShowTable() {
+            let ModelObject = { name: $('#name').val() };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getApplyleaveList", "Attendance")',
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("list").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+
+        function btnRemoveLeaveOnclick(id) {
+
+            $("#detail_id").val(id);
+
+        }
+
+        function btnRemoveOnclick() {
+
+                    let ModelObject = {
+                        id: $('#detail_id').val(),
+
+                      };
+                    $.ajax({
+                        url: '@Url.Action("RemoveLeaves", "Attendance")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            $('#detail_id').val(null);
+                            $("#Removeleave").modal('hide');
+                            $("#myToast").toast({
+                                delay: 5000
+                            });
+                            $("#myToast").toast("show");
+                            document.getElementById('tostmsg').innerHTML =
+                                data;
+                            ShowTable();
+                            getleavebalance();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+
+
+        }
+        function btnLeaveRefreshOnclick() {
+             $.ajax({
+                        url: '@Url.Action("RefreshLeave", "Attendance")',
+                        type: "POST",
+                        dataType: "json",
+                        success: function (data) {
+                            $('#editleave_type').val(null);
+                            $('#editleave_duration').val(null);
+                            $('#editleave_from_date').val(null);
+                            $('#editleave_to_date').val(null);
+                            $('#editleave_reason').val(null);
+                            $('#editleaveid').val(null);
+                            $("#Modifyleave").modal('hide');
+                            $("#myToast").toast({
+                                delay: 5000
+                            });
+                            $("#myToast").toast("show");
+                            document.getElementById('tostmsg').innerHTML =
+                                data;
+                            ShowTable();
+                            getleavebalance();
+
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+        }
+        function btnLeaveLedgerOnclick() {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getleaveledgerList", "Attendance")',
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("ledgertable").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+
+    </script>
+}

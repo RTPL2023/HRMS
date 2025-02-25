@@ -175,6 +175,30 @@ namespace HRMS.Models.Database
             }
             return (ealst);
         }
+        public List<employee_attendance> getdataBydate(string empl_id,string f_date,string t_date)
+        {
+            List<employee_attendance> ealst = new List<employee_attendance>();
+            string sql = "Select * from employee_attendance Where employee_Id='" + empl_id + "' and convert(date,date,103)>=convert(date,'" + f_date+ "',103)and convert(date,date,103)<=convert(date,'" + t_date + "',103) order by id desc";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    employee_attendance ea = new employee_attendance();
+                    ea.id = Convert.ToInt32(dr["id"]);
+                    ea.duration = !Convert.IsDBNull(dr["duration"]) ? Convert.ToDecimal(dr["duration"]) : Convert.ToDecimal(0);
+                    ea.date = Convert.ToString(dr["date"]);
+                    ea.day = Convert.ToString(dr["day"]);
+                    ea.in_time = Convert.ToString(dr["in_time"]);
+                    ea.out_time = Convert.ToString(dr["out_time"]);
+                    //ea.duration = Convert.ToDecimal(dr["duration"]);
+                    ea.punch_type = Convert.ToString(dr["punch_type"]);
+                    ea.is_approved = !Convert.IsDBNull(dr["is_approved"]) ? Convert.ToInt32(dr["is_approved"]) : Convert.ToInt32(2);
+                    ealst.Add(ea);
+                }
+            }
+            return (ealst);
+        }
         public List<employee_attendance> GetDetailAttendanceReportByEmpId(DetailReportViewModel model)
         {
             List<employee_attendance> ealst = new List<employee_attendance>();

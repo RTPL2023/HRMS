@@ -25,17 +25,17 @@ namespace HRMS.Models.Database
         UtilityController u = new UtilityController();
 
 
-        public string saveDesignationMaster(employee_masterViewModel model)
+        public string saveDesignationMaster(string designation)
         {
             string msg = "";
-            string sql = "Select * from Designation_Master where Designation = '" + model.designation + "'";
+            string sql = "Select * from Designation_Master where Designation = '" + designation + "'";
             config.singleResult(sql);
             if (config.dt.Rows.Count == 0)
             {
 
                 config.Insert("Designation_Master", new Dictionary<string, object>()
                 {
-                    { "designation",model.designation },
+                    { "designation",designation },
 
                     { "created_by","users"},
                     { "created_on",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/") },
@@ -107,6 +107,24 @@ namespace HRMS.Models.Database
         {
             List<Designation_Master> dmlst = new List<Designation_Master>();
             string sql = "Select * from Designation_Master order by id";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    Designation_Master dm = new Designation_Master();
+                    dm.id = Convert.ToString(dr["id"]);
+
+                    dm.designation = Convert.ToString(dr["designation"]);
+                    dmlst.Add(dm);
+                }
+            }
+            return (dmlst);
+        }
+        public List<Designation_Master> getDesignation_Masterlistsforautocomplete(string designation)
+        {
+            List<Designation_Master> dmlst = new List<Designation_Master>();
+            string sql = "Select * from Designation_Master where designation LIKE'%"+designation+"%'  order by designation";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {

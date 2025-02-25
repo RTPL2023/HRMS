@@ -4,11 +4,12 @@
     ViewBag.Title = "Employee Detail Report";
 
 }
-<link rel="stylesheet" href="~/css/datepicker.css"/>
+<link href="~/css/datepicker.css" rel="stylesheet" />
+
 <style>
     .heading {
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        color: saddlebrown;
+        color: black;
         font-size: 30px;
         text-align: center;
     }
@@ -81,12 +82,12 @@
         font-family: Arial, Helvetica, sans-serif;
         /*font-size: 15px;*/
         border-collapse: collapse;
-        width: 1000px;
+        width: 900px;
     }
 
         .itemtab tbody {
             display: block;
-            width: 1000px;
+            width: 900px;
             overflow: auto;
             height: 250px;
         }
@@ -101,7 +102,7 @@
         }
 
         .itemtab td, th {
-            width: 1000px;
+            width: 900px;
         }
 
         .itemtab tr:nth-child(even) {
@@ -174,69 +175,130 @@
     <div class="heading mt-2">
         Employee Wise (Detail/Summary) Attendance Report
     </div>
-    <div class="mt-3">
-        <table align="center" class="rounded-corners1" style="font-weight:bold">
+    <div class="container mt-4">
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-1 col-12">
+                        From Date:
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.from_date, new { @class = "form-control", @id = "datepicker1" })
+                    </div>
+                    <div class="col-lg-1 col-12">
+                        To Date :
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.to_date, new { @class = "form-control", @id = "datepicker2" })
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        Employee Id :
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        @Html.DropDownListFor(p => p.employee_id, new SelectList(Model.empiddesc, "Value", "Text"), new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-lg-1 col-12">
+                        Total Days:
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.tot_days_in_month, new { @class = "form-control", style = "width:80px" })
+                    </div>
+                    <div class="col-lg-1 col-12">
+                        Sundays:
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.sundays, new { @class = "form-control", style = "width:80px" })
+                    </div>
+                    <div class="col-lg-1 col-12">
+                        Holidays:
+                    </div>
+                    <div class="col-lg-1 col-12">
+                        @Html.TextBoxFor(p => p.holidays, new { @class = "form-control", style = "width:80px" })
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        Op-Holidays:
+                    </div>
+                    <div class="col-lg-1 col-12">
+                        @Html.TextBoxFor(p => p.op_holidays, new { @class = "form-control", style = "width:80px" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-lg-1 col-12">
+                        Leaves:
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.leaves_taken, new { @class = "form-control", style = "width:80px" })
+                    </div>
+                    <div class="col-lg-1 col-12">
+                        LOP:
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.lop, new { @class = "form-control", style = "width:80px" })
+                    </div>
 
-            <tr>
-                <td>
-                    From Date:@Html.TextBoxFor(p => p.from_date, new { @class = "size", @id = "datepicker1" })
-                    To Date : @Html.TextBoxFor(p => p.to_date, new { @class = "size", @id = "datepicker2" })
-                    Employee Id : @Html.DropDownListFor(p => p.employee_id, new SelectList(Model.empiddesc, "Value", "Text"), new { @class = " w-30" })
-
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Total Days:
-                    @Html.TextBoxFor(p => p.tot_days_in_month, new { @class = "size" })
-                    Sundays:
-                    @Html.TextBoxFor(p => p.sundays, new { @class = "size" })
-                    Holidays:
-                    @Html.TextBoxFor(p => p.holidays, new { @class = "size" })
-                    Op-Holidays:
-                    @Html.TextBoxFor(p => p.op_holidays, new { @class = "size" })
-                    Leaves:
-                    @Html.TextBoxFor(p => p.leaves_taken, new { @class = "size" })
-                    LOP:
-                    @Html.TextBoxFor(p => p.lop, new { @class = "size" })
-                    Total Working Day:
-                    @Html.TextBoxFor(p => p.total_working_days, new { @class = "size" })
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input id="BtnRefresh" type="button" name="BtnRefresh" Height="40" Width="100" class="btn btn-primary pull-right" value="Refresh" onclick="GetDetailReport()" />
-                </td>
-                <td>
-                    <input id="BtnExcelSummary" type="button" name="BtnExcelSummary" Height="40" Width="100" class="btn btn-primary pull-right" value="Download Summary Excel Report" onclick="GetSummaryReportExcel()" />
-                </td>
-                <td>
-                    <input id="BtnExcelDetail" type="button" name="BtnExcelDetail" Height="40" Width="100" class="btn btn-primary pull-right" value="Download Detail Excel Report" onclick="GetDetailReportExcel()" />
-                </td>
-            </tr>
-        </table>
+                    <div class="col-lg-2 col-12">
+                        Total Working Day:
+                    </div>
+                    <div class="col-lg-1 col-12">
+                        @Html.TextBoxFor(p => p.total_working_days, new { @class = "form-control", style = "width:80px" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-lg-2 col-12">
+                        Actual Salary:
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.act_salary, new { @class = "form-control" })
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        Calculated Salary:
+                    </div>
+                    <div class="col-lg-2 col-12">
+                        @Html.TextBoxFor(p => p.cal_salary, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row mt-2" style="display:flex; justify-content:center">
+                    <div class="col-lg-2 col-12 mt-1 text-center">
+                        <input id="BtnRefresh" type="button" name="BtnRefresh" Height="40" Width="100" class="btn btn-primary" value="Refresh" onclick="GetDetailReport()" />
+                    </div>
+                    <div class="col-lg-3 col-12 mt-1 text-center">
+                        <input id="BtnExcelSummary" type="button" name="BtnExcelSummary" Height="40" Width="100" class="btn btn-primary" value="Download Summary Excel Report" onclick="GetSummaryReportExcel()" />
+                    </div>
+                    <div class="col-lg-3 col-12 mt-1 text-center">
+                        <input id="BtnExcelDetail" type="button" name="BtnExcelDetail" Height="40" Width="100" class="btn btn-primary" value="Download Detail Excel Report" onclick="GetDetailReportExcel()" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <table>
-            <tr>
-                <td>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-lg-9 col-12">
+                <div class="table-responsive">
                     <table POITable class="itemtab">
                         <tbody id="attendancelist">
                         </tbody>
                     </table>
-                </td>
-                <td>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12">
+                <div class="table-responsive">
                     <table POITable class="tab1">
                         <tbody id="leavelist">
                         </tbody>
                     </table>
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
+        </div>
+
+
 
     </div>
 </form>
-@*}*@
+
 @section scripts
 {
 
@@ -300,7 +362,8 @@
                     $('#leaves_taken').val(data.leaves_taken);
                     $('#lop').val(data.lop);
                     $('#total_working_days').val(data.total_working_days);
-
+                    $('#act_salary').val(data.act_salary);
+                    $('#cal_salary').val(data.cal_salary);
 
                 },
                 error: function (err) {

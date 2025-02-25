@@ -1,0 +1,256 @@
+﻿@model HRMS.Models.ViewModel.SalaryMasterViewModel
+@{
+    Layout = "../Shared/_layout.cshtml";
+    ViewBag.Title = "Salary Structure";
+
+}
+
+<style>
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: black;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    body {
+        /*font-weight:bold;*/
+        color: darkslategrey;
+    }
+
+    input {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    select {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    input:focus {
+        background-color: rgba(249,98,159, 0.2);
+    }
+
+    select:focus {
+        background-color: rgba( 173,216,230, 0.4);
+    }
+
+    .size {
+        height: 30px;
+        width: 128px;
+    }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    .sizesmall {
+        height: 30px;
+        width: 78px;
+    }
+
+    .sizel {
+        height: 30px;
+        width: 400px;
+    }
+
+    .rounded-corners2 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid #4a35b0;
+        background-color: #ece9fb;
+    }
+
+    .rounded-corners1 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid #7f2917;
+        background-color: #f2dfb7;
+        color: #7f2917
+    }
+
+    .itemtab {
+        font-family: Arial, Helvetica, sans-serif;
+        /*font-size: 15px;*/
+    }
+
+        .itemtab tbody {
+            display: block;
+            overflow: auto;
+            height: 250px;
+        }
+
+        .itemtab td {
+            padding: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 12px
+        }
+
+        .itemtab td, th {
+        }
+
+        .itemtab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .itemtab tr:hover {
+            background-color: #ddd;
+        }
+
+        .itemtab th {
+            border: 2px solid white;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 14px;
+            /*background-color: #04AA6D;*/
+            background-color: skyblue;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+    tab1 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        border-collapse: collapse;
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .tab1 tbody {
+        display: block;
+        width: 200px;
+        overflow: auto;
+        height: 300px;
+        text-align: center;
+    }
+
+    .tab1 td, .tab1 th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        border-collapse: collapse;
+        width: 200px;
+    }
+
+    .tab1 tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .tab1 tr:hover {
+        background-color: rgba(255, 182, 193, 0.2);
+    }
+
+    .tab1 th {
+        padding: 8px;
+        text-align: center;
+        background-color: #145f9f;
+        font-size: 12px;
+        color: white;
+        position: sticky;
+        top: 0;
+        border: 2px solid white;
+    }
+</style>
+<form asp-controller="Salary" asp-action="SalaryStructure" method="post" enctype="multipart/form-data">
+    <div class="heading mt-2">
+        Salary Structure
+    </div>
+    <div class="container mt-1">
+        <div class="card mt-2">
+            <div class="card-body">
+
+                <div class="row">
+                   
+                    <div class="col-lg-3 col-12">
+                        Financal Year :
+                        @Html.DropDownListFor(p => p.financal_year, new SelectList(Model.financal_yeardesc, "Value", "Text"), new { @class = "form-control", @onchange = "financal_yearOnchange()" })
+
+                    </div>
+                 
+                    <div class="col-lg-2 col-12">
+                        Date :
+                        @Html.DropDownListFor(p => p.effect_date, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select Date", new { @class = "form-control", @onchange = " getsalaryList()" })
+
+
+                    </div>
+                 
+                    @*<div class="col-lg-4 col-12">
+                        @Html.DropDownListFor(p => p.employee_id, new SelectList(Model.empiddesc, "Value", "Text"), new { @class = "form-control" })
+                    </div>*@
+                </div>
+
+            </div>
+            <div class="row  mt-1">
+                <div class="col-12">
+                    <div class="table-responsive" >
+                        <table POITable class="table table-hover" id="list" style="height:100%">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</form>
+@section scripts
+{
+
+    <script src="~/js/jquery-3.6.1.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+           
+        });
+      
+        function getsalaryList() {
+            let ModelObject = {
+                effect_date: $('#effect_date').val(),
+            };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getSalaryDetailsByEmpployee_id", "Salary")',
+                dataType: "json",
+                data: ModelObject,
+                success: function (data) {
+                    document.getElementById("list").innerHTML = data;
+
+                },
+                error: function (err) {
+                    alert("Unable To Calculate");
+                }
+            });
+        }
+        function financal_yearOnchange() {
+
+            var finYear = $('#financal_year').val();
+            $.ajax({
+                url: '@Url.Action("getEffctDateByFinYear", "Utility")',
+            type: "GET",
+            dataType: "JSON",
+                data: { finYear: finYear},
+                success: function (data) {
+                    $("#effect_date").html(""); // clear before appending new list
+                    $.each(data, function (i, c) {
+                        $("#effect_date").append(
+                            $('<option></option>').val(c.effect_date).html(c.effect_date));
+                });
+            }
+            });
+        }
+    </script>
+}

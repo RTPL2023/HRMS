@@ -14,6 +14,7 @@ namespace HRMS.Models.Database
         public string emg_contact_name { get; set; }
         public string emg_contact_relation { get; set; }
         public string emg_contact_no { get; set; }
+        public string emg_address { get; set; }
 
 
 
@@ -30,6 +31,7 @@ namespace HRMS.Models.Database
                     eec.emg_contact_name = Convert.ToString(dr["emg_contact_name"]);
                     eec.emg_contact_relation = Convert.ToString(dr["emg_contact_relation"]);
                     eec.emg_contact_no = Convert.ToString(dr["emg_contact_no"]);
+                    eec.emg_address = Convert.ToString(dr["emg_address"]);
                 }
             }
             return (eec);

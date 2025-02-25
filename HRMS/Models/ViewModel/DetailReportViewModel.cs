@@ -21,6 +21,8 @@ namespace HRMS.Models.ViewModel
         public string total_working_days { get; set; }
         public string tableelement { get; set; }
         public string tableelement1 { get; set; }
+        public string cal_salary { get; set; }
+        public string act_salary { get; set; }
         public IEnumerable<SelectListItem> empiddesc { get; set; }
 
     }

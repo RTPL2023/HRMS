@@ -25,12 +25,14 @@ namespace HRMS.Models.Database
         public decimal sl_balance { get; set; }
         public decimal cl_balance { get; set; }
         public decimal el_balance { get; set; }
+        public decimal co_balance { get; set; }
 
         public string remarks { get; set; }
         public string create_date { get; set; }
         public string modify_date { get; set; }
         public string created_by { get; set; }
         public string modified_by { get; set; }
+        public string compoff_against { get; set; }
 
 
         public string refreshleaveBalance(string employee_id, string date)
@@ -54,8 +56,8 @@ namespace HRMS.Models.Database
                         config.singleResult(sql);
                         if (config.dt.Rows.Count > 0)
                         {
-                            DataRow drsl = (DataRow)config.dt.Rows[0];
-                            lv_balance = Convert.IsDBNull(Convert.ToDecimal(drsl["lv_balance"])) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
+                            DataRow drsl = (DataRow)config.dt.Rows[config.dt.Rows.Count-1];
+                            lv_balance = !Convert.IsDBNull(drsl["lv_balance"]) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
                         }
                         config.Insert("Leave_ledger", new Dictionary<string, object>()
                             {
@@ -69,13 +71,15 @@ namespace HRMS.Models.Database
                             { "create_date",u.currentDateTime().ToString("dd/MM/yyyy").Replace("-","/")},
                             { "created_by",employee_id},
                             });
+                        lv_balance = 0;
                         sql = "select * from Leave_ledger where employee_id='" + employee_id + "' and lv_hd='CL' order by id";
                         config.singleResult(sql);
                         if (config.dt.Rows.Count > 0)
                         {
-                            DataRow drsl = (DataRow)config.dt.Rows[0];
-                            lv_balance = Convert.IsDBNull(Convert.ToDecimal(drsl["lv_balance"])) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
+                            DataRow drsl = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                            lv_balance = !Convert.IsDBNull(drsl["lv_balance"]) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
                         }
+                       
                         config.Insert("Leave_ledger", new Dictionary<string, object>()
                         {
                             { "employee_id",employee_id },
@@ -90,12 +94,13 @@ namespace HRMS.Models.Database
 
 
                         });
+                        lv_balance = 0;
                         sql = "select * from Leave_ledger where employee_id='" + employee_id + "' and lv_hd='EL' order by id";
                         config.singleResult(sql);
                         if (config.dt.Rows.Count > 0)
                         {
-                            DataRow drsl = (DataRow)config.dt.Rows[0];
-                            lv_balance = Convert.IsDBNull(Convert.ToDecimal(drsl["lv_balance"])) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
+                            DataRow drsl = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                            lv_balance = !Convert.IsDBNull(drsl["lv_balance"]) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
                         }
                         config.Insert("Leave_ledger", new Dictionary<string, object>()
                         {
@@ -120,8 +125,8 @@ namespace HRMS.Models.Database
                         config.singleResult(sql);
                         if (config.dt.Rows.Count > 0)
                         {
-                            DataRow drsl = (DataRow)config.dt.Rows[0];
-                            lv_balance = Convert.IsDBNull(Convert.ToDecimal(drsl["lv_balance"])) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
+                            DataRow drsl = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                            lv_balance = !Convert.IsDBNull(drsl["lv_balance"]) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
                         }
                         config.Insert("Leave_ledger", new Dictionary<string, object>()
                             {
@@ -171,6 +176,13 @@ namespace HRMS.Models.Database
             {
                 DataRow drsl = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
                 ll.el_balance = !Convert.IsDBNull(drsl["lv_balance"]) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
+            }
+            sql = "select * from Leave_ledger where employee_id='" + employee_id + "' and lv_hd='CO' order by id";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count > 0)
+            {
+                DataRow drsl = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                ll.co_balance = !Convert.IsDBNull(drsl["lv_balance"]) ? Convert.ToDecimal(drsl["lv_balance"]) : Convert.ToDecimal("0");
             }
             return ll;
         }

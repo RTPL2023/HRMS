@@ -1,0 +1,588 @@
+﻿@model HRMS.Models.ViewModel.SalaryMasterViewModel
+@{
+    Layout = "../Shared/_layout.cshtml";
+    ViewBag.Title = "Salary Master";
+
+}
+
+<style>
+    .heading {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: black;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    body {
+        /*font-weight:bold;*/
+        color: darkslategrey;
+    }
+
+    input {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    select {
+        background-color: rgba( 173,216,230, 0.4);
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    input:focus {
+        background-color: rgba(249,98,159, 0.2);
+    }
+
+    select:focus {
+        background-color: rgba( 173,216,230, 0.4);
+    }
+
+    .size {
+        height: 30px;
+        width: 128px;
+    }
+
+    .rounded-corners {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid green;
+    }
+
+    .sizesmall {
+        height: 30px;
+        width: 78px;
+    }
+
+    .sizel {
+        height: 30px;
+        width: 400px;
+    }
+
+    .rounded-corners2 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid #4a35b0;
+        background-color: #ece9fb;
+    }
+
+    .rounded-corners1 {
+        border-spacing: 10px;
+        border-collapse: separate;
+        border-radius: 10px;
+        border: 1px solid #7f2917;
+        background-color: #f2dfb7;
+        color: #7f2917
+    }
+
+    .itemtab {
+        font-family: Arial, Helvetica, sans-serif;
+        /*font-size: 15px;*/
+    }
+
+        .itemtab tbody {
+            display: block;
+            overflow: auto;
+            height: 250px;
+        }
+
+        .itemtab td {
+            padding: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 12px
+        }
+
+        .itemtab td, th {
+        }
+
+        .itemtab tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .itemtab tr:hover {
+            background-color: #ddd;
+        }
+
+        .itemtab th {
+            border: 2px solid white;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
+            font-size: 14px;
+            /*background-color: #04AA6D;*/
+            background-color: skyblue;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+    tab1 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        border-collapse: collapse;
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .tab1 tbody {
+        display: block;
+        width: 200px;
+        overflow: auto;
+        height: 300px;
+        text-align: center;
+    }
+
+    .tab1 td, .tab1 th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        border-collapse: collapse;
+        width: 200px;
+    }
+
+    .tab1 tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .tab1 tr:hover {
+        background-color: rgba(255, 182, 193, 0.2);
+    }
+
+    .tab1 th {
+        padding: 8px;
+        text-align: center;
+        background-color: #145f9f;
+        font-size: 12px;
+        color: white;
+        position: sticky;
+        top: 0;
+        border: 2px solid white;
+    }
+</style>
+<form asp-controller="Salary" asp-action="SalaryMaster" method="post" enctype="multipart/form-data">
+    <div class="heading mt-2">
+        Salary Master
+    </div>
+    <div class="container mt-1">
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="row p-2" style="background-color:lightblue">
+                    <div class="col-12">
+                        <div class="row mt-2">
+                            <div class="col-lg-2 col-12">
+                                Employee :
+                            </div>
+                            <div class="col-lg-4 col-12">
+                                @Html.DropDownListFor(p => p.employee_id, new SelectList(Model.empiddesc, "Value", "Text"), new { @class = "form-control", @onchange = "employee_idOnchange()" })
+                            </div>
+                            <div class="col-lg-2 col-12">
+                                Effect Date :
+                            </div>
+                            <div class="col-lg-2 col-12">
+                                @Html.TextBoxFor(p => p.effect_date, new { @class = "form-control", @onkeypress = "javascript: return evteffect_date(event);" })
+                            </div>
+                            <div class="col-lg-2 col-12">
+                                @Html.TextBoxFor(p => p.designation, new { @class = "form-control", @type = "text" })
+
+
+                            </div>
+                            <div class="col-lg-2 col-12 text-center mt-1">
+                                <input type="button" class="btn btn-primary" id="btnSaveSalary" value="Submit" onclick="btnbtnSaveSalaryOnclick()">
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col-lg-3 col-12">
+                                Total Earning:
+                                @Html.TextBoxFor(p => p.tot_earn, new { @class = "form-control", @onkeypress = "javascript: return evttot_earn(event);" })
+                            </div>
+                            <div class="col-lg-3 col-12">
+                                Basic :
+                                @Html.TextBoxFor(p => p.basic, new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-lg-3 col-12">
+                                HRA :
+                                @Html.TextBoxFor(p => p.hra, new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-lg-3 col-12">
+                                Other Allowance :
+                                @Html.TextBoxFor(p => p.other_allw, new { @class = "form-control" })
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-6 p-1" style="background-color: #FFE2E2">
+                        <div class="row mb-1">
+                            <div class="col-12 text-center" style="font-weight:bold">
+                                Deduction From Employee
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2">
+
+                            <div class="col-lg-3 col-12">
+                                PTAX :
+                                @Html.TextBoxFor(p => p.emp_ptax, new { @class = "form-control", @onkeypress = "javascript: return evtemp_ptax(event);" })
+                            </div>
+
+                            <div class="col-lg-3 col-12">
+                                PF :
+                                @Html.TextBoxFor(p => p.emp_pf, new { @class = "form-control", @onkeypress = "javascript: return evtemp_pf(event);" })
+                            </div>
+                            <div class="col-lg-3 col-12">
+                                ESIC :
+                                @Html.TextBoxFor(p => p.emp_esic, new { @class = "form-control", @onkeypress = "javascript: return evtemp_esic(event);" })
+                            </div>
+                            <div class="col-lg-3 col-12">
+                                TDS :
+                                <select id="tds_type" class="form-control" onchange="tds_typeOnchange()">
+                                    <option value="Select">Select</option>
+                                    <option value="YES">YES</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-1 mb-2">
+
+                            <div class="col-lg-3 col-12" id="tdsSH">
+                                TDS Amount :
+                                @Html.TextBoxFor(p => p.emp_tds, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-5 col-12">
+                                Total Employee Deduction :
+                                @Html.TextBoxFor(p => p.tot_emp_ded, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-4 col-12">
+                                Net Pay :
+                                @Html.TextBoxFor(p => p.emp_net, new { @class = "form-control" })
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-6 p-1" style="background-color: #CAE0BC ">
+                        <div class="row mt-1">
+                            <div class="col-12 text-center" style="font-weight:bold">
+                                Company Contribution
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2">
+
+                            <div class="col-lg-5 col-12">
+                                PF:
+                                @Html.TextBoxFor(p => p.comp_pf, new { @class = "form-control", @onkeypress = "javascript: return evtcomp_pf(event);" })
+                            </div>
+
+                            <div class="col-lg-5 col-12">
+                                ESIC :
+                                @Html.TextBoxFor(p => p.comp_esic, new { @class = "form-control", @onkeypress = "javascript: return evtcomp_esic(event);" })
+                            </div>
+
+                        </div>
+                        <div class="row mt-1">
+
+                            <div class="col-lg-6 col-12">
+                                Total Company Contribution :
+                                @Html.TextBoxFor(p => p.tot_comp_con, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                Total CTC :
+                                @Html.TextBoxFor(p => p.tot_ctc, new { @class = "form-control" })
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="row  mt-1">
+                    <div class="col-12">
+                        <div class="table-responsive" style="height:250px;">
+                            <table POITable class="itemtab" id="list">
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</form>
+@section scripts
+{
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/start/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#tdsSH').hide();
+            $('#employee_id').focus();
+            getsalaryList();
+            $("#designation").autocomplete({
+                source: function (request, response) {
+                    let ModelObject = {
+
+                        designation: $('#designation').val(),
+
+                    };
+                    $.ajax({
+                        url: "/Utility/GetDesignationforautocomplete",
+                        type: "POST",
+                        dataType: "json",
+                        data: ModelObject,
+                        success: function (data) {
+                            response($.map(data, function (value) {
+                                return { label: value.designation, value: value.designation };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "",
+                    results: function (count) {
+                        return count + (count > 1 ? 'results' : 'result ') + 'found';
+                    }
+                }
+            });
+        });
+        function employee_idOnchange() {
+            $('#effect_date').focus();
+        }
+        function evteffect_date(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                $('#tot_earn').focus();
+            }
+        }
+        function evttot_earn(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                GetCalculatedSalaryStructure();
+                $('#emp_ptax').focus();
+            }
+        }
+
+        function evtemp_ptax(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                empDeduction();
+                $('#emp_pf').focus();
+            }
+        }
+        function evtemp_pf(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                empDeduction();
+                $('#emp_esic').focus();
+            }
+        }
+        function evtemp_esic(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                empDeduction();
+                $('#tds_type').focus();
+            }
+        }
+
+        function empDeduction() {
+
+            if ($('#tds_type').val() == "YES") {
+
+                $('#emp_net').val(Math.round( parseFloat($('#tot_earn').val()) - (parseFloat($('#emp_pf').val()) + parseFloat($('#emp_esic').val()) + parseFloat($('#emp_tds').val()) + parseFloat($('#emp_ptax').val()))));
+                $('#tot_emp_ded').val(Math.round( (parseFloat($('#emp_pf').val()) + parseFloat($('#emp_esic').val()) + parseFloat($('#emp_tds').val()) + parseFloat($('#emp_ptax').val()))));
+
+            }
+            else {
+                $('#emp_net').val(Math.round( parseFloat($('#tot_earn').val()) - (parseFloat($('#emp_pf').val()) + parseFloat($('#emp_esic').val()) + parseFloat($('#emp_ptax').val()))));
+                $('#tot_emp_ded').val(Math.round( (parseFloat($('#emp_pf').val()) + parseFloat($('#emp_esic').val()) + parseFloat($('#emp_ptax').val()))));
+
+            }
+        }
+        function evtcomp_pf(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                empContribution();
+                $('#comp_esic').focus();
+            }
+        }
+        function evtcomp_esic(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if ((charCode < 106 || charCode > 95) && (charCode < 58 || charCode > 47) && charCode != 13 && charCode == 191 && charCode == 111 && (charCode < 65 || charCode > 90))
+                return false;
+            else if (charCode == 13) {
+                empContribution();
+
+            }
+        }
+        function empContribution() {
+
+
+            $('#tot_ctc').val(Math.round( parseFloat($('#tot_earn').val()) + parseFloat($('#comp_pf').val()) + parseFloat($('#comp_esic').val())));
+            $('#tot_comp_con').val(Math.round( parseFloat($('#comp_pf').val()) + parseFloat($('#comp_esic').val())));
+
+
+        }
+        function GetCalculatedSalaryStructure() {
+            let ModelObject = {
+
+                emp_ptax: $('#emp_ptax').val(),
+                tds_type: $('#tds_type').val(),
+                tot_earn: $('#tot_earn').val(),
+            };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetCalculatedSalary", "Salary")',
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    $('#basic').val(data.basic);
+                    $('#emp_ptax').val(data.emp_ptax);
+                    $('#hra').val(data.hra);
+                    $('#other_allw').val(data.other_allw);
+                    $('#emp_pf').val(data.emp_pf);
+                    $('#emp_esic').val(data.emp_esic);
+                    $('#emp_tds').val(data.emp_tds);
+                    $('#comp_pf').val(data.comp_pf);
+                    $('#comp_esic').val(data.comp_esic);
+                    $('#tot_emp_ded').val(data.tot_emp_ded);
+                    $('#tot_comp_con').val(data.tot_comp_con);
+                    $('#emp_net').val(data.emp_net);
+                    $('#tot_ctc').val(data.tot_ctc);
+
+                },
+                error: function (err) {
+                    alert("Unable To Calculate");
+                }
+            });
+        }
+
+        function tds_typeOnchange() {
+
+            if ($('#tds_type').val() == "YES") {
+                $('#tdsSH').show();
+                $('#emp_tds').val(Math.round(parseFloat($('#tot_earn').val()) * 10 / 100));
+                empDeduction();
+                $('#comp_pf').focus();
+
+            }
+            else {
+                $('#tdsSH').hide();
+                $('#emp_tds').val("0.00");
+                $('#comp_pf').focus();
+
+            }
+        }
+
+        function btnbtnSaveSalaryOnclick() {
+            if ($('#designation').val() == "" || $('#designation').val() == null) {
+                alert("Designation Can't Blank");
+                $('#designation').focus();
+            }
+            if ($('#tds_type').val() == "Select") {
+                alert("Please Choose TDS Type!!");
+                $('#tds_type').focus();
+            }
+            else {
+                let ModelObject = {
+                    employee_id: $('#employee_id').val(),
+                    basic: $('#basic').val(),
+                    hra: $('#hra').val(),
+                    other_allw: $('#other_allw').val(),
+                    emp_ptax: $('#emp_ptax').val(),
+                    tds_type: $('#tds_type').val(),
+                    tot_earn: $('#tot_earn').val(),
+                    emp_pf: $('#emp_pf').val(),
+                    emp_pf: $('#emp_pf').val(),
+                    emp_tds: $('#emp_tds').val(),
+                    comp_pf: $('#comp_pf').val(),
+                    comp_esic: $('#comp_esic').val(),
+                    tot_emp_ded: $('#tot_emp_ded').val(),
+                    tot_comp_con: $('#tot_comp_con').val(),
+                    effect_date: $('#effect_date').val(),
+                    emp_esic: $('#emp_esic').val(),
+                    emp_net: $('#emp_net').val(),
+                    tot_ctc: $('#tot_ctc').val(),
+                    designation: $('#designation').val(),
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SavedSalary", "Salary")',
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        alert(data);
+                        getsalaryList();
+                        $('#basic').val("");
+                        $('#hra').val("");
+                        $('#other_allw').val("");
+                        $('#emp_ptax').val("");
+                        $('#tds_type').val("");
+                        $('#tot_earn').val("");
+                        $('#emp_pf').val("");
+                        $('#emp_pf').val("");
+                        $('#emp_tds').val("");
+                        $('#comp_pf').val("");
+                        $('#comp_esic').val("");
+                        $('#tot_emp_ded').val("");
+                        $('#tot_comp_con').val("");
+                        $('#emp_esic').val("");
+                        $('#emp_net').val("");
+                        $('#tot_ctc').val("");
+                        $('#designation').val("");
+                        $('#employee_id').focus();
+                    },
+                    error: function (err) {
+                        alert("Unable To Calculate");
+                    }
+                });
+            }
+        }
+        function getsalaryList() {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getSalaryList", "Salary")',
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("list").innerHTML = data;
+
+                },
+                error: function (err) {
+                    alert("Unable To Calculate");
+                }
+            });
+        }
+    </script>
+}
