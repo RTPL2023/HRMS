@@ -1,0 +1,233 @@
+﻿@model HRMS.Models.ViewModel.PunchInPunchOutViewModel
+@{
+    ViewData["Title"] = "Employee Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/card.css" rel="stylesheet" />
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+    }
+
+    .display-date {
+        text-align: center;
+        margin-top: 8px;
+        font-weight: bold;
+        color: #5D3FD3;
+        font-family: 'Merienda', cursive;
+        animation-name: glow;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+</style>
+<form asp-controller="Attendance" asp-action="AddAttendance" method="post">
+    <div class="container ">
+        <div class="row">
+            <div class="card__wrapper no-height">
+
+                <div class="row">
+                    <div class="p-2"></div>
+                    <div class="col-lg-2 col-12 col-sm-12 text-start formTitle">
+                        <div class="form-group">
+                            <button type="button" id="BtnaddAttandence" name="punchout" class="btn btn-danger" onclick="BtnaddAttandenceOnclick()">Add Attandence</button>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-12 col-sm-12 text-start formTitle">
+                        <div class="form-group">
+                            <label>Employee</label>
+                            <span style="color:crimson">*</span>
+                            @Html.DropDownListFor(p => p.employee_id, new SelectList(Model.empiddesc, "Value", "Text"), new { @class = "form-control", @onchange = "employee_idonchange()" })
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-12 col-sm-12 text-start formTitle">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <span style="color:crimson">*</span>
+                            @Html.TextBoxFor(p => p.attendance_date, new { @class = "form-control", @type = "date", @required = "true" })
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-12 col-sm-12 text-start formTitle">
+                        <div class="form-group">
+                            <label>Day Type</label>
+                            <span style="color:crimson">*</span>
+
+                            <select name="day_count" id="day_count" class="form-control" required onchange="daycountonchange()">
+                                <option value="">Select Day Type</option>
+                                <option value="1">Full Day</option>
+                                <option value="0.5">Half Day</option>
+
+                            </select>
+
+
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-12 col-sm-12 text-start formTitle">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>Remarks</label>
+                                <span style="color:crimson">*</span>
+                                @Html.TextBoxFor(p => p.reason, new { @class = "form-control", @required = "true" })
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="timesbox">
+                    <div class="col-lg-2 col-12 col-sm-12 text-start formTitle">
+
+                    </div>
+                    <div class="col-lg-2 col-12 col-sm-12 text-start formTitle">
+                        <div class="form-group">
+                            <label>In Time</label>
+                            <span style="color:crimson">*</span>
+                            <input type="time" id="actual_In_time" class="form-control" required />
+
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-12 col-sm-12 text-start formTitle">
+                        <div class="form-group">
+                            <label>Out Time</label>
+                            <span style="color:crimson">*</span>
+                            <input type="time" id="actual_Out_time" class="form-control" required />
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-sm-12 mb-12 mb-sm-0">
+                <div class="card">
+                    <div class="table-responsive" style="height:350px">
+                        <table class="table  table-hover" align="center" id="attlist">
+                            @*<tbody >
+                                </tbody>*@
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</form>
+@section scripts
+{
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            $('#timesbox').hide();
+            employee_idonchange();
+        });
+
+        function employee_idonchange() {
+            let ModelObject = {
+                employee_id: $('#employee_id').val(),
+
+            };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getEmployeeAttendenceList", "Attendance")',
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("attlist").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function daycountonchange() {
+
+            if ($('#day_count').val() == "1") {
+                $('#actual_In_time').val("09:30:01");
+                $('#actual_Out_time').val("18:30:01");
+                $('#timesbox').show();
+
+            }
+            else if ($('#day_count').val() == "0.5") {
+                $('#actual_In_time').val("09:30:01");
+                $('#actual_Out_time').val("14:00:01");
+                $('#timesbox').show();
+
+            }
+            else {
+
+                $('#timesbox').hide();
+                $('#actual_In_time').val("");
+                $('#actual_Out_time').val("");
+            }
+        }
+        function BtnaddAttandenceOnclick() {
+
+            if ($('#attendance_date').val() == "") {
+                alert("Date Can't Blank");
+                $('#attendance_date').focus();
+            }
+            else if ($('#day_count').val() == "") {
+                alert("Choose Day Type");
+                $('#day_count').focus();
+            }
+            else if ($('#actual_In_time').val() == "") {
+                alert("In Time Can't Blank");
+                $('#actual_In_time').focus();
+            }
+            else if ($('#actual_Out_time').val() == "") {
+                alert("Out Time Can't Blank");
+                $('#actual_Out_time').focus();
+            }
+            else if ($('#reason').val() == "") {
+                alert("Reason Can't Blank");
+                $('#reason').focus();
+            }
+            else {
+
+
+                let ModelObject = {
+                    employee_id: $('#employee_id').val(),
+                    attendance_date: $('#attendance_date').val(),
+                    day_count: $('#day_count').val(),
+                    actual_In_time: $('#actual_In_time').val(),
+                    actual_Out_time: $('#actual_Out_time').val(),
+                    reason: $('#reason').val(),
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("saveAttendenceByadmin", "Attendance")',
+                    dataType: "json",
+                    data: ModelObject,
+                    success: function (data) {
+                        
+                        alert(data);
+                        employee_idonchange();
+                    },
+                    error: function (err) {
+                        //alert("Error Occured");
+                    }
+                });
+            }
+        }
+    </script>
+
+}

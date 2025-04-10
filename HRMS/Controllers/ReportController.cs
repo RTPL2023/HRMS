@@ -383,6 +383,10 @@ namespace HRMS.Controllers
                 worksheet.Cell(currentRow, 11).Value = "Calculated Net Pay";
                 foreach (var ab in empl)
                 {
+                    //if (ab.employee_id == "RTPL0014")
+                    //{
+
+                    //}
                     DetailReportViewModel model = new DetailReportViewModel();
                     model.employee_id = ab.employee_id;
                     model.from_date = from_date;

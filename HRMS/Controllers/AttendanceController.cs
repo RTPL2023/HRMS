@@ -7,6 +7,12 @@ using HRMS.Models.ViewModel;
 using HRMS.Models.Database;
 using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
+using MigraDoc.DocumentObjectModel;
+using PdfSharp.Pdf;
+using MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.Rendering;
+using System.IO;
 
 namespace HRMS.Controllers
 {
@@ -67,15 +73,24 @@ namespace HRMS.Controllers
 
         public JsonResult getEmployeeAttendenceList(PunchInPunchOutViewModel model)
         {
+            string empid = "";
             employee_attendance ea = new employee_attendance();
             List<employee_attendance> ealst = new List<employee_attendance>();
-            ealst = ea.getemployeeAttendacelistByemployeeId(User.Identity.Name);
+            if (model.employee_id == null)
+            {
+                empid = User.Identity.Name;
+            }
+            else
+            {
+                empid = model.employee_id;
+            }
+            ealst = ea.getemployeeAttendacelistByemployeeId(empid);
             string tableemenent = "";
             string atttype = "";
             string tagColor = "";
             if (ealst.Count > 0)
             {
-                tableemenent = "<tr><th>Date</th><th>Day</th><th>In Time</th><th>Out Time</th><th>Half/Full Day</th><th>Punch Valid/Invalid</th><th>Action</th></tr>";
+                tableemenent = "<thead><tr><th>Date</th><th>Day</th><th>In Time</th><th>Out Time</th><th>Half/Full Day</th><th>Punch Valid/Invalid</th><th>Action</th></tr></thead><tbody>";
                 foreach (var a in ealst)
                 {
 
@@ -128,7 +143,16 @@ namespace HRMS.Controllers
                         tableemenent = tableemenent + "<tr " + tagColor + " ><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>" + atttype + "</td><td>" + a.punch_type + "</td>";
                         if (a.is_approved == 2)
                         {
-                            tableemenent = tableemenent + "<td><button type =\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#EditInvalid\" onclick=btnEditOnclick('" + a.in_time + "','" + a.out_time + "','" + a.date + "','" + a.id + "','" + a.punch_type + "','" + a.duration + "')> <i class=\"fa-solid fa-pen\"></i></button ></td></tr>";
+                            if (model.employee_id == null)
+                            {
+
+
+                                tableemenent = tableemenent + "<td><button type =\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#EditInvalid\" onclick=btnEditOnclick('" + a.in_time + "','" + a.out_time + "','" + a.date + "','" + a.id + "','" + a.punch_type + "','" + a.duration + "')> <i class=\"fa-solid fa-pen\"></i></button ></td></tr>";
+                            }
+                            else
+                            {
+                                tableemenent += "<td></td></tr>";
+                            }
 
                         }
                         else
@@ -138,6 +162,7 @@ namespace HRMS.Controllers
                     }
                 }
             }
+            tableemenent += " </tbody>";
             return Json(tableemenent);
         }
 
@@ -145,9 +170,11 @@ namespace HRMS.Controllers
         {
             employee_attendance ea = new employee_attendance();
             List<employee_attendance> ealst = new List<employee_attendance>();
+            model.tot_days_in_month = Convert.ToString(DateTime.DaysInMonth(u.currentDateTime().Year, u.currentDateTime().Month));
+
             string month = u.currentDateTime().Month.ToString().Length == 1 ? "0" + u.currentDateTime().Month.ToString() : u.currentDateTime().Month.ToString();
             string fdate = "01/" + month + "/" + u.currentDateTime().Year;
-            string tdate = u.currentDateTime().ToString("dd/MM/yyyy").Replace("-", "/");
+            string tdate = model.tot_days_in_month + "/" + month + "/" + u.currentDateTime().Year;
             ealst = ea.getdataBydate(User.Identity.Name, fdate, tdate);
 
             foreach (var a in ealst)
@@ -173,7 +200,6 @@ namespace HRMS.Controllers
                 }
             }
 
-            model.tot_days_in_month = Convert.ToString(DateTime.DaysInMonth(u.currentDateTime().Year, u.currentDateTime().Month));
             model.sundays = Convert.ToString(u.CountDayOfWeekInMonth(u.currentDateTime().Year, u.currentDateTime().Month, DayOfWeek.Sunday));
             model.holidays = Convert.ToString(u.HolidaysInMonth(fdate, tdate));
             return Json(model);
@@ -407,7 +433,7 @@ namespace HRMS.Controllers
 
         public IActionResult AddCompOff(LeaveApplyViewModel model)
         {
-            model.empiddesc = u.getempidDesc();
+            model.empiddesc = u.getempidDescBymanagerid(User.Identity.Name);
             return View(model);
         }
 
@@ -464,15 +490,25 @@ namespace HRMS.Controllers
             Holiday_List hl = new Holiday_List();
             DateTime startdt = new DateTime(u.currentDateTime().Year, u.currentDateTime().Month, 1);
             var tbl = "";
-            tbl = "<tr><th>Date</th><th>Holiday</th></tr>";
+            tbl = "<tr><th>Date</th><th>Holiday</th><th>Alternative</th></tr>";
             int lastDayOfMonth = DateTime.DaysInMonth(u.currentDateTime().Year, u.currentDateTime().Month);
             DateTime enddt = new DateTime(u.currentDateTime().Year, u.currentDateTime().Month, lastDayOfMonth);
-            hlist = hl.getemployeeLeaveListByEmployee_id(monthstartdate(), monthlastdate());
+            hlist = hl.getholidaylist(monthstartdate(), monthlastdate());
             foreach (var a in hlist)
             {
                 tbl += "<tr>";
                 tbl += "<td>" + a.date + "</td>";
-                tbl += "<td>" + a.description + "</td><tr>";
+                tbl += "<td>" + a.description + "</td>";
+                if (a.alternative == "Yes")
+                {
+                    tbl += "<td>Yes</td></tr>";
+                }
+                else
+                {
+                    tbl += "</tr>";
+
+                }
+
             }
 
             return Json(tbl);
@@ -523,5 +559,179 @@ namespace HRMS.Controllers
 
             return Json(tbl);
         }
+
+        [HttpGet]
+        public IActionResult Holidays(holidaysViewModel model)
+        {
+
+            return View(model);
+        }
+        public JsonResult SaveHolidays(holidaysViewModel model)
+        {
+
+            Holiday_List hl = new Holiday_List();
+            string msg = hl.SaveUpdateHolidays(model, User.Identity.Name);
+            return Json(msg);
+        }
+
+        public JsonResult getholidayList()
+        {
+            List<Holiday_List> hlist = new List<Holiday_List>();
+            Holiday_List hl = new Holiday_List();
+
+            var tbl = "";
+            tbl = "<tr><th>Date</th><th>Holiday</th><th>Alternative</th></tr>";
+            string fdate = "01/01/" + u.currentDateTime().Year;
+            string tdate = "31/12/" + u.currentDateTime().Year;
+            hlist = hl.getholidaylist(fdate, tdate);
+            foreach (var a in hlist)
+            {
+
+                if (a.alt_id != 0)
+                {
+                    tbl += "<tr class=\"table-primary\">";
+                    tbl += "<td>" + a.date + "</td>";
+                    tbl += "<td>" + a.description + "</td>";
+                    tbl += "<td>" + a.alternative + "</td></tr>";
+                }
+                else
+                {
+                    tbl += "<tr>";
+                    tbl += "<td>" + a.date + "</td>";
+                    tbl += "<td>" + a.description + "</td>";
+                    tbl += "<td></td></tr>";
+
+                }
+
+            }
+            return Json(tbl);
+        }
+        public IActionResult downloadHolidayPdf(string year, string month)
+        {
+            var document = GetDocument();
+            MemoryStream stream = new MemoryStream();
+            document.Save(stream);
+            Response.ContentType = "application/pdf";
+            Response.Headers.Add("content-length", stream.Length.ToString());
+            byte[] bytes = stream.ToArray();
+            stream.Close();
+            return File(bytes, "application/pdf", "HolidayList.pdf");
+        }
+        public PdfDocument GetDocument()
+        {
+            var document = new Document();
+            BuildDocument(document);
+            var pdfRenderer = new PdfDocumentRenderer();
+            pdfRenderer.Document = document;
+            pdfRenderer.RenderDocument();
+            //return pdfRenderer.PdfDocument;
+            return pdfRenderer.PdfDocument;
+        }
+
+        public void BuildDocument(Document document)
+        {
+            List<Holiday_List> hlist = new List<Holiday_List>();
+            Holiday_List hl = new Holiday_List();
+            string fdate = "01/01/" + u.currentDateTime().Year;
+            string tdate = "31/12/" + u.currentDateTime().Year;
+            hlist = hl.getholidaylist(fdate, tdate);
+            Section section = document.AddSection();
+            //Image image = section.Headers.Primary.AddImage("D:\\CLW ALL Projects & Documentation\\clw final - Design\\Fin-Pro-v1\\wwwroot\\Images\\clw_logo1.jpeg");
+            Image image = section.Headers.Primary.AddImage("wwwroot\\img\\logo.png");
+            image.Height = "2.5cm";
+            image.LockAspectRatio = true;
+            image.RelativeVertical = RelativeVertical.Line;
+            image.RelativeHorizontal = RelativeHorizontal.Margin;
+            image.Top = ShapePosition.Top;
+            image.Left = ShapePosition.Center;
+            image.WrapFormat.Style = WrapStyle.Through;
+            //Create Header
+            var paragraph = section.AddParagraph();
+            paragraph.Format.Alignment = ParagraphAlignment.Center;
+            paragraph.Format.Font.Bold = true;
+            paragraph.Format.Font.Size = 11;
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddText("Rishi Technovision PVT.LTD.");
+            paragraph.AddLineBreak();
+            paragraph.AddText("BF-88 SALTLAKE SECTOR-I, BIDHANNAGAR, WEST BENGAL      Phone: 0341 - 2526440");
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddText("Holiday List - " + u.currentDateTime().Year);
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.AddLineBreak();
+            paragraph.Format.SpaceAfter = 20;
+            var table = section.AddTable();
+            table.Style = "Table";
+            table.Format.Alignment = ParagraphAlignment.Center;
+            table.Rows.Alignment = RowAlignment.Center;
+            table.Borders.Width = 0.25;
+            table.Borders.Left.Width = 0.5;
+            table.Borders.Right.Width = 0.5;
+            table.Rows.LeftIndent = 0;
+            table.Borders.Width = 0.5;
+            Column column = table.AddColumn("3cm");
+            column.Format.Alignment = ParagraphAlignment.Left;
+            column = table.AddColumn("6cm");
+            column.Format.Alignment = ParagraphAlignment.Left;
+            column = table.AddColumn("5cm");
+            column.Format.Alignment = ParagraphAlignment.Left;
+            Row row = table.AddRow();
+            row.Format.Font.Name = "Times New Roman";
+            //row.Format.Font.Bold = true;
+            row.Height = Unit.FromCentimeter(.6);
+            //row.Format.Font.Size = 10;
+            row.Cells[0].AddParagraph("Date");
+            row.Cells[0].Format.Font.Bold = true;
+            row.Cells[0].Format.Font.Name = "Arial";
+            row.Cells[1].AddParagraph("Holiday");
+            row.Cells[1].Format.Font.Bold = true;
+            row.Cells[1].Format.Font.Name = "Arial";
+            row.Cells[2].AddParagraph("Alternative");
+            row.Cells[2].Format.Font.Bold = true;
+            row.Cells[2].Format.Font.Name = "Arial";
+            foreach (var a in hlist)
+            {
+                Row row1 = table.AddRow();
+                row1.Height = Unit.FromCentimeter(.6);
+                row1.Format.Font.Name = "Times New Roman";
+                if (a.alt_id != 0)
+                {
+                    row1.Cells[0].AddParagraph(a.date);
+                    row1.Cells[1].AddParagraph(a.description);
+                    row1.Cells[2].AddParagraph(a.alternative);
+                    row1.Shading.Color = Colors.LightSkyBlue;
+                }
+                else
+                {
+                    row1.Cells[0].AddParagraph(a.date);
+                    row1.Cells[1].AddParagraph(a.description);
+                }
+            }
+        }
+
+
+
+
+        [HttpGet]
+        public IActionResult AddAttendance(PunchInPunchOutViewModel model)
+        {
+            model.empiddesc = u.getempidDescBymanagerid(User.Identity.Name);
+            return View(model);
+        }
+        public JsonResult saveAttendenceByadmin(PunchInPunchOutViewModel model)
+        {
+
+            employee_attendance ea = new employee_attendance();
+            string msg = ea.SaveAttendanceByAdmin(model, User.Identity.Name);
+            return Json(msg);
+        }
+
     }
 }

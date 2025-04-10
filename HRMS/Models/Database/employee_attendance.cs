@@ -154,7 +154,7 @@ namespace HRMS.Models.Database
         public List<employee_attendance> getemployeeAttendacelistByemployeeId(string empl_id)
         {
             List<employee_attendance> ealst = new List<employee_attendance>();
-            string sql = "Select top (45) * from employee_attendance Where employee_Id='" + empl_id + "' order by id desc";
+            string sql = "Select top (45) * from employee_attendance Where employee_Id='" + empl_id + "' order by convert(date,date,103) desc";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
@@ -169,16 +169,16 @@ namespace HRMS.Models.Database
                     ea.out_time = Convert.ToString(dr["out_time"]);
                     //ea.duration = Convert.ToDecimal(dr["duration"]);
                     ea.punch_type = Convert.ToString(dr["punch_type"]);
-                    ea.is_approved = !Convert.IsDBNull(dr["is_approved"])? Convert.ToInt32(dr["is_approved"]): Convert.ToInt32(2);
+                    ea.is_approved = !Convert.IsDBNull(dr["is_approved"]) ? Convert.ToInt32(dr["is_approved"]) : Convert.ToInt32(2);
                     ealst.Add(ea);
                 }
             }
             return (ealst);
         }
-        public List<employee_attendance> getdataBydate(string empl_id,string f_date,string t_date)
+        public List<employee_attendance> getdataBydate(string empl_id, string f_date, string t_date)
         {
             List<employee_attendance> ealst = new List<employee_attendance>();
-            string sql = "Select * from employee_attendance Where employee_Id='" + empl_id + "' and convert(date,date,103)>=convert(date,'" + f_date+ "',103)and convert(date,date,103)<=convert(date,'" + t_date + "',103) order by id desc";
+            string sql = "Select * from employee_attendance Where employee_Id='" + empl_id + "' and convert(date,date,103)>=convert(date,'" + f_date + "',103)and convert(date,date,103)<=convert(date,'" + t_date + "',103) order by id desc";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
@@ -222,5 +222,77 @@ namespace HRMS.Models.Database
             }
             return (ealst);
         }
+
+
+
+        public string SaveAttendanceByAdmin(PunchInPunchOutViewModel model, string user)
+        {
+            model.attendance_date = Convert.ToDateTime(model.attendance_date, usCinfo).ToString("dd/MM/yyyy").Replace("-", "/");
+            int lv_count = 0;
+            int holiday_count = 0;
+            int sunday = 0;
+           
+            string msg = "";
+            string sql = "Select * from Employee_attendance where employee_id='" + model.employee_id + "' and Convert(varchar,date,103)=Convert(varchar,'" + model.attendance_date + "',103) ";
+            config.singleResult(sql);
+
+            if (config.dt.Rows.Count > 0)
+            {
+                msg = "Attendance Already Added";
+            }
+            else
+            {
+                leave_details ld = new leave_details();
+                //check leaves on date
+                sql = "Select * from Leave_count where employee_id='" + model.employee_id + "' and Convert(varchar,date,103)=Convert(varchar,'" + model.attendance_date + "',103)";
+                config.singleResult(sql);
+
+                if (config.dt.Rows.Count > 0)
+                {
+                    lv_count++;
+                }
+                //check Hiliday
+                sql = "Select * from Holiday_List where  Convert(varchar,date,103)=Convert(varchar,'" + model.attendance_date + "',103)";
+                config.singleResult(sql);
+
+                if (config.dt.Rows.Count > 0)
+                {
+                    holiday_count++;
+                }
+                if (Convert.ToDateTime(model.attendance_date, usCinfo).DayOfWeek == DayOfWeek.Sunday)
+                {
+                    sunday++;
+                }
+                if (lv_count != 1 && holiday_count != 1 && sunday != 1)
+                {
+
+                    config.Insert("Employee_attendance", new Dictionary<string, object>()
+                    { 
+                          {"employee_Id" ,model.employee_id},
+                          {"date",model.attendance_date},
+                          {"day",Convert.ToDateTime( model.attendance_date,usCinfo).ToString("dddd")},
+                          {"in_time",model.actual_In_time},
+                          {"Out_time",model.actual_out_time},
+                          {"In_Location_type","Valid"},
+                          {"Out_Location_Type","Valid"},
+                          {"Punchin_latitude","22.5973024"},
+                          {"Punchin_longitude","88.4180823"},
+                          {"Punchout_latitude","22.5973024"},
+                          {"Punchout_longitude","88.4180823"},
+                          {"punch_type","Valid"},
+                          {"Duration",Convert.ToInt32(model.day_count)},
+                          {"Remarks",model.reason+" (Done By-"+user+")"} });
+                    msg = "Saved";
+                }
+                else
+                {
+                    msg = "Given Date Is Not Applicable For Attendance For This Employee";
+                }
+            }
+            return msg;
+
+
+        }
+
     }
 }

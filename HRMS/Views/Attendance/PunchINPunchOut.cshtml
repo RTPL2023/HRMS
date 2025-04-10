@@ -6,7 +6,27 @@
 
 <link href="~/css/card.css" rel="stylesheet" />
 <style>
-  
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+    }
+    .display-date {
+        text-align: center;
+        margin-top: 8px;
+        font-weight: bold;
+        color: #5D3FD3;
+        font-family: 'Merienda', cursive;
+        animation-name: glow;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+
 </style>
 <form asp-controller="Attendance" asp-action="PunchINPunchOut" method="post">
     <div class="container ">
@@ -28,15 +48,20 @@
                     <div class="p-2"><button type="button" id="punchin" name="punchin" class="btn btn-primary btn-lg" onclick="btnPunchinOnclick()">PUNCH IN</button></div>
                     <div class="p-2"><button type="button" id="punchout" name="punchout" class="btn btn-danger btn-lg" onclick="btnPunchoutOnclick()">PUNCH OUT</button></div>
                 </div>
+                <div class="display-date">
+                    <span id="day">Day</span>,
+                    <span id="navdate">00/00/0000</span>,
+                    <span id="time" style="color: #E0115F">00:00:00 AM</span>
+                </div>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-sm-12 mb-12 mb-sm-0">
                 <div class="card">
                     <div class="table-responsive" style="height:350px">
-                        <table class="table table-bordered table-hover" align="center">
-                            <tbody id="attlist">
-                            </tbody>
+                        <table class="table  table-hover" align="center"id="attlist">
+                            @*<tbody >
+                            </tbody>*@
                         </table>
 
                     </div>
@@ -179,6 +204,11 @@
 
            /* $('#myToast').hide();*/
             $('#disbledtextbox').hide();
+            getDaylist();
+
+        });
+
+        function getDaylist() {
               $.ajax({
                 type: "POST",
                 url: '@Url.Action("getfulldayHalfdayAndAbsent", "Attendance")',
@@ -196,9 +226,7 @@
                     //alert("Error Occured");
                 }
             });
-
-        });
-
+        }
 
         function btnPunchinOnclick() {
             document.getElementById("punchin").disabled = true;
@@ -214,29 +242,21 @@
         }
 
         function in_showPosition(position) {
-
-
-
-
             var inloc = "";
-             //if (((22.597269 - 0.0002) < position.coords.latitude < (22.597269 + 0.0002) )&& ((88.417978 - 0.0004) < position.coords.longitude < (88.417978 + 0.0004))) {
-
-             //   inloc = "Valid";
-             //   alert("Valid");
-             //}
-
-             //else {
-             //   inloc = "Invalid";
-             //   alert("Invalid");
-
+            //if (((22.597269 - 0.0002) < position.coords.latitude < (22.597269 + 0.0002) )&& ((88.417978 - 0.0004) < position.coords.longitude < (88.417978 + 0.0004))) {
+            //   inloc = "Valid";
+            //   alert("Valid");
+            //}
+            //else {
+            //   inloc = "Invalid";
+            //   alert("Invalid");
             //}
             //alert(JSON.stringify(position.coords.latitude));
             //alert(JSON.stringify(position.coords.longitude));
-
-            if ((22.597269 - 0.0003) < position.coords.latitude) {
-                if (position.coords.latitude < (22.597269 + 0.0003)) {
-                    if ((88.417978 - 0.0004) < position.coords.longitude) {
-                        if (position.coords.longitude < (88.417978 + 0.0004)) {
+            if ((22.5973024 - 0.0004) < position.coords.latitude) {
+                if (position.coords.latitude < (22.5973024 + 0.0004)) {
+                    if ((88.4180823 - 0.0007) < position.coords.longitude) {
+                        if (position.coords.longitude < (88.4180823 + 0.0007)) {
                             inloc = "Valid";
                             /*alert("Location Valid");*/
                         }
@@ -251,45 +271,38 @@
                 else {
                     inloc = "Invalid";
                 }
-
-
             }
             else {
                 inloc = "Invalid";
             }
-
-
-
             let ModelObject = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 in_location_type: inloc
             };
+            $.ajax({
+                url: '@Url.Action("EmployeeInAttendanceMark", "Attendance")',
+                type: "POST",
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    alert(data);
+                    if (inloc == "Valid") {
+                        alert("Location Valid");
+                    }
+                    else {
+                        alert("Location Invalid")
+                    }
+                    document.getElementById("punchin").disabled = false;
+                    ShowTable();
+                    getDaylist();
+                },
+                error: function (err) {
+                    alert("Error Occured");
+                    document.getElementById("punchin").disabled = false;
 
-                    $.ajax({
-                        url: '@Url.Action("EmployeeInAttendanceMark", "Attendance")',
-                        type: "POST",
-                       data: ModelObject,
-                        dataType: "json",
-                        success: function (data) {
-                            alert(data);
-                            if (inloc == "Valid") {
-                                alert("Location Valid");
-
-
-                            }
-                            else {
-                                alert("Location Invalid")
-                            }
-                            document.getElementById("punchin").disabled = false;
-                            ShowTable();
-                        },
-                        error: function (err) {
-                            alert("Error Occured");
-                            document.getElementById("punchin").disabled = false;
-
-                        }
-                    });
+                }
+            });
 
         }
 
@@ -307,17 +320,13 @@
 
         function out_showPosition(position) {
 
-              var outloc = "";
+            var outloc = "";
             //if ((22.6295808 - 0.001) < position.coords.latitude < (22.6295808 + 0.001) && (88.4310016 - 0.001) < position.coords.longitude < (88.4310016 + 0.001)) {
-
             //    outloc = "Valid";
             //}
             //else {
             //    outloc = "Invalid";
-
             //}
-
-
             if ((22.597269 - 0.0003) < position.coords.latitude) {
                 if (position.coords.latitude < (22.597269 + 0.0003)) {
                     if ((88.417978 - 0.0004) < position.coords.longitude) {
@@ -336,45 +345,38 @@
                 else {
                     outloc = "Invalid";
                 }
-
-
             }
             else {
                 outloc = "Invalid";
             }
-
-
             let ModelObject = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 out_location_type: outloc
             };
-
-                    $.ajax({
-                        url: '@Url.Action("EmployeeOutAttendanceMark", "Attendance")',
-                        type: "POST",
-                       data: ModelObject,
-                        dataType: "json",
-                        success: function (data) {
-                            alert(data);
-                            if (outloc == "Valid") {
-                                alert("Location Valid")
-                            }
-                            else {
-                                alert("Location Invalid")
-                            }
-                            ShowTable();
-                            document.getElementById("punchout").disabled = false;
-
-                        },
-                        error: function (err) {
-                            console.log(err);
-                            alert("Error Occured");
-                            document.getElementById("punchout").disabled = false;
-
-                        }
-                    });
-
+            $.ajax({
+                url: '@Url.Action("EmployeeOutAttendanceMark", "Attendance")',
+                type: "POST",
+                data: ModelObject,
+                dataType: "json",
+                success: function (data) {
+                    alert(data);
+                    if (outloc == "Valid") {
+                        alert("Location Valid")
+                    }
+                    else {
+                        alert("Location Invalid")
+                    }
+                    ShowTable();
+                    document.getElementById("punchout").disabled = false;
+                    getDaylist();
+                },
+                error: function (err) {
+                    console.log(err);
+                    alert("Error Occured");
+                    document.getElementById("punchout").disabled = false;
+                }
+            });
         }
 
         function ShowTable() {
@@ -428,44 +430,44 @@
 
             } else if ($('#requested_out_time').val() == "") {
                 alert("Out Time Can't Be Blank!");
-            } else {
-                    let ModelObject = {
-                            requested_in_time: $('#requested_in_time').val(),
-                            requested_out_time: $('#requested_out_time').val(),
-                            attendance_date: $('#attendance_date').val(),
-                            attendance_Id: $('#attendance_Id').val(),
-                            actual_In_time: $('#actual_In_time').val(),
-                            actual_out_time: $('#actual_out_time').val(),
-                            actual_punch_type: $('#actual_punch_type').val(),
-                            actual_day_count: $('#actual_day_count').val(),
-                            requested_day_count: $('#requested_day_count').val(),
-                            reason: $('#reason').val(),
-                    };
-                    $.ajax({
-                        url: '@Url.Action("editIntimeOutTime", "Attendance")',
-                        type: "POST",
-                        data: ModelObject,
-                        dataType: "json",
-                        success: function (data) {
-                            cleartextbox();
+            }
+            else {
+                let ModelObject = {
+                    requested_in_time: $('#requested_in_time').val(),
+                    requested_out_time: $('#requested_out_time').val(),
+                    attendance_date: $('#attendance_date').val(),
+                    attendance_Id: $('#attendance_Id').val(),
+                    actual_In_time: $('#actual_In_time').val(),
+                    actual_out_time: $('#actual_out_time').val(),
+                    actual_punch_type: $('#actual_punch_type').val(),
+                    actual_day_count: $('#actual_day_count').val(),
+                    requested_day_count: $('#requested_day_count').val(),
+                    reason: $('#reason').val(),
+                };
+                $.ajax({
+                    url: '@Url.Action("editIntimeOutTime", "Attendance")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        cleartextbox();
 
-                            $("#EditInvalid").modal('hide');
-                            $("#myToast").toast({
-                                delay: 5000
-                            });
-                            $("#myToast").toast("show");
-                            document.getElementById('tostmsg').innerHTML =
-                                data;
-                            ShowTable();
-                        },
-                        error: function (err) {
-                            alert("Error Occured");
-                        }
-                    });
+                        $("#EditInvalid").modal('hide');
+                        $("#myToast").toast({
+                            delay: 5000
+                        });
+                        $("#myToast").toast("show");
+                        document.getElementById('tostmsg').innerHTML =
+                            data;
+                        ShowTable();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
             }
         }
         function totalSundayonclick() {
-
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("getsundayList", "Attendance")',
@@ -497,7 +499,7 @@
             });
         }
         function getfulldaylist(day) {
-           
+
             let ModelObject = { day: day };
             $.ajax({
                 type: "POST",
@@ -514,5 +516,41 @@
                 }
             });
         }
+    </script>
+    <script>
+       
+        function currentDateAndTime() {
+            let today = new Date;
+            //today.setHours(today.getHours() + 12);
+            //today.setMinutes(today.getMinutes() + 30);
+            const dayWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            let dayName = dayWeek[today.getDay()];
+
+            let dayDate = today.getDate();
+            let month = today.getMonth() + 1;
+            let year = today.getFullYear();
+
+            dayDate = dayDate < 10 ? '0' + dayDate : dayDate;
+            month = month < 10 ? '0' + month : month;
+            let formattedDate = dayDate + '/' + month + '/' + year;
+            document.getElementById("day").textContent = dayName;
+            document.getElementById("navdate").textContent = formattedDate;
+
+            let hours = today.getHours();
+            let minutes = today.getMinutes();
+            let seconds = today.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            let time = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+            document.getElementById("time").textContent = time;
+        }
+        setInterval(currentDateAndTime, 1000);
+
+        currentDateAndTime();
+
     </script>
 }

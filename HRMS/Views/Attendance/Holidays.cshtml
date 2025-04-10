@@ -1,0 +1,230 @@
+﻿
+@model HRMS.Models.ViewModel.holidaysViewModel
+@{
+    ViewData["Title"] = "Holidays";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/card.css" rel="stylesheet" />
+
+<form asp-controller="Attendance" asp-action="AddCompOff" method="post">
+    <div class="row text-center mt-3">
+        <h3> Holidays List</h3>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-lg-3 col-12 mt-1 align-content-center">
+            <input id="Btnpdf" type="button" name="Btnpdf" Height="40" Width="100" class="btn btn-primary" value="Download Pdf" onclick="downloadPdf()" />
+        </div>
+        @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
+        {
+            <div class="col-lg-3 col-12 mt-1 align-content-center">
+                <input id="Btnholiday" type="button" name="Btnholiday" Height="40" Width="100" class="btn btn-primary" value="Add Holiday" data-bs-toggle="modal" data-bs-target="#Holidays" />
+            </div>}
+        </div>
+    <div class="row">
+        <div class="col-12 col-sm-12 col-md-12">
+            <table id="holidayList" class="table">
+            </table>
+        </div>
+    </div>
+
+    <!--ADD Leave Modal  Start -->
+    <div class="modal fade" id="Holidays" tabindex="-1" aria-labelledby="HolidaysLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-lg">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="HolidaysLabel">Add Holidays</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+                    <div class="row m-3">
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label> Date</label>
+                                <span style="color:crimson">*</span>
+                                <input type="date" id="h_date" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+                            <div class="form-group">
+                                <label>Description</label>
+
+                                <span style="color:crimson">*</span>
+                                <input type="text" id="description" class="form-control" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row m-3">
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+
+                            <div class="form-group">
+                                <label> Alternative</label>
+
+                                <span style="color:crimson">*</span>
+
+                                <select name="alternative" id="alternative" class="form-control" required onchange="alternativeOnchange()">
+                                    <option value="">Select Options</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                  
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
+
+                            <div class="form-group" id="altwith">
+                                <label>Alternative With</label>
+
+                                <span style="color:crimson">*</span>
+
+                                <select name="altid" id="altid" class="form-control" required>
+                                  
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="btnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+</form>
+@section scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+               $.ajax({
+                type: "POST",
+                url: '@Url.Action("getholidays", "Utility")',
+
+                dataType: "json",
+                success: function (data) {
+                    $("#altid").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#altid").append(
+                            $('<option></option>').val(sc.id).html(sc.description));
+
+                    });
+
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+                });
+            ShowTable();
+
+            $('#altwith').hide();
+
+        });
+
+        function downloadPdf() {
+
+           window.location.href = "@Url.Action("downloadHolidayPdf", "Attendance")";
+
+        }
+
+        function ShowTable() {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getholidayList", "Attendance")',
+
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("holidayList").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function alternativeOnchange() {
+
+            if ($('#alternative').val() == "") {
+                $('#altwith').hide();
+                $('#altwith').val(null);
+
+                alert("choose alternative Type!!");
+                $('#alternative').focus();
+
+            } else if ($('#alternative').val() == "Yes") {
+                $('#altwith').show();
+                $('#altid').focus();
+
+            }
+            else {
+                $('#altwith').hide();
+                $('#altwith').val(null);
+
+            }
+        }
+        function btnsubmitOnclick() {
+
+          
+            if ($('#h_date').val() == "") {
+                alert("choose Date!!");
+                $('#h_date').focus();
+            }
+            else if ($('#description').val() == "") {
+                alert("Description Can't Blank!!");
+                $('#description').focus();
+            }
+            else if ($('#alternative').val() == "") {
+                alternativeOnchange();
+            }
+            else if ($('#alternative').val() == "Yes" && $('#altid').val() == "") {
+               
+               
+                    alert("Choose Alternative With!!");
+                    $('#altid').focus();
+             
+            }
+            else {
+                let ModelObject = {
+                    date: $('#h_date').val(),
+                    description: $('#description').val(),
+                    alternative: $('#alternative').val(),
+                    altid: $('#altid').val(),
+                    
+                };
+                $.ajax({
+                    url: '@Url.Action("SaveHolidays", "Attendance")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        alert(data);
+                        $('#h_date').val(null);
+                        $('#description').val(null);
+                        $('#alternative').val(null);
+                        $('#altid').val(null);
+                        $("#Holidays").modal('hide');
+                        ShowTable();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+            }
+
+        }
+
+    </script>
+}

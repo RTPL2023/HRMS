@@ -1,0 +1,1035 @@
+﻿@model HRMS.Models.ViewModel.AddAllMasterOfAddressViewModel
+@{
+    ViewData["Title"] = "Add All Master Address";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .table__icon.edit {
+        background-color: rgba(26, 188, 156, .1);
+        --tw-text-opacity: 1;
+        color: rgb(26 188 156 / var(--tw-text-opacity, 1));
+    }
+
+    .table__icon {
+        display: flex;
+        height: 30px;
+        width: 30px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        padding: 2px 7px;
+        font-size: 14px;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+        transition-property: all;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-duration: .3s;
+        transition-timing-function: linear;
+    }
+
+    button {
+        border-width: 0;
+        background-color: transparent;
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+    }
+
+    .table__icon.delete {
+        background-color: rgba(255, 58, 41, .1);
+        --tw-text-opacity: 1;
+        color: rgb(255 58 41 / var(--tw-text-opacity, 1));
+    }
+
+    .table-responsive {
+        max-height: 300px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+    }
+</style>
+<form asp-controller="Master" asp-action="AddAllMasterOfAddress" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CountryMaster">
+                            Add Country
+                        </button>
+                        <div class="row">
+                            <div class="col col-10 table-responsive">
+                                <div class="table-responsive" style="height:200px">
+                                    <table class="table  table-hover" align="center" id="list">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stateMaster">
+                            Add State
+                        </button>
+                        <div class="row">
+                            <div class="col col-10 table-responsive">
+                                <div class="table-responsive" style="height:200px">
+                                    <table class="table  table-hover" align="center" id="ststelist">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#DistrictMaster">
+                            Add District
+                        </button>
+                        <div class="row">
+                            <div class="col col-10 table-responsive">
+                                <div class="table-responsive" style="height:200px">
+                                    <table class="table  table-hover" align="center" id="districtlist">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#CityMaster">
+                            Add City
+                        </button>
+                        <div class="row">
+                            <div class="col col-10 table-responsive">
+                                <div class="table-responsive" style="height:200px">
+                                    <table class="table  table-hover" align="center" id="citylist">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ADD Country Master Modal  Start -->
+    <div class="modal fade" id="CountryMaster" tabindex="-1" aria-labelledby="CountryMasterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="CountryMasterLabel">Add New Country</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+
+
+                    <div class="row m-3">
+
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Country Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.countryname, new { @class = "form-control", @type = "text" })
+
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="countrybtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ADD Country Master Modal  End -->
+    <!--ADD Country Master Edit Modal  Start -->
+    <div class="modal fade" id="CountryMasterEdit" tabindex="-1" aria-labelledby="CountryMasterEditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="CountryMasterEditLabel">Add New Country</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+
+
+                    <div class="row m-3">
+
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Country Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editcountryname, new { @class = "form-control", @type = "text" })
+
+                            </div>
+                            <div class="form-group">
+                                <label>Country Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editcountryid, new { @class = "form-control", @type = "text" })
+
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="countryEditbtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ADD  state Modal  Start -->
+    <div class="modal fade" id="stateMaster" tabindex="-1" aria-labelledby="stateMasterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="stateMasterLabel">Add New State</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>State Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.statename, new { @class = "form-control", @type = "text" })
+
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>Country Name</label><span style="color:crimson">*</span>
+                                <select name="country" id="country" class="form-control" type="first_dropdown" required>
+                                    <option value="">Select Country</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="StatebtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ADD State Master Edit Modal  Start -->
+    <div class="modal fade" id="stateMasterEdit" tabindex="-1" aria-labelledby="stateMasterEditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="stateMasterEditLabel">Modify State</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+
+
+
+                    <div class="row m-3">
+
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>State Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editstatename, new { @class = "form-control", @type = "text" })
+
+                            </div>  <div class="form-group">
+                                <label>State id</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editstateid, new { @class = "form-control", @type = "text" })
+
+                            </div>
+                            <div class="form-group">
+                                <label>Country Name</label><span style="color:crimson">*</span>
+                                <select name="countryedit" id="countryedit" class="form-control" type="secound_dropdown" required>
+                                    <option value="">Select Country</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="ststeEditbtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ADD  state Modal  End -->
+    <!--ADD District Master Modal  Start -->
+
+    <div class="modal fade" id="DistrictMaster" tabindex="-1" aria-labelledby="DistrictMasterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="DistrictMasterLabel">Add New District</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>District Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.districtname, new { @class = "form-control", @type = "text" })
+
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>State Name</label><span style="color:crimson">*</span>
+                                <select name="state" id="state" class="form-control" required>
+                                    <option value="">Select State</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="DistrictbtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--ADD District Master Edit Modal  Start -->
+    <div class="modal fade" id="DistrictMasterEdit" tabindex="-1" aria-labelledby="DistrictMasterEditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="DistrictMasterEditLabel">Modify District</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>District Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editdistrictname, new { @class = "form-control", @type = "text" })
+
+                            </div>
+                            <div class="form-group">
+                                <label>District id</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editdistrictid, new { @class = "form-control", @type = "text" })
+                            </div>
+                            <div class="form-group">
+                                <label>State Name</label><span style="color:crimson">*</span>
+                                <select name="editstate" id="editstate" class="form-control" required>
+                                    <option value="">Select State</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="DistrictEditbtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ADD District Master Modal  End -->
+    <!--ADD city Master Modal  Start -->
+
+    <div class="modal fade" id="CityMaster" tabindex="-1" aria-labelledby="CityMasterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="CityMasterLabel">Add New City</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>City Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.cityname, new { @class = "form-control", @type = "text" })
+
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>District Name</label><span style="color:crimson">*</span>
+                                <select name="district" id="district" class="form-control" required>
+                                    <option value="">Select District</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="citybtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--ADD City Master Edit Modal  Start -->
+    <div class="modal fade" id="CityMasterEdit" tabindex="-1" aria-labelledby="CityMasterEditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="CityMasterEditLabel">Modify City</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <from>
+                    <div class="row m-3">
+                        <div class="col-lg-12 col-12 col-sm-12 text-start">
+                            <div class="form-group">
+                                <label>City Name</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editcityname, new { @class = "form-control", @type = "text" })
+
+                            </div>
+                            <div class="form-group">
+                                <label>City id</label><span style="color:crimson">*</span>
+                                @Html.TextBoxFor(model => model.editcityid, new { @class = "form-control", @type = "text" })
+                            </div>
+                            <div class="form-group">
+                                <label>District Name</label><span style="color:crimson">*</span>
+                                <select name="editdistrict" id="editdistrict" class="form-control" required>
+                                    <option value="">Select District</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </from>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnsubmit" name="btnsubmit" onclick="cityEditbtnsubmitOnclick()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--ADD City Master Modal  End -->
+</form>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+              //---- Country  dropdowon-------
+
+            getalldropdown();
+            ShowCountryTable();
+            ShowStateTable();
+            ShowDistrictTable();
+            ShowcityTable();
+        });
+
+        function getalldropdown() {
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("getCountryMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#country").html(""); // clear before appending new list
+                    $("#countryedit").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#country").append(
+                            $('<option></option>').val(sc.countryid).html(sc.countryname));
+                        $("#countryedit").append(
+                            $('<option></option>').val(sc.countryid).html(sc.countryname));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+
+            //---- State  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getStateMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#state").html(""); // clear before appending new list
+                    $("#editstate").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#state").append(
+                            $('<option></option>').val(sc.stateid).html(sc.statename));
+                        $("#editstate").append(
+                            $('<option></option>').val(sc.stateid).html(sc.statename));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+            //---- dist  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getDistrictMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#district").html(""); // clear before appending new list
+                    $("#editdistrict").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#district").append(
+                            $('<option></option>').val(sc.districtid).html(sc.districtname));
+                        $("#editdistrict").append(
+                            $('<option></option>').val(sc.districtid).html(sc.districtname));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+              //---- City  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getCityMastDetails", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#city").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#city").append(
+                            $('<option></option>').val(sc.cityid).html(sc.cityname));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+            });
+            //---- City  dropdowon-------
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getReportingManager", "Utility")',
+                dataType: "json",
+                success: function (data) {
+                    $("#reporting_mg_id").html(""); // clear before appending new list
+                    $.each(data, function (i, sc) {
+
+                        $("#reporting_mg_id").append(
+                            $('<option></option>').val(sc.employee_id).html(sc.name));
+                    });
+                },
+                error: function (err) {
+                alert(err);
+                }
+
+               });
+        }
+        //********Country Start**************
+
+        function ShowCountryTable() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getCountryMasterList", "Master")',
+
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("list").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function countrybtnsubmitOnclick() {
+
+            if ($('#countryname').val() == null || $('#countryname').val() == "") {
+                alert("Country Name Required !!");
+                $('#countryname').focus();
+            }
+             else {
+                    let ModelObject = {
+                        countryname: $('#countryname').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("SavedCountry", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Saved Successfully") {
+                                alert(data);
+                            }
+                            $("#CountryMaster").modal('hide');
+                            $('#countryname').val(null);
+                            ShowCountryTable();
+                            getalldropdown();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnCountryEditOnclick(countryid, countryname) {
+            $('#editcountryid').val(countryid);
+            $('#editcountryname').val(countryname);
+        }
+        function countryEditbtnsubmitOnclick() {
+
+            if ($('#editcountryname').val() == null || $('#editcountryname').val() == "") {
+                alert("Country Name Required !!");
+                $('#editcountryname').focus();
+            }
+             else {
+                    let ModelObject = {
+                        countryname: $('#editcountryname').val(),
+                        countryid: $('#editcountryid').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("EditCountryName", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Updated Successfuly") {
+                                alert(data);
+                            }
+                            $("#CountryMasterEdit").modal('hide');
+                            $('#editcountryname').val(null);
+                            $('#editcountryid').val(null);
+                            ShowCountryTable();
+                            getalldropdown();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnCountryDeleteOnclick(countryid) {
+            if (confirm("Are You Confirm !") == true) {
+                let ModelObject = {
+                    countryid: countryid,
+                };
+                $.ajax({
+                    url: '@Url.Action("DeleteCountry", "Master")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != "Deleted Successfuly") {
+                            alert(data);
+                        }
+
+                        //$("#CountryMaster").modal('hide');
+                        //$('#countryname').val(null);
+                        ShowCountryTable();
+                        getalldropdown();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+                /* alert("You pressed OK!" + counteryid);*/
+                //} else {
+                //    text = "You canceled!";
+                //}
+            }
+        }
+
+        //********Country End**************
+
+
+        //********State Start**************
+
+        function ShowStateTable() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getStateMasterList", "Master")',
+
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("ststelist").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function StatebtnsubmitOnclick() {
+
+            if ($('#statename').val() == null || $('#statename').val() == "") {
+                alert("State Name Required !!");
+                $('#statename').focus();
+            }
+             else {
+                    let ModelObject = {
+                        statename: $('#statename').val(),
+                        country: $('#country').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("SavedState", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Saved Successfully") {
+                                alert(data);
+                            }
+                            $("#stateMaster").modal('hide');
+                            $('#statename').val(null);
+                            ShowStateTable();
+                            getalldropdown();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnStateEditOnclick(stateid, statename, countryid) {
+
+           
+            $('#editstateid').val(stateid);
+            $('#editstatename').val(statename.replace("-", " "));
+            $('#countryedit').val(countryid);
+
+        }
+        function ststeEditbtnsubmitOnclick() {
+
+            if ($('#editstatename').val() == null || $('#editstatename').val() == "") {
+                alert("State Name Required !!");
+                $('#editstatename').focus();
+            }
+             else {
+                    let ModelObject = {
+                        editstatename: $('#editstatename').val(),
+                        editstateid: $('#editstateid').val(),
+                        countryid: $('#countryedit').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("EditStateName", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Updated Successfuly") {
+                                alert(data);
+                            }
+                            $("#stateMasterEdit").modal('hide');
+                            $('#editstateid').val(null);
+                            $('#editstatename').val(null);
+                            ShowStateTable();
+                           /* getalldropdown();*/
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnStateDeleteOnclick(stateid) {
+            if (confirm("Are You Confirm !") == true) {
+                let ModelObject = {
+                    stateid: stateid,
+                };
+                $.ajax({
+                    url: '@Url.Action("DeleteState", "Master")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != "Deleted Successfuly") {
+                            alert(data);
+                        }
+
+                        ShowStateTable();
+
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+                /* alert("You pressed OK!" + counteryid);*/
+                //} else {
+                //    text = "You canceled!";
+                //}
+            }
+        }
+
+        //********State End**************
+         //********District Start**************
+
+        function ShowDistrictTable() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getDistrictMasterList", "Master")',
+
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("districtlist").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function DistrictbtnsubmitOnclick() {
+
+            if ($('#districtname').val() == null || $('#districtname').val() == "") {
+                alert("District Name Required !!");
+                $('#districtname').focus();
+            }
+             else {
+                    let ModelObject = {
+                        districtname: $('#districtname').val(),
+                        stateid: $('#state').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("SavedDistrict", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Saved Successfully") {
+                                alert(data);
+                            }
+                            $("#DistrictMaster").modal('hide');
+                            $('#districtname').val(null);
+                            ShowDistrictTable();
+                            getalldropdown();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnDistrictEditOnclick(districtid, districtname, stateid) {
+
+
+            $('#editdistrictid').val(districtid);
+            $('#editdistrictname').val(districtname.replace("-", " "));
+            $('#editstate').val(stateid);
+
+        }
+        function DistrictEditbtnsubmitOnclick() {
+         
+            if ($('#editdistrictname').val() == null || $('#editdistrictname').val() == "") {
+                alert("District Name Required !!");
+                $('#editdistrictname').focus();
+            }
+             else {
+                    let ModelObject = {
+                        editdistrictname: $('#editdistrictname').val(),
+                        editdistrictid: $('#editdistrictid').val(),
+                        stateid: $('#editstate').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("EditDistrictName", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Updated Successfuly") {
+                                alert(data);
+                            }
+                            $("#DistrictMasterEdit").modal('hide');
+                            $('#editdistrictname').val(null);
+                            $('#editdistrictid').val(null);
+                            ShowDistrictTable();
+                           /* getalldropdown();*/
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnDistrictDeleteOnclick(districtid) {
+            if (confirm("Are You Confirm !") == true) {
+                let ModelObject = {
+                    districtid: districtid,
+                };
+                $.ajax({
+                    url: '@Url.Action("DeleteDistrict", "Master")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != "Deleted Successfuly") {
+                            alert(data);
+                        }
+
+                        ShowDistrictTable();
+
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+                /* alert("You pressed OK!" + counteryid);*/
+                //} else {
+                //    text = "You canceled!";
+                //}
+            }
+        }
+
+        //********State End**************
+
+          //********City Start**************
+
+        function ShowcityTable() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("getCityMasterList", "Master")',
+
+                dataType: "json",
+                success: function (data) {
+                    document.getElementById("citylist").innerHTML = data;
+
+                },
+                error: function (err) {
+                    //alert("Error Occured");
+                }
+            });
+        }
+        function citybtnsubmitOnclick() {
+
+            if ($('#cityname').val() == null || $('#cityname').val() == "") {
+                alert("City Name Required !!");
+                $('#cityname').focus();
+            }
+             else {
+                    let ModelObject = {
+                        cityname: $('#cityname').val(),
+                        districtid: $('#district').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("SavedCity", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Saved Successfully") {
+                                alert(data);
+                            }
+                            $("#CityMaster").modal('hide');
+                            $('#cityname').val(null);
+                            ShowcityTable();
+                            getalldropdown();
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnCityEditOnclick(cityid, cityname, districtid) {
+
+
+            $('#editcityid').val(cityid);
+            $('#editcityname').val(cityname.replace("-", " "));
+            $('#editdistrict').val(districtid);
+
+        }
+        function cityEditbtnsubmitOnclick() {
+          
+            if ($('#editcityname').val() == null || $('#editcityname').val() == "") {
+                alert("District Name Required !!");
+                $('#editcityname').focus();
+            }
+             else {
+                    let ModelObject = {
+                        editcityname: $('#editcityname').val(),
+                        editcityid: $('#editcityid').val(),
+                        districtid: $('#editdistrict').val(),
+                    };
+                    $.ajax({
+                        url: '@Url.Action("EditCityName", "Master")',
+                        type: "POST",
+                        data: ModelObject,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data != "Updated Successfuly") {
+                                alert(data);
+                            }
+                            $("#CityMasterEdit").modal('hide');
+                            $('#editcityname').val(null);
+                            $('#editcityid').val(null);
+                            ShowcityTable();
+                           /* getalldropdown();*/
+                        },
+                        error: function (err) {
+                            alert("Error Occured");
+                        }
+                    });
+            }
+        }
+        function btnCityDeleteOnclick(cityid) {
+            if (confirm("Are You Confirm !") == true) {
+                let ModelObject = {
+                    cityid: cityid,
+                };
+                $.ajax({
+                    url: '@Url.Action("Deletecity", "Master")',
+                    type: "POST",
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != "Deleted Successfuly") {
+                            alert(data);
+                        }
+                        ShowcityTable();
+                    },
+                    error: function (err) {
+                        alert("Error Occured");
+                    }
+                });
+               
+            }
+        }
+
+        //********State End**************
+        
+    </script>
+}

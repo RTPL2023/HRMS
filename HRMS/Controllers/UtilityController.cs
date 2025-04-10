@@ -8,6 +8,7 @@ using HRMS.Models.Database;
 using System.Drawing.Printing;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Microsoft.AspNetCore.Authorization;
 
 using System.IO;
 using HRMS.Includes;
@@ -36,11 +37,11 @@ namespace HRMS.Controllers
         //****************For Country Drop Down
         public JsonResult getCountryMastDetails()
         {
-            
+
             MasterCountry cm = new MasterCountry();
             var country = cm.getCountryMast();
-            
-            return  Json(country);
+
+            return Json(country);
         }
         //****************For State Drop Down
         public JsonResult getStateMastDetails()
@@ -181,7 +182,7 @@ namespace HRMS.Controllers
         //cloud
         public DateTime currentDateTime()
         {
-            DateTime curdt = DateTime.Now.AddHours(13);
+            DateTime curdt = DateTime.Now.AddHours(12);
             curdt = curdt.AddMinutes(30);
             return curdt;
         }
@@ -198,6 +199,19 @@ namespace HRMS.Controllers
             Employee_Master em = new Employee_Master();
 
             m.empiddesc = em.getempidMast().ToList().Select(x => new SelectListItem
+            {
+                Value = x.employee_id.ToString(),
+                Text = x.name.ToString()
+            });
+
+            return m.empiddesc;
+        }
+        public IEnumerable<SelectListItem> getempidDescBymanagerid(string user)
+        {
+            DetailReportViewModel m = new DetailReportViewModel();
+            Employee_Master em = new Employee_Master();
+         
+            m.empiddesc = em.getemployeelist(user).ToList().Select(x => new SelectListItem
             {
                 Value = x.employee_id.ToString(),
                 Text = x.name.ToString()
@@ -223,8 +237,11 @@ namespace HRMS.Controllers
         {
 
             string date = "";
+            //string alt_date = "";
+            //string month_code = "";
             int count = 0;
-
+            int id = 0;
+            int alt_id = 0;
             string sql = "Select * from Holiday_List where convert(date,date,103)>=convert(date,'" + from_dt + "',103) and convert(date,date,103)<=convert(date,'" + to_dt + "',103) and alternative='Yes'";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
@@ -232,12 +249,37 @@ namespace HRMS.Controllers
                 foreach (DataRow dr in config.dt.Rows)
                 {
                     date = Convert.ToString(dr["date"]);
-                    sql = "Select * from employee_attendance where employee_id=empid and date='" + date + "' and punch_type='Valid'";
+                    //month_code = date.Substring(3, 2);
+                    id = Convert.ToInt32(dr["id"]);
+                    alt_id = Convert.ToInt32(dr["alt_id"]);
+                    //sql = "Select * from Holiday_List where id=" + alt_id;
+                    //config.singleResult(sql);
+                    //if (config.dt.Rows.Count > 0)
+                    //{
+                    //    DataRow dr1 = (DataRow)config.dt.Rows[config.dt.Rows.Count - 1];
+                    //    id = Convert.ToInt32(dr1["id"]);
+                    //}
+
+                    sql = "Select * from op_holiday_availed where id="+ alt_id +" and employee_id='"+ empid + "'";
                     config.singleResult(sql);
                     if (config.dt.Rows.Count == 0)
                     {
-                        count = count + 1;
+                        sql = "Select * from employee_attendance where employee_id='" + empid + "' and date='" + date + "' and punch_type='Valid'";
+                        config.singleResult(sql);
+                        if (config.dt.Rows.Count == 0)
+                        {
+                            count = count + 1;
+                            config.Insert("op_holiday_availed", new Dictionary<string, object>()
+                            {
+                            { "op_holiday_id",id },
+                            { "employee_id",empid },
+                            });
+                        }
+
                     }
+
+                    
+                    
 
                 }
 
@@ -462,5 +504,16 @@ namespace HRMS.Controllers
             return returnValue;
         }
         //******** End Amount In Words
+        //=========Get Holiday 1 Year dropdown=============
+        public ActionResult getholidays()
+        {
+            string fdate = "01/01/" +currentDateTime().Year;
+            string tdate = "31/12/" + currentDateTime().Year;
+            Holiday_List ltm = new Holiday_List();
+            var leavetype = ltm.getholidaylist(fdate, tdate);
+            return Json(leavetype);
+        }
+
+        //=========Get Holiday 1 Year dropdown End=============
     }
 }

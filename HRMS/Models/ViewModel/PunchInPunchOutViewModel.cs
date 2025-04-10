@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,5 +35,8 @@ namespace HRMS.Models.ViewModel
         public string tot_days_in_month { get; set; }
         public string sundays { get; set; }
         public string holidays { get; set; }
+        public string day_count { get; set; }
+        public IEnumerable<SelectListItem> empiddesc { get; set; }
+
     }
 }

@@ -15,12 +15,12 @@ namespace HRMS.Models.DataBase
         public String cityid { get; set; }
         public String CitySubId { get; set; }
         public String cityname { get; set; }
-        public String DistrictId { get; set; }
-        public String DistrictName { get; set; }
-        public String StateId { get; set; }
-        public String StateName { get; set; }
-        public String CountryId { get; set; }
-        public String CountryName { get; set; }
+        public String districtid { get; set; }
+        public String districtname { get; set; }
+        public String stateid { get; set; }
+        public String statename { get; set; }
+        public String countryid { get; set; }
+        public String countryname { get; set; }
         public String Created_by { get; set; }
         public String Create_date { get; set; }
         public  String Create_Time { get; set; }
@@ -98,13 +98,40 @@ namespace HRMS.Models.DataBase
                 {
                     mc.cityid = Convert.ToString(dr["cityid"]);
                     mc.cityname = Convert.ToString(dr["cityname"]);
-                    mc.DistrictId = Convert.ToString(dr["DistrictId"]);
+                    mc.districtid = Convert.ToString(dr["DistrictId"]);
                 }
             }
             return mc;
         }
 
+        public MasterCity CheckCityName(string City, string districtid)
+        {
+            string sql = "Select * from  Master_City where districtid='" + districtid + "' order by districtid";
+            config.singleResult(sql);
 
+            MasterCity mc = new MasterCity();
+
+            mc.checkdata = false;
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    mc.cityname = Convert.ToString(dr["CityName"]);
+                    if (mc.cityname == City)
+                    {
+                        mc.checkdata = true;
+                        return mc;
+                    }
+                    else
+                    {
+                        mc.checkdata = false;
+                    }
+                }
+
+            }
+
+            return mc;
+        }
         public List<MasterCity> getAllCityList()
         {
             string sql = "select * from Master_City mc,master_district md where mc.is_deleted<>1 and mc.DistrictId=md.DistrictId order by cityname";
@@ -119,87 +146,51 @@ namespace HRMS.Models.DataBase
                     MasterCity ms = new MasterCity();
                     ms.cityid = Convert.ToString(dr["cityid"]);
                     ms.cityname = Convert.ToString(dr["cityname"]);
-                    ms.DistrictId = Convert.ToString(dr["DistrictId"]);
-                    ms.DistrictName = Convert.ToString(dr["DistrictName"]);
+                    ms.districtid = Convert.ToString(dr["DistrictId"]);
+                    ms.districtname = Convert.ToString(dr["DistrictName"]);
                     mcl.Add(ms);
                 }
             }
             return mcl;
         }
 
-        //public string UpdateCity(MasterCity mc)
-        //{
-        //    string sql = "select * from master_city where cityname ='" + mc.cityname + "' and DistrictId='" + mc.DistrictId + "'";
-        //    config.singleResult(sql);
-        //    int check = 0;
-        //    if (config.dt.Rows.Count > 0)
-        //    {
-        //        check = 1;
-        //        mc.msg = "Same City Already Exist Under Same District";
-        //    }
-        //    if (check == 0)
-        //    {
-        //        try
-        //        {
-        //            config.Update("Master_City", new Dictionary<String, object>()
-        //                {
-        //                { "cityname",      mc.cityname},
-        //                { "DistrictId",    mc.DistrictId},
-        //                { "Modified_By",   mc.Modified_by},
-        //                { "Modified_Date", mc.Modified_Date},
-        //                { "Modified_Time", mc.Modified_Time},
-        //                { "M_Device_Name", mc.M_Device_name},
-        //                }, new Dictionary<string, object>()
-        //                {
-        //                { "cityid", mc.cityid },
-        //                });
-        //            mc.msg = "Updated Successfuly";
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            mc.msg = "Updation Not Completed Succesfuly";
-        //        }
-        //    }
-        //    return mc.msg;
-        //}
+        public string UpdateCity(MasterCity mc)
+        {
+            string sql = "select * from master_city where cityname ='" + mc.cityname + "' and DistrictId='" + mc.districtid + "'";
+            config.singleResult(sql);
+            int check = 0;
+            if (config.dt.Rows.Count > 0)
+            {
+                check = 1;
+                mc.msg = "Same City Already Exist Under Same District";
+            }
+            if (check == 0)
+            {
+                try
+                {
+                    config.Update("Master_City", new Dictionary<String, object>()
+                        {
+                        { "cityname",      mc.cityname},
+                        { "DistrictId",    mc.districtid},
+                        { "Modified_By",   mc.Modified_by},
+                        { "Modified_Date", mc.Modified_Date},
+                        { "Modified_Time", mc.Modified_Time},
+                        { "M_Device_Name", mc.M_Device_name},
+                        }, new Dictionary<string, object>()
+                        {
+                        { "cityid", mc.cityid },
+                        });
+                    mc.msg = "Updated Successfuly";
+                }
+                catch (Exception ex)
+                {
+                    mc.msg = "Updation Not Completed Succesfuly";
+                }
+            }
+            return mc.msg;
+        }
 
-        //public DataTable UpdateCity(MasterCity mc)
-        //{
-        //    DataTable dt = new DataTable();
-        //    Hashtable hs = new Hashtable();
-        //    string sql = "select * from master_city where cityname ='" + mc.cityname + "' and DistrictId='" + mc.DistrictId + "'";
-        //    config.singleResult(sql);
-        //    int check = 0;
-        //    if (config.dt.Rows.Count > 0)
-        //    {
-        //        check = 1;
-        //        mc.msg = "Same City Already Exist Under Same District";
-        //    }
-        //    if (check == 0)
-        //    {
-        //        try
-        //        {
-        //            {
-        //                hs.Add("cityname", mc.cityname);
-        //                hs.Add("DistrictId", mc.DistrictId);
-        //                hs.Add("Modified_By", mc.Modified_by);
-        //                hs.Add("Modified_Date", mc.Modified_Date);
-        //                hs.Add("Modified_Time", mc.Modified_Time);
-        //                hs.Add("M_Device_Name", mc.M_Device_name);
-        //            }
-        //            {
-        //                hs.Add("cityid", mc.cityid);
-        //            }
-        //            dt = config.singleResult("spUpdateCity", hs);
-        //            mc.msg = "Updated Successfuly";
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            mc.msg = "Updation Not Completed Succesfuly";
-        //        }
-        //    }
-        //    return dt;
-        //}
+       
 
         public string DeleteCity(MasterCity mc)
         {
@@ -282,64 +273,27 @@ namespace HRMS.Models.DataBase
             return mc;
         }
 
-        //public string saveCity(MasterCity mc)
-        //{
-        //    config.Insert("Master_City", new Dictionary<string, object>()
-        //        {
-        //        { "cityid", mc.cityid},
-        //        { "cityname", mc.cityname},
-        //       { "DistrictId", mc.DistrictId},
-        //        { "Created_by", mc.Created_by},
-        //        { "Create_date", mc.Create_date},
-        //        { "Create_Time", mc.Create_Time},
-        //        { "Modified_by", mc.Modified_by},
-        //        { "Modified_Date", mc.Modified_Date},
-        //        { "Modified_Time", mc.Modified_Time},
-        //        { "Device_name", mc.Device_name},
-        //        { "M_Device_name", mc.M_Device_name}
-        //    });
-        //    mc.msg = "Saved Successfully";
-        //    return mc.msg;
-        //}
-
-        //public DataTable saveCity(MasterCity mc)
-        //{
-        //    DataTable dt = new DataTable();
-        //    Hashtable hs = new Hashtable();
-        //    hs.Add("cityid", mc.cityid);
-        //    hs.Add("cityname", mc.cityname);
-        //    hs.Add("DistrictId", mc.DistrictId);
-        //    hs.Add("Created_by", mc.Created_by);
-        //    hs.Add("Create_date", mc.Create_date);
-        //    hs.Add("Create_Time", mc.Create_Time);
-        //    hs.Add("Modified_by", mc.Modified_by);
-        //    hs.Add("Modified_Date", mc.Modified_Date);
-        //    hs.Add("Modified_Time", mc.Modified_Time);
-        //    hs.Add("Device_name", mc.Device_name);
-        //    hs.Add("M_Device_name", mc.M_Device_name);
-        //    dt = config.singleResult("spSaveCity", hs);
-        //    return dt;
-        //}
-
-        public MasterCity GetcityidBycityname(string city)
+        public string saveCity(MasterCity mc)
         {
-            MasterCity mc = new MasterCity();
-            string sql = "Select * from  Master_City where cityname='" + city + "' order by cityid";
-            config.singleResult(sql);
-
-            acode = 0;
-            if (config.dt.Rows.Count > 0)
-            {
-                foreach (DataRow dr in config.dt.Rows)
+            config.Insert("Master_City", new Dictionary<string, object>()
                 {
-                    mc.cityid = Convert.ToString(dr["cityid"]);
-
-                }
-
-            }
-            return mc;
-
+                { "cityid", mc.cityid},
+                { "cityname", mc.cityname},
+                { "DistrictId", mc.districtid},
+                { "Created_by", mc.Created_by},
+                { "Create_date", mc.Create_date},
+                { "Create_Time", mc.Create_Time},
+                { "Modified_by", mc.Modified_by},
+                { "Modified_Date", mc.Modified_Date},
+                { "Modified_Time", mc.Modified_Time},
+                { "Device_name", mc.Device_name},
+                { "M_Device_name", mc.M_Device_name}
+            });
+            mc.msg = "Saved Successfully";
+            return mc.msg;
         }
+
+       
 
         public List<MasterCity> getCityMast()
         {
@@ -372,9 +326,9 @@ namespace HRMS.Models.DataBase
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    mc.DistrictName = Convert.ToString(dr["districtName"]);
-                    mc.StateName = Convert.ToString(dr["StateName"]);
-                    mc.CountryName = Convert.ToString(dr["CountryName"]);
+                    mc.districtname = Convert.ToString(dr["districtName"]);
+                    mc.statename = Convert.ToString(dr["StateName"]);
+                    mc.countryname = Convert.ToString(dr["CountryName"]);
                 }
             }
             return mc;
