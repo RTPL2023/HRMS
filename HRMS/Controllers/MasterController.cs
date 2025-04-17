@@ -77,17 +77,18 @@ namespace HRMS.Controllers
             string tableemenent = "";
             if (emlst.Count > 0)
             {
-                tableemenent = "<tr><th>Name</th><th>Employee Id</th><th>Edit</th></tr>";
+                //tableemenent = "<tr><th>Name</th><th>Employee Id</th><th>Edit</th></tr>";
                 foreach (var a in emlst)
                 {
 
-                    tableemenent = tableemenent + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td><a href = '" + @Url.Action("Employee_Profile", "Master", new { id = a.employee_id }) + "' class = \"table__icon edit\"><i class = \"fa-solid fa-pen fa-lg\"></i></a></td></tr>";
-
+                    //tableemenent = tableemenent + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td><a href = '" + @Url.Action("Employee_Profile", "Master", new { id = a.employee_id }) + "' class = \"table__icon edit\"><i class = \"fa-solid fa-pen fa-lg\"></i></a></td></tr>";
+                    tableemenent = tableemenent + "<div class=\"col-12 col-sm-3 col-md-3  col-lg-4 mt-2\"><div class=\"card\"><div class=\"card-body text-center\"><img src =\""+ a.image + "\" width =\"100\" height=\"100\" class=\"rounded-circle\"/><h5 class=\"card-title\">" + a.name + "<h5> <p class=\"fw-light fs-5\">" + a.designationName + "</p><p class=\"fw-light fs-6\">" + a.departmetName + "</p> <div class=\"col-sm-12 mb-12 mb-sm-0\"><a class=\"btn btn-outline-primary\" href=\"/hrm/employee-profile/1\">View</a>  <a class=\"btn btn-outline-primary\" href=\"hrm/employee-profile/1\">Block</a></div></div></div></div>";
 
                 }
             }
             return Json(tableemenent);
-        }
+}
+        
         [HttpGet]
         public IActionResult DesignationsMaster(employee_masterViewModel model)
         {

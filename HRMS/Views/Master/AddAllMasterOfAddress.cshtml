@@ -52,6 +52,9 @@
         position: sticky;
         top: 0;
     }
+    .addids {
+       display:none;
+    }
 </style>
 <form asp-controller="Master" asp-action="AddAllMasterOfAddress" method="post">
     <div class="container">
@@ -93,7 +96,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-sm-6 mb-3 mb-sm-0">
                 <div class="card">
                     <div class="card-body">
@@ -185,7 +188,7 @@
                                 @Html.TextBoxFor(model => model.editcountryname, new { @class = "form-control", @type = "text" })
 
                             </div>
-                            <div class="form-group">
+                            <div class="form-group addids">
                                 <label>Country Name</label><span style="color:crimson">*</span>
                                 @Html.TextBoxFor(model => model.editcountryid, new { @class = "form-control", @type = "text" })
 
@@ -260,7 +263,8 @@
                                 <label>State Name</label><span style="color:crimson">*</span>
                                 @Html.TextBoxFor(model => model.editstatename, new { @class = "form-control", @type = "text" })
 
-                            </div>  <div class="form-group">
+                            </div> 
+                            <div class="form-group addids">
                                 <label>State id</label><span style="color:crimson">*</span>
                                 @Html.TextBoxFor(model => model.editstateid, new { @class = "form-control", @type = "text" })
 
@@ -342,7 +346,7 @@
                                 @Html.TextBoxFor(model => model.editdistrictname, new { @class = "form-control", @type = "text" })
 
                             </div>
-                            <div class="form-group">
+                            <div class="form-group addids">
                                 <label>District id</label><span style="color:crimson">*</span>
                                 @Html.TextBoxFor(model => model.editdistrictid, new { @class = "form-control", @type = "text" })
                             </div>
@@ -422,7 +426,7 @@
                                 @Html.TextBoxFor(model => model.editcityname, new { @class = "form-control", @type = "text" })
 
                             </div>
-                            <div class="form-group">
+                            <div class="form-group addids">
                                 <label>City id</label><span style="color:crimson">*</span>
                                 @Html.TextBoxFor(model => model.editcityid, new { @class = "form-control", @type = "text" })
                             </div>

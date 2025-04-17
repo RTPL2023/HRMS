@@ -26,6 +26,12 @@
                 </div>
             </div>
         </div>
+        <div class="row" id="employeelist">
+          
+            
+            
+
+        </div>
         <div class="row">
             <div class="col-sm-12 mb-12 mb-sm-0">
                 <div class="card">
@@ -254,7 +260,7 @@
 
                                         @*@Html.TextBoxFor(p => p.date_of_birth, new { @class = "form-control", @type = "date" })*@
                                         @Html.TextBoxFor(p => p.date_of_birth, "{0:dd/MM/yyyy}", new { @class = "form-control", @type = "date" })
-                                      
+
                                     </div>
 
                                 </div>
@@ -650,7 +656,7 @@
             }
             else {
                     let ModelObject = {
-                       
+
                         employee_id: $('#employee_id').val(),
                         name: $('#name').val(),
                         gender: $('#gender').val(),
@@ -695,6 +701,7 @@
             }
         }
         function ShowTable() {
+
             let ModelObject = {  name: $('#name').val()};
                     $.ajax({
                         type: "POST",
@@ -702,7 +709,7 @@
                         data: ModelObject,
                         dataType: "json",
                         success: function (data) {
-                            document.getElementById("list").innerHTML = data;
+                            document.getElementById("employeelist").innerHTML = data;
 
                     },
                      error: function (err) {
