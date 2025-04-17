@@ -116,8 +116,6 @@ namespace HRMS.Controllers
             data += "<tr class=\"table-success\"><th colspan=\"2\">CTC(Monthly)</th><th colspan=\"2\">" + sm.tot_ctc.ToString("0.00") + "</th></tr>";
             data += "<tr class=\"table-success\"><th colspan=\"2\">CTC(Yearly)</th><th colspan=\"2\">" + (sm.tot_ctc * 12).ToString("0.00") + "</th></tr>";
 
-
-
             return Json(data);
         }
 

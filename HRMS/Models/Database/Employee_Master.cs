@@ -20,7 +20,7 @@ namespace HRMS.Models.Database
 
         DateTimeFormatInfo usCinfo = new CultureInfo("en-GB", false).DateTimeFormat;
 
-        
+
 
         public DateTimeFormatInfo UsCinfo { get => usCinfo; set => usCinfo = value; }
         SQLConfig config = new SQLConfig();
@@ -41,7 +41,7 @@ namespace HRMS.Models.Database
         public string country { get; set; }
 
         public string joining_date { get; set; }
-        public string date_of_birth { get; set; } 
+        public string date_of_birth { get; set; }
         public string joining_date2 { get; set; }
         public string date_of_birth2 { get; set; }
         public string designation { get; set; }
@@ -62,6 +62,7 @@ namespace HRMS.Models.Database
         public string emg_Phone2 { get; set; }
         public string emg_Address1 { get; set; }
         public string emg_Address2 { get; set; }
+        public string image { get; set; }
 
         public string msg { get; set; }
         public Byte[] bank_detail { get; set; }
@@ -72,10 +73,10 @@ namespace HRMS.Models.Database
         public Byte[] police_verification { get; set; }
         public Byte[] permanent_letter { get; set; }
         public Byte[] employee_img { get; set; }
-        public string saveEmployeedetails(employee_masterViewModel model,string user)
+        public string saveEmployeedetails(employee_masterViewModel model, string user)
         {
             UtilityController u = new UtilityController();
-            
+
 
             string sql = "Select * from Employee_Master where Employee_id = '" + model.employee_id + "'";
             config.singleResult(sql);
@@ -130,36 +131,47 @@ namespace HRMS.Models.Database
         public List<Employee_Master> getemployeelists()
         {
             List<Employee_Master> emplst = new List<Employee_Master>();
-            string sql = "Select * from Employee_Master order by id";
+            string sql = " SELECT Employee_Master.*, Designation_Master.Designation as designationName, Employee_document.*,Department_Master.department as departmetName ,users.Blocked FROM Employee_Master LEFT JOIN Designation_Master ON Employee_Master.Designation = Designation_Master.id LEFT JOIN Department_Master ON Employee_Master.department = Department_Master.id LEFT JOIN Employee_document ON Employee_Master.Employee_id = Employee_document.employee_id LEFT JOIN Users ON Employee_Master.employee_id = Users.employee_id order by Employee_Master.employee_id ";
+            config.singleResult(sql);
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in config.dt.Rows)
                 {
-                    Employee_Master em = new Employee_Master();
-                    em.employee_id = Convert.ToString(dr["employee_id"]);
-                    em.branch_id = Convert.ToString(dr["branch_id"]);
-                    em.name = Convert.ToString(dr["name"]);
-                    em.gender = Convert.ToString(dr["gender"]);
-                    em.contact_number_1 = Convert.ToString(dr["contact_number_1"]);
-                    em.contact_number_2 = Convert.ToString(dr["contact_number_2"]);
-                    em.personal_email = Convert.ToString(dr["personal_email"]);
-                    em.official_email = Convert.ToString(dr["official_email"]);
-                    em.employment_type = Convert.ToString(dr["employment_type"]);
-                    em.address = Convert.ToString(dr["address"]);
-                    em.city = Convert.ToString(dr["city"]);
-                    em.dist = Convert.ToString(dr["dist"]);
-                    em.state = Convert.ToString(dr["state"]);
-                    em.country = Convert.ToString(dr["country"]);
-                    em.pin = Convert.ToString(dr["pin"]);
-                    em.joining_date = Convert.ToString(dr["joining_date"]);
-                    em.date_of_birth = Convert.ToString(dr["date_of_birth"]);
-                    em.designation = Convert.ToString(dr["designation"]);
-                    em.department = Convert.ToString(dr["department"]);
-                    em.reporting_mg_id = Convert.ToString(dr["reporting_mg_id"]);
-                    em.last_edu_ql = Convert.ToString(dr["last_edu_ql"]);
-                    em.employment_role = Convert.ToString(dr["employment_role"]);
-                    emplst.Add(em);
+                    if (Convert.ToString(dr["Blocked"]) == "0" && Convert.ToString(dr["employee_id"])!= "RTPLM001")
+                    {
+                        Employee_Master em = new Employee_Master();
+                        em.employee_id = Convert.ToString(dr["employee_id"]);
+                        em.branch_id = Convert.ToString(dr["branch_id"]);
+                        em.name = Convert.ToString(dr["name"]);
+                        em.gender = Convert.ToString(dr["gender"]);
+                        em.contact_number_1 = Convert.ToString(dr["contact_number_1"]);
+                        em.contact_number_2 = Convert.ToString(dr["contact_number_2"]);
+                        em.personal_email = Convert.ToString(dr["personal_email"]);
+                        em.official_email = Convert.ToString(dr["official_email"]);
+                        em.employment_type = Convert.ToString(dr["employment_type"]);
+                        em.address = Convert.ToString(dr["address"]);
+                        em.city = Convert.ToString(dr["city"]);
+                        em.dist = Convert.ToString(dr["dist"]);
+                        em.state = Convert.ToString(dr["state"]);
+                        em.country = Convert.ToString(dr["country"]);
+                        em.pin = Convert.ToString(dr["pin"]);
+                        em.joining_date = Convert.ToString(dr["joining_date"]);
+                        em.date_of_birth = Convert.ToString(dr["date_of_birth"]);
+                        em.designation = Convert.ToString(dr["designation"]);
+                        em.department = Convert.ToString(dr["department"]);
+                        em.reporting_mg_id = Convert.ToString(dr["reporting_mg_id"]);
+                        em.last_edu_ql = Convert.ToString(dr["last_edu_ql"]);
+                        em.employment_role = Convert.ToString(dr["employment_role"]);
+                        em.designationName = Convert.ToString(dr["designationName"]);
+                        em.departmetName = Convert.ToString(dr["departmetName"]);
+                        em.employee_img = dr["employee_img"] != System.DBNull.Value ? (byte[])dr["employee_img"] : null;
+                        if (em.employee_img != null)
+                        {
+                            em.image = "data:image/jpg;base64," + Convert.ToBase64String(em.employee_img);
+                        }
+                        emplst.Add(em);
+                    }
                 }
 
             }
@@ -274,6 +286,36 @@ namespace HRMS.Models.Database
         public List<Employee_Master> getemployeelist(string user)
         {
             string sql;
+            if (user == "RTPLM001")
+            {
+                sql = "select * from Employee_Master where employee_id <> 'RTPLM001' order by id";
+
+            }
+            else
+            {
+                sql = "select * from Employee_Master where employee_id <> 'RTPLM001' and Reporting_mg_id='" + user + "' order by id";
+
+            }
+            config.singleResult(sql);
+            List<Employee_Master> lstdtm = new List<Employee_Master>();
+
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    Employee_Master dtm = new Employee_Master();
+                    dtm.employee_id = dr["employee_id"].ToString();
+                    dtm.name = dr["employee_id"].ToString() + "-" + dr["name"].ToString();
+
+
+                    lstdtm.Add(dtm);
+                }
+            }
+            return lstdtm;
+        }
+        public List<Employee_Master> getemployeelist(string user)
+        {
+            string sql;
             if(user == "RTPLM001")
             {
                 sql = "select * from Employee_Master where employee_id <> 'RTPLM001' order by id";
@@ -364,10 +406,10 @@ namespace HRMS.Models.Database
                     em.state = Convert.ToString(dr["state"]);
                     em.country = Convert.ToString(dr["country"]);
                     em.pin = Convert.ToString(dr["pin"]);
-                    em.joining_date = Convert.ToDateTime(dr["joining_date"],usCinfo).ToString("yyyy/MM/dd");
-                    em.date_of_birth = Convert.ToDateTime(dr["date_of_birth"], usCinfo).ToString("yyyy/MM/dd"); 
-                    em.joining_date2 = Convert.ToDateTime(dr["joining_date"],usCinfo).ToString("dd/MM/yyyy");
-                    em.date_of_birth2 = Convert.ToDateTime(dr["date_of_birth"], usCinfo).ToString("dd/MM/yyyy"); 
+                    em.joining_date = Convert.ToDateTime(dr["joining_date"], usCinfo).ToString("yyyy/MM/dd");
+                    em.date_of_birth = Convert.ToDateTime(dr["date_of_birth"], usCinfo).ToString("yyyy/MM/dd");
+                    em.joining_date2 = Convert.ToDateTime(dr["joining_date"], usCinfo).ToString("dd/MM/yyyy");
+                    em.date_of_birth2 = Convert.ToDateTime(dr["date_of_birth"], usCinfo).ToString("dd/MM/yyyy");
                     em.designation = Convert.ToString(dr["designation"]);
                     em.department = Convert.ToString(dr["department"]);
                     em.departmetName = Convert.ToString(dr["departmetName"]);
@@ -381,7 +423,7 @@ namespace HRMS.Models.Database
             }
             return em;
         }
-        public string UpdateEmployeedetailsByEmployee_id(employee_masterViewModel model ,string user)
+        public string UpdateEmployeedetailsByEmployee_id(employee_masterViewModel model, string user)
         {
 
             string sql = "Select * from Employee_Master where Employee_id = '" + model.employee_id + "'";
@@ -414,7 +456,7 @@ namespace HRMS.Models.Database
                 sql = sql + "blood_group='" + model.blood_group + "'";
                 sql = sql + "where ";
                 sql = sql + "employee_id='" + model.employee_id + "'";
-               
+
                 config.Execute_Query(sql);
                 //users update role
                 sql = "update users set ";
@@ -439,12 +481,12 @@ namespace HRMS.Models.Database
             string sql;
             sql = "SELECT * FROM Employee_Emergency_details where Employee_id='" + empid + "';";
             config.singleResult(sql);
-            Employee_Master em = new Employee_Master();  
+            Employee_Master em = new Employee_Master();
             em.employee_id = empid;
             if (config.dt.Rows.Count >= 1)
             {
                 DataRow dr = (DataRow)config.dt.Rows[0];
-              
+
                 em.emg_Name1 = Convert.ToString(dr["Emg_contact_name"]);
                 em.emg_Phone1 = Convert.ToString(dr["Emg_contact_no"]);
                 em.emg_Relatio1 = Convert.ToString(dr["Emg_contact_relation"]);
@@ -462,16 +504,16 @@ namespace HRMS.Models.Database
         }
         public string SAVEUpdateEmployee_Emergency_details(employee_masterViewModel model)
         {
-           string sql = "SELECT * FROM Employee_Emergency_details where Employee_id='" + model.employee_id + "';";
+            string sql = "SELECT * FROM Employee_Emergency_details where Employee_id='" + model.employee_id + "';";
             config.singleResult(sql);
-            if (config.dt.Rows.Count >0)
+            if (config.dt.Rows.Count > 0)
             {
-                sql = "delete FROM Employee_Emergency_details where Employee_id = '" +model.employee_id + "'";
+                sql = "delete FROM Employee_Emergency_details where Employee_id = '" + model.employee_id + "'";
                 config.Execute_Query(sql);
             }
-            if(model.emg_Name1!=null && model.emg_Name1 != "")
+            if (model.emg_Name1 != null && model.emg_Name1 != "")
             {
-             config.Insert("Employee_Emergency_details", new Dictionary<string, object>()
+                config.Insert("Employee_Emergency_details", new Dictionary<string, object>()
                          {
                          { "employee_id",model.employee_id },
                          { "emg_contact_name",model.emg_Name1 },
@@ -482,9 +524,9 @@ namespace HRMS.Models.Database
                          });
 
             }
-            if(model.emg_Name2!=null && model.emg_Name2 != "")
+            if (model.emg_Name2 != null && model.emg_Name2 != "")
             {
-               config.Insert("Employee_Emergency_details", new Dictionary<string, object>()
+                config.Insert("Employee_Emergency_details", new Dictionary<string, object>()
                             {
                             { "employee_id",model.employee_id },
                             { "emg_contact_name",model.emg_Name2 },
@@ -497,6 +539,6 @@ namespace HRMS.Models.Database
 
             return "Saved";
         }
-       
+
     }
 }

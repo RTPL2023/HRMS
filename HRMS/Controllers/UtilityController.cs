@@ -37,11 +37,11 @@ namespace HRMS.Controllers
         //****************For Country Drop Down
         public JsonResult getCountryMastDetails()
         {
-            
+
             MasterCountry cm = new MasterCountry();
             var country = cm.getCountryMast();
-            
-            return  Json(country);
+
+            return Json(country);
         }
         //****************For State Drop Down
         public JsonResult getStateMastDetails()
