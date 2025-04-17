@@ -258,10 +258,10 @@ namespace HRMS.Models.Database
             }
             return (smlist);
         }
-        public salary_master GetSalaryDetailByEmployeeid(string empid)
+        public salary_master GetSalaryDetailByEmployeeid(string empid,string to_date)
         {
             salary_master sm = new salary_master();
-            string sql = "select * from salary_master where employee_id='" + empid + "' order by convert(date,effect_date,103)";
+            string sql = "select * from salary_master where employee_id='" + empid + "' and convert(date,effect_date,103)<= convert(date,'"+ to_date + "',103) order by convert(date,effect_date,103)";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {

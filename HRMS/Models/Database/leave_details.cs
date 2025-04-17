@@ -308,6 +308,10 @@ namespace HRMS.Models.Database
                 {
                     diff = (Convert.ToDateTime(ld.leave_to_date, usCinfo) - Convert.ToDateTime(ld.leave_from_date, usCinfo)).TotalDays + 1;
                 }
+                else
+                {
+                    diff = Convert.ToDouble(ld.leave_duration);
+                }
 
 
 
@@ -321,16 +325,30 @@ namespace HRMS.Models.Database
                 sql = sql + "where ";
                 sql = sql + "employee_Id='" + employee_id + "' and id='" + id + "'";
                 config.Execute_Query(sql);
-                for (double i = 0; i < diff; i++)
+                if (diff >= 1)
                 {
-                    config.Insert("leave_count", new Dictionary<string, object>()
+                    for (double i = 0; i < diff; i++)
+                    {
+                        config.Insert("leave_count", new Dictionary<string, object>()
                     {
                         { "employee_id",employee_id },
                         { "lv_hd",ld.leave_type },
                         { "date",Convert.ToDateTime(ld.leave_from_date, usCinfo).AddDays(i).ToString("dd/MM/yyyy").Replace("-","/") },
                         { "duration",1},
                         });
+                    }
                 }
+                else
+                {
+                    config.Insert("leave_count", new Dictionary<string, object>()
+                    {
+                        { "employee_id",employee_id },
+                        { "lv_hd",ld.leave_type },
+                        { "date",Convert.ToDateTime(ld.leave_from_date, usCinfo).ToString("dd/MM/yyyy").Replace("-","/") },
+                        { "duration",Convert.ToDecimal(diff)},
+                        });
+                }
+                
 
 
             }

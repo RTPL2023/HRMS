@@ -271,6 +271,36 @@ namespace HRMS.Models.Database
             }
             return lstdtm;
         }
+        public List<Employee_Master> getemployeelist(string user)
+        {
+            string sql;
+            if(user == "RTPLM001")
+            {
+                sql = "select * from Employee_Master where employee_id <> 'RTPLM001' order by id";
+
+            }
+            else
+            {
+                sql = "select * from Employee_Master where employee_id <> 'RTPLM001' and Reporting_mg_id='"+user+"' order by id";
+
+            }
+            config.singleResult(sql);
+            List<Employee_Master> lstdtm = new List<Employee_Master>();
+
+            if (config.dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in config.dt.Rows)
+                {
+                    Employee_Master dtm = new Employee_Master();
+                    dtm.employee_id = dr["employee_id"].ToString();
+                    dtm.name = dr["employee_id"].ToString() + "-" + dr["name"].ToString();
+
+
+                    lstdtm.Add(dtm);
+                }
+            }
+            return lstdtm;
+        }
         public Employee_Master getEmployeename(string empid)
         {
             string sql;
@@ -388,8 +418,8 @@ namespace HRMS.Models.Database
                 config.Execute_Query(sql);
                 //users update role
                 sql = "update users set ";
-                sql = sql + "user_role='" + model.user_role + "'";
-                sql = sql + "Modified_By='" + user + "'";
+                sql = sql + "user_role='" + model.user_role + "',";
+                sql = sql + "Modified_By='" + user + "',";
                 sql = sql + "Modified_On='" + u.currentDateTime().ToString("dd/MM/yyyy").Replace("-", "/") + "'";
 
                 sql = sql + "where ";

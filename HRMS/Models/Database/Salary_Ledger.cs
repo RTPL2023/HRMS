@@ -55,14 +55,14 @@ namespace HRMS.Models.Database
 
 
 
-        public void SaveSalaryLedger(Salary_Ledger sl)
+        public void SaveSalaryLedger(Salary_Ledger sl,string to_date)
         {
             string sql = "";
             if (sl.month != "" && sl.month != null)
             {
                 sl.month = sl.month.ToUpper();
             }
-            sql = "Select * from salary_master where employee_id='" + sl.employee_id + "' order by Convert(date,effect_date,103)";
+            sql = "Select * from salary_master where employee_id='" + sl.employee_id + "' and Convert(date,effect_date,103)<= Convert(date,'"+ to_date + "',103) order by Convert(date,effect_date,103)";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {

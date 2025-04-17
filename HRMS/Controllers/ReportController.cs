@@ -54,7 +54,7 @@ namespace HRMS.Controllers
             model.holidays = Convert.ToString(u.HolidaysInMonth(model.from_date, model.to_date));
             model.op_holidays = Convert.ToString(u.OpHolidaysInMonthTakenOrNot(model.employee_id,model.from_date, model.to_date));
             salary_master sm = new salary_master();
-            sm = sm.GetSalaryDetailByEmployeeid(model.employee_id);
+            sm = sm.GetSalaryDetailByEmployeeid(model.employee_id, model.to_date);
             leave_details ld = new leave_details();
             model.leaves_taken = ld.GetLeaveCountByEmpid(model).ToString("0.0");
             decimal work_day = 0;
@@ -163,7 +163,7 @@ namespace HRMS.Controllers
             sl.actual_net_pay = Convert.ToDecimal(model.act_salary);
             sl.calculated_net_pay = Convert.ToDecimal(model.cal_salary);
             sl.lop = model.lop;
-            sl.SaveSalaryLedger(sl);
+            sl.SaveSalaryLedger(sl,model.to_date);
 
             return Json(model);
         }
@@ -306,7 +306,7 @@ namespace HRMS.Controllers
                 worksheet.Cell(currentRow, 8).Value = "Actual Net Pay";
                 worksheet.Cell(currentRow, 9).Value = "Calculated Net Pay";
                 salary_master sm = new salary_master();
-                sm = sm.GetSalaryDetailByEmployeeid(model.employee_id);
+                sm = sm.GetSalaryDetailByEmployeeid(model.employee_id, model.to_date);
                 model.total_working_days = Convert.ToString(work_day);
                 model.lop = Convert.ToString(Convert.ToDecimal(model.tot_days_in_month) - (Convert.ToDecimal(model.sundays) + Convert.ToDecimal(model.holidays) + Convert.ToDecimal(model.op_holidays) + Convert.ToDecimal(model.leaves_taken) + Convert.ToDecimal(model.total_working_days)));
                 model.act_salary = sm.emp_net.ToString("0.00");
@@ -332,7 +332,7 @@ namespace HRMS.Controllers
                 sl.actual_net_pay = Convert.ToDecimal(model.act_salary);
                 sl.calculated_net_pay = Convert.ToDecimal(model.cal_salary);
                 sl.lop = model.lop;
-                sl.SaveSalaryLedger(sl);
+                sl.SaveSalaryLedger(sl, model.to_date);
 
                 using (var stream = new MemoryStream())
                 {
@@ -383,6 +383,10 @@ namespace HRMS.Controllers
                 worksheet.Cell(currentRow, 11).Value = "Calculated Net Pay";
                 foreach (var ab in empl)
                 {
+                    //if (ab.employee_id == "RTPL0014")
+                    //{
+
+                    //}
                     DetailReportViewModel model = new DetailReportViewModel();
                     model.employee_id = ab.employee_id;
                     model.from_date = from_date;
@@ -396,7 +400,7 @@ namespace HRMS.Controllers
                     leave_details ld = new leave_details();
                     model.leaves_taken = ld.GetLeaveCountByEmpid(model).ToString("0.0");
                     salary_master sm = new salary_master();
-                    sm = sm.GetSalaryDetailByEmployeeid(model.employee_id);
+                    sm = sm.GetSalaryDetailByEmployeeid(model.employee_id, model.to_date);
                     decimal work_day = 0;
 
                     employee_attendance ea = new employee_attendance();
@@ -443,7 +447,7 @@ namespace HRMS.Controllers
                     sl.actual_net_pay = Convert.ToDecimal(model.act_salary);
                     sl.calculated_net_pay = Convert.ToDecimal(model.cal_salary);
                     sl.lop = model.lop;
-                    sl.SaveSalaryLedger(sl);
+                    sl.SaveSalaryLedger(sl, model.to_date);
 
                 }
                 using (var stream = new MemoryStream())
