@@ -717,11 +717,26 @@
                      }
                     });
         }
+        function btnBlockOnclick(employee_id) {
+            if (confirm("Are You Confirm To Block The Employee!")) {
+                let ModelObject = {
 
-
-
-
-
-
+                    employee_id: employee_id,
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("blockemployeeByid", "Master")',
+                    data: ModelObject,
+                    dataType: "json",
+                    success: function (data) {
+                        alert(data);
+                        ShowTable();
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+            };
+        }
     </script>
 }

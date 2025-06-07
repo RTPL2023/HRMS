@@ -36,6 +36,7 @@ namespace HRMS.Models.ViewModel
         public string sundays { get; set; }
         public string holidays { get; set; }
         public string day_count { get; set; }
+        public string pg { get; set; }
         public IEnumerable<SelectListItem> empiddesc { get; set; }
 
     }

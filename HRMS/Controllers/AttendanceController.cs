@@ -90,7 +90,14 @@ namespace HRMS.Controllers
             string tagColor = "";
             if (ealst.Count > 0)
             {
-                tableemenent = "<thead><tr><th>Date</th><th>Day</th><th>In Time</th><th>Out Time</th><th>Half/Full Day</th><th>Punch Valid/Invalid</th><th>Action</th></tr></thead><tbody>";
+                if (model.pg == "Add")
+                {
+                    tableemenent = "<thead><tr><th>Date</th><th>Day</th><th>In Time</th><th>Out Time</th><th>Half/Full Day</th><th>Punch Valid/Invalid</th></tr></thead><tbody>";
+                }
+                else
+                {
+                    tableemenent = "<thead><tr><th>Date</th><th>Day</th><th>In Time</th><th>Out Time</th><th>Half/Full Day</th><th>Punch Valid/Invalid</th><th>Action</th></tr></thead><tbody>";
+                }
                 foreach (var a in ealst)
                 {
 
@@ -119,8 +126,14 @@ namespace HRMS.Controllers
                     if (a.duration == Convert.ToDecimal(1))
                     {
                         atttype = "Full Day";
-                        tableemenent = tableemenent + "<tr " + tagColor + " ><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>" + atttype + "</td><td>" + a.punch_type + "</td>" +
-                        "<td></td></tr>";
+                        if (model.pg != "Add")
+                        {
+                            tableemenent = tableemenent + "<tr " + tagColor + " ><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>" + atttype + "</td><td>" + a.punch_type + "</td><td></td></tr>";
+                        }
+                        else
+                        {
+                            tableemenent = tableemenent + "<tr " + tagColor + " ><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>" + atttype + "</td><td>" + a.punch_type + "</td></tr>";
+                        }
                     }
                     else if (a.duration == Convert.ToDecimal(0.5))
                     {
@@ -128,8 +141,18 @@ namespace HRMS.Controllers
                         tableemenent = tableemenent + "<tr " + tagColor + " ><td>" + a.date + "</td><td>" + a.day + "</td><td>" + a.in_time + "</td><td>" + a.out_time + "</td><td>" + atttype + "</td><td>" + a.punch_type + "</td>";
                         if (a.is_approved == 2)
                         {
-                            tableemenent = tableemenent + "<td><button type =\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#EditInvalid\" onclick=btnEditOnclick('" + a.in_time + "','" + a.out_time + "','" + a.date + "','" + a.id + "','" + a.punch_type + "','" + a.duration + "')> <i class=\"fa-solid fa-pen\"></i></button ></td></tr>";
-
+                            if (model.employee_id == null)
+                            {
+                                if (model.pg != "Add")
+                                {
+                                    tableemenent = tableemenent + "<td><button type =\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#EditInvalid\" onclick=btnEditOnclick('" + a.in_time + "','" + a.out_time + "','" + a.date + "','" + a.id + "','" + a.punch_type + "','" + a.duration + "')> <i class=\"fa-solid fa-pen\"></i></button ></td></tr>";
+                                }
+                                
+                            }
+                            else
+                            {
+                                tableemenent += "<td></td></tr>";
+                            }
                         }
                         else
                         {
@@ -146,8 +169,10 @@ namespace HRMS.Controllers
                             if (model.employee_id == null)
                             {
 
-
-                                tableemenent = tableemenent + "<td><button type =\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#EditInvalid\" onclick=btnEditOnclick('" + a.in_time + "','" + a.out_time + "','" + a.date + "','" + a.id + "','" + a.punch_type + "','" + a.duration + "')> <i class=\"fa-solid fa-pen\"></i></button ></td></tr>";
+                                if (model.pg != "Add")
+                                {
+                                    tableemenent = tableemenent + "<td><button type =\"button\" class=\"table__icon edit\" data-bs-toggle=\"modal\" data-bs-target=\"#EditInvalid\" onclick=btnEditOnclick('" + a.in_time + "','" + a.out_time + "','" + a.date + "','" + a.id + "','" + a.punch_type + "','" + a.duration + "')> <i class=\"fa-solid fa-pen\"></i></button ></td></tr>";
+                                }
                             }
                             else
                             {

@@ -26,7 +26,7 @@ namespace HRMS.Models.Database
         public string m_device_name { get; set; }
         public users getLoggin(string _employee_id, string _pwd)
         {
-            string sql = "SELECT * FROM users WHERE employee_id = '" + _employee_id + "'  and Password = '" + _pwd + "' ";
+            string sql = "SELECT * FROM users WHERE employee_id = '" + _employee_id + "'  and Password = '" + _pwd + "' and blocked!=1";
 
             users us = new users();
             try

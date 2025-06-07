@@ -27,15 +27,15 @@
                         <div class="col-10 col">
                             <h5 class="card__heading-title">Personal Information</h5>
 
-                        </div>  
-                        @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
-                            {
-                        <div class="col-2">
-                            <button type="button" class="edit-icon" name="btnPIEdit" id="btnPIEdit" data-bs-toggle="modal" data-bs-target="#btnProInfoEdit" onclick="getemployeesdetalis()">
-
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
                         </div>
+                        @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
+                        {
+                            <div class="col-2">
+                                <button type="button" class="edit-icon" name="btnPIEdit" id="btnPIEdit" data-bs-toggle="modal" data-bs-target="#btnProInfoEdit" onclick="getemployeesdetalis()">
+
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+                            </div>
                         }
                     </div>
                     <div class="row">
@@ -93,7 +93,7 @@
                             <h5 class="card__heading-title">Emergency Contact</h5>
 
                         </div>
-                      
+
                         <div class="col-2 text-center">
                             <button type="button" class="edit-icon" data-bs-target="#EmergencyContactedit" data-bs-toggle="modal" onclick="getemployeeEmargencyContact()">
 
@@ -175,12 +175,12 @@
                             </div>
                             @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
                             {
-                            <div class="col-2">
-                                <button type="button" class="edit-icon" data-bs-target="#BankDetailedit" data-bs-toggle="modal">
+                                <div class="col-2">
+                                    <button type="button" class="edit-icon" data-bs-target="#BankDetailedit" data-bs-toggle="modal">
 
-                                    <i class="fa-solid fa-pen"></i>
-                                </button>
-                            </div>}
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                </div>}
                         </div>
 
                         <div class="row">
@@ -304,9 +304,9 @@
 
                             </div>
                             @if (this.User.IsInRole("ADMIN") || this.User.IsInRole("SUPERADMIN"))
-                            { <div class="col-2">
-                                <button type="button" class="edit-icon" data-bs-target="#DocumentUpload" data-bs-toggle="modal"> <i class="fa-solid fa-pen"></i></button>
-                            </div>}
+                            {<div class="col-2">
+                                    <button type="button" class="edit-icon" data-bs-target="#DocumentUpload" data-bs-toggle="modal"> <i class="fa-solid fa-pen"></i></button>
+                                </div>}
                         </div>
                         <div class="row">
 
@@ -472,7 +472,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start formTitle">
                                     <div class="form-group">
                                         <label>Official Mail</label>
-                                        
+
 
                                         @Html.TextBoxFor(p => p.official_email, new { @class = "form-control", @type = "text" })
 
@@ -637,7 +637,7 @@
                                         <span style="color:crimson">*</span>
                                         @*<select name="designation" id="designation" class="form-control" required>
                                             </select>*@
-                                        @Html.DropDownListFor(p => p.designation, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select Group", new { @class="form-control"})
+                                        @Html.DropDownListFor(p => p.designation, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select Group", new { @class = "form-control" })
 
 
                                     </div>
@@ -796,7 +796,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label> Name</label>
-                                        
+
                                         <input type="text" id="emg_Name2" class="form-control">
                                     </div>
 
@@ -804,7 +804,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>Relationship</label>
-                                       
+
                                         <input type="text" id="emg_Relatio2" class="form-control">
 
                                     </div>
@@ -813,7 +813,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>Phone</label>
-                                       
+
                                         <input type="text" id="emg_Phone2" class="form-control">
 
                                     </div>
@@ -822,7 +822,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        
+
                                         <input type="text" id="emg_Address2" class="form-control">
 
                                     </div>
@@ -936,7 +936,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>Voter No</label>
-                                     
+
                                         <input type="text" id="voter_id_no" class="form-control">
 
                                     </div>
@@ -945,7 +945,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>UAN No.</label>
-                                       
+
                                         <input type="text" id="pf_no" class="form-control">
 
                                     </div>
@@ -954,7 +954,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>Esic No.</label>
-                                        
+
                                         <input type="text" id="esic_no" class="form-control">
 
                                     </div>
@@ -963,7 +963,7 @@
                                 <div class="col-lg-6 col-12 col-sm-12 text-start">
                                     <div class="form-group">
                                         <label>Passport No.</label>
-                                      
+
                                         <input type="text" id="passport_no" class="form-control">
 
                                     </div>
@@ -1471,7 +1471,7 @@
                 }
 
             });
-              
+
         });
         //$(document).ready(function () {
 
@@ -1507,7 +1507,7 @@
                     document.getElementById('piaddress').innerHTML = 'Address : ' + data.address;
                     document.getElementById('pigender').innerHTML = 'Gender : ' + data.gender;
                     document.getElementById('piblood_group').innerHTML = 'Blood Group : ' + data.blood_group;
-                   
+
                     $('#employee_id').val(data.employee_id);
                     $('#name').val(data.name);
                     $('#gender').val(data.gender);
@@ -1522,7 +1522,7 @@
                     $('#state').val(data.state);
                     $('#pin').val(data.pin);
                     $('#country').val(data.country);
-                 
+
                     $('#joining_date').val(data.joining_date);
                     $('#date_of_birth').val(data.date_of_birth);
                     $('#designation').val(data.designation);
@@ -2198,6 +2198,7 @@
             });
 
     }
+       
 
     </script>
 

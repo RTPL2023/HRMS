@@ -141,6 +141,7 @@
         function employee_idonchange() {
             let ModelObject = {
                 employee_id: $('#employee_id').val(),
+                pg: 'Add'
 
             };
             $.ajax({
@@ -181,7 +182,7 @@
         function BtnaddAttandenceOnclick() {
 
             if ($('#attendance_date').val() == "") {
-                alert("Date Can't Blank");
+                alert("Date Can't be Blank");
                 $('#attendance_date').focus();
             }
             else if ($('#day_count').val() == "") {
@@ -189,16 +190,19 @@
                 $('#day_count').focus();
             }
             else if ($('#actual_In_time').val() == "") {
-                alert("In Time Can't Blank");
+                alert("In Time Can't be Blank");
                 $('#actual_In_time').focus();
             }
             else if ($('#actual_Out_time').val() == "") {
-                alert("Out Time Can't Blank");
+                alert("Out Time Can't be Blank");
                 $('#actual_Out_time').focus();
             }
             else if ($('#reason').val() == "") {
-                alert("Reason Can't Blank");
+                alert("Reason Can't be Blank");
                 $('#reason').focus();
+            } else if ($('#employee_id').val() == "" || $('#employee_id').val() == null ) {
+                alert("Employee ID  Can't be Blank");
+                $('#employee_id').focus();
             }
             else {
 

@@ -202,7 +202,7 @@ namespace HRMS.Models.Database
         public List<employee_attendance> GetDetailAttendanceReportByEmpId(DetailReportViewModel model)
         {
             List<employee_attendance> ealst = new List<employee_attendance>();
-            string sql = "Select  * from employee_attendance Where employee_Id='" + model.employee_id + "' and Convert(date,date,103)>=Convert(date,'" + model.from_date + "',103) and Convert(date,date,103)<=Convert(date,'" + model.to_date + "',103) order by id";
+            string sql = "Select  * from employee_attendance Where employee_Id='" + model.employee_id + "' and Convert(date,date,103)>=Convert(date,'" + model.from_date + "',103) and Convert(date,date,103)<=Convert(date,'" + model.to_date + "',103) order by Convert(date,date,103)";
             config.singleResult(sql);
             if (config.dt.Rows.Count > 0)
             {

@@ -272,6 +272,7 @@ namespace HRMS.Controllers
                 currentRow = 3;
                 foreach (var a in ldl)
                 {
+
                     if (a.leave_type == "SL")
                     {
                         a.leave_type = "Sick Leave";
@@ -295,7 +296,8 @@ namespace HRMS.Controllers
 
                     currentRow++;
                 }
-                currentRow++;
+                currentRow=eal.Count+5;
+
                 worksheet.Cell(currentRow, 1).Value = "Total Days";
                 worksheet.Cell(currentRow, 2).Value = "Sundays";
                 worksheet.Cell(currentRow, 3).Value = "Holidays";

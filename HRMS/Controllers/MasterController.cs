@@ -69,6 +69,7 @@ namespace HRMS.Controllers
             em.updateEmployeedetails(model);
             return ("over");
         }
+
         public JsonResult getEmployeeList(employee_masterViewModel model)
         {
             Employee_Master em = new Employee_Master();
@@ -82,13 +83,13 @@ namespace HRMS.Controllers
                 {
 
                     //tableemenent = tableemenent + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td><a href = '" + @Url.Action("Employee_Profile", "Master", new { id = a.employee_id }) + "' class = \"table__icon edit\"><i class = \"fa-solid fa-pen fa-lg\"></i></a></td></tr>";
-                    tableemenent = tableemenent + "<div class=\"col-12 col-sm-3 col-md-3  col-lg-4 mt-2\"><div class=\"card\"><div class=\"card-body text-center\"><img src =\""+ a.image + "\" width =\"100\" height=\"100\" class=\"rounded-circle\"/><h5 class=\"card-title\">" + a.name + "<h5> <p class=\"fw-light fs-5\">" + a.designationName + "</p><p class=\"fw-light fs-6\">" + a.departmetName + "</p> <div class=\"col-sm-12 mb-12 mb-sm-0\"><a class=\"btn btn-outline-primary\" href=\"/hrm/employee-profile/1\">View</a>  <a class=\"btn btn-outline-primary\" href=\"hrm/employee-profile/1\">Block</a></div></div></div></div>";
+                    tableemenent = tableemenent + "<div class=\"col-12 col-sm-3 col-md-3  col-lg-4 mt-2\"><div class=\"card\"><div class=\"text-center\"><img src =\"" + a.image + "\" width =\"100\" height=\"100\" class=\"rounded-circle mt-3\"/><h5 class=\"card-title\">" + a.name + "<h5> <p class=\"fw-light fs-5\">" + a.designationName + "</p><p class=\"fw-light fs-6\">" + a.departmetName + "</p> <div class=\"col-sm-12 mb-12 mb-sm-0\"><a class=\"btn btn-outline-primary\" href = '" + @Url.Action("Employee_Profile", "Master", new { id = a.employee_id }) + "'>View</a>  <a class=\"btn btn-outline-primary\" onclick=btnBlockOnclick('" + a.employee_id + "')>Block</a></div></div></div></div>";
 
                 }
             }
             return Json(tableemenent);
-}
-        
+        }
+
         [HttpGet]
         public IActionResult DesignationsMaster(employee_masterViewModel model)
         {
@@ -371,7 +372,12 @@ namespace HRMS.Controllers
             return Json(data);
         }
 
-
+        public JsonResult blockemployeebyId(employee_masterViewModel model)
+        {
+            Employee_Master em = new Employee_Master();
+            string msg = em.blockemployeebyId(model, User.Identity.Name);
+            return Json (msg);
+        }
         [HttpGet]
         public IActionResult AddAllMasterOfAddress(AddAllMasterOfAddressViewModel model)
         {
@@ -737,7 +743,7 @@ namespace HRMS.Controllers
         }
         public JsonResult Deletecity(AddAllMasterOfAddressViewModel model)
         {
-           
+
             MasterCity mc = new MasterCity();
             MasterBranch mb = new MasterBranch();
             mb = mb.CheckAllBranchesDeletedOrNot(model.cityid);

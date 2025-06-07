@@ -265,7 +265,7 @@ namespace HRMS.Models.Database
         public List<Employee_Master> getempidMast()
         {
             string sql;
-            sql = "select * from Employee_Master where employee_id <> 'RTPLM001' order by id";
+            sql = "select * from Employee_Master where employee_id <> 'RTPLM001' and closed_dt is null order by id";
             config.singleResult(sql);
             List<Employee_Master> lstdtm = new List<Employee_Master>();
 
@@ -540,5 +540,26 @@ namespace HRMS.Models.Database
             return "Saved";
         }
 
+
+        public string blockemployeebyId(employee_masterViewModel model ,string users)
+        {
+            string msg = "";
+            string sql = "select * from employee_master where employee_id='" + model.employee_id + "' and closed_dt is NULL";
+            config.singleResult(sql);
+            if (config.dt.Rows.Count>0)
+            {
+                sql = "update employee_master set closed_dt='" + Convert.ToString(DateTime.Now) + "' where employee_id='"+model.employee_id+"'";
+                config.Execute_Query(sql); 
+                sql = "update users set Blocked=1,Modified_By='"+ users + "',Modified_On='"+DateTime.Now+"' where employee_id='" + model.employee_id+"'";
+                config.Execute_Query(sql);
+                msg = "Users Blocked";
+            }
+            else
+            {
+                msg = "Employee Not Found";
+            }
+
+            return msg;
+        }
     }
 }
