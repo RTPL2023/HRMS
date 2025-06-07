@@ -125,6 +125,12 @@
       /*  --tw-bg-opacity: 1;*/
         background-color: rgb(255 21 0/ var(--tw-bg-opacity, 1));
     }
+    th:first-child, td:first-child {
+        position: sticky;
+        left: 0px;
+      
+    }
+
 </style>
 <form asp-controller="Attendance" asp-action="EmployeeAttendanceModifyList" method="post">
     <div class="container ">
@@ -139,8 +145,8 @@
             <div class="col-sm-12 mb-12 mb-sm-0">
                 <div class="card">
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover" align="center">
+                    <div class="table-responsive" style="height:300px">
+                        <table class="table table-bordered table-hover" align="center" >
                             <tbody id="list">
                             </tbody>
                         </table>

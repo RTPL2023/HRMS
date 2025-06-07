@@ -246,14 +246,15 @@ namespace HRMS.Controllers
             Employee_Attendance_mod_Request amr = new Employee_Attendance_mod_Request();
             List<Employee_Attendance_mod_Request> amrlist = new List<Employee_Attendance_mod_Request>();
             amrlist = amr.getEmployeeAttModifyApplylistUndermanagers(User.Identity.Name);
+            model.attlist = "<tr><th>Name</th><th>Emp Id</th><th>Application Date</th><th>Attendance Date</th><th>Actual In Time</th><th>Requested In Time</th>" +
+               "<th>Actual Out Time</th><th>Requested Out Time</th><th>Actual Punch Type</th><th>Requested Punch Type</th><th>Actual Day Count</th><th>Requested Day Count</th><th>Reason</th><th>Status</th></tr>";
             if (amrlist.Count > 0)
             {
 
-                model.attlist = "<tr><th>Emp Id</th><th>Name</th><th>Application Date</th><th>Attendance Date</th><th>Actual In Time</th><th>Requested In Time</th>" +
-                "<th>Actual Out Time</th><th>Requested Out Time</th><th>Actual Punch Type</th><th>Requested Punch Type</th><th>Actual Day Count</th><th>Requested Day Count</th><th>Reason</th><th>Status</th></tr>";
+               
                 foreach (var a in amrlist)
                 {
-                    model.attlist = model.attlist + "<tr><td>" + a.employee_id + "</td><td>" + a.name + "</td><td>" + a.application_date + "</td><td>" + a.attendance_date + "</td><td>" + a.actual_In_time + "</td><td>" + a.requested_in_time + "</td>";
+                    model.attlist = model.attlist + "<tr><td>" + a.name + "</td><td>" + a.employee_id + "</td><td>" + a.application_date + "</td><td>" + a.attendance_date + "</td><td>" + a.actual_In_time + "</td><td>" + a.requested_in_time + "</td>";
                     model.attlist = model.attlist + "<td>" + a.actual_out_time + "</td><td>" + a.requested_out_time + "</td><td>" + a.actual_punch_type + "</td><td>" + a.requested_punch_type + "</td><td>" + a.actual_day_count + "</td><td>" + a.requested_day_count + "</td><td>" + a.reason + "</td>";
                     model.attlist = model.attlist + "<td><button type =\"button\" class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target=\"#Approved\" onclick=btnApprovrdOnclick('" + a.attendance_Id + "','" + a.employee_id + "')>Approve</i></button ></td>";
                     model.attlist = model.attlist + "<td><button type =\"button\" class=\"btn btn-danger\" data-bs-toggle=\"modal\" data-bs-target=\"#Rejected\" onclick=btnRejectOnclick('" + a.attendance_Id + "','" + a.employee_id + "')>Rejected</i></button ></td></tr>";
